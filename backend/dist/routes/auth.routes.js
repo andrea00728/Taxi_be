@@ -1,30 +1,36 @@
-import express from "express";
-import admin from "firebase-admin";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-import nodemailer from "nodemailer";
-dotenv.config();
-const AuthRouter = express.Router();
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.verifyToken = void 0;
+const express_1 = __importDefault(require("express"));
+const firebase_admin_1 = __importDefault(require("firebase-admin"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const dotenv_1 = __importDefault(require("dotenv"));
+const nodemailer_1 = __importDefault(require("nodemailer"));
+dotenv_1.default.config();
+const AuthRouter = express_1.default.Router();
 const SECRET = "taxibe_secret_key_2025";
 const serviceAccount = {
     projectId: process.env.FIREBASE_PROJECT_ID,
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
     privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
 };
-if (!admin.apps.length) {
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
+if (!firebase_admin_1.default.apps.length) {
+    firebase_admin_1.default.initializeApp({
+        credential: firebase_admin_1.default.credential.cert(serviceAccount),
     });
 }
 // Configuration Nodemailer avec SMTP Gmail
-const transporter = nodemailer.createTransport({
+const transporter = nodemailer_1.default.createTransport({
     service: 'gmail',
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
     },
 });
-export const verifyToken = (roles = []) => {
+const verifyToken = (roles = []) => {
     return (req, res, next) => {
         const authHeader = req.headers.authorization;
         if (!authHeader)
@@ -33,7 +39,7 @@ export const verifyToken = (roles = []) => {
         if (!token)
             return res.status(401).json({ message: "Token invalide" });
         try {
-            const decoded = jwt.verify(token, SECRET);
+            const decoded = jsonwebtoken_1.default.verify(token, SECRET);
             if (!decoded || typeof decoded === "string")
                 return res.status(401).json({ message: "Token invalide" });
             if (roles.length && !roles.includes(decoded.role))
@@ -46,6 +52,7 @@ export const verifyToken = (roles = []) => {
         }
     };
 };
+exports.verifyToken = verifyToken;
 /**
  * @swagger
  * tags:
@@ -94,15 +101,15 @@ AuthRouter.post("/register", async (req, res) => {
     }
     try {
         try {
-            await admin.auth().getUserByEmail(email);
+            await firebase_admin_1.default.auth().getUserByEmail(email);
             return res.status(400).json({ error: "L'adresse email est déjà utilisée." });
         }
         catch (err) {
             if (err.code !== "auth/user-not-found")
                 throw err;
         }
-        const userRecord = await admin.auth().createUser({ email, password });
-        await admin.auth().setCustomUserClaims(userRecord.uid, { role });
+        const userRecord = await firebase_admin_1.default.auth().createUser({ email, password });
+        await firebase_admin_1.default.auth().setCustomUserClaims(userRecord.uid, { role });
         res.status(201).json({ message: "Utilisateur créé", uid: userRecord.uid, role });
     }
     catch (error) {
@@ -140,9 +147,9 @@ AuthRouter.post("/login", async (req, res) => {
     if (!email)
         return res.status(400).json({ error: "Email manquant" });
     try {
-        const user = await admin.auth().getUserByEmail(email);
+        const user = await firebase_admin_1.default.auth().getUserByEmail(email);
         const role = user.customClaims?.role || "user";
-        const token = jwt.sign({ uid: user.uid, role }, SECRET, { expiresIn: "2h" });
+        const token = jsonwebtoken_1.default.sign({ uid: user.uid, role }, SECRET, { expiresIn: "2h" });
         res.json({ token, role });
     }
     catch (error) {
@@ -179,7 +186,7 @@ AuthRouter.post("/password-reset", async (req, res) => {
     if (!email)
         return res.status(400).json({ error: "Email manquant" });
     try {
-        const link = await admin.auth().generatePasswordResetLink(email);
+        const link = await firebase_admin_1.default.auth().generatePasswordResetLink(email);
         await transporter.sendMail({
             from: `"Support" <${process.env.EMAIL_USER}>`,
             to: email,
@@ -222,7 +229,7 @@ AuthRouter.post("/send-email-verification", async (req, res) => {
     if (!email)
         return res.status(400).json({ error: "Email manquant" });
     try {
-        const link = await admin.auth().generateEmailVerificationLink(email);
+        const link = await firebase_admin_1.default.auth().generateEmailVerificationLink(email);
         await transporter.sendMail({
             from: `"Support" <${process.env.EMAIL_USER}>`,
             to: email,
@@ -236,5 +243,5 @@ AuthRouter.post("/send-email-verification", async (req, res) => {
         res.status(400).json({ error: error.message || error });
     }
 });
-export default AuthRouter;
+exports.default = AuthRouter;
 //# sourceMappingURL=auth.routes.js.map

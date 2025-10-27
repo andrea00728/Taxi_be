@@ -1,7 +1,9 @@
-import { Router } from "express";
-import { RegionController } from "../controllers/region.controller.js";
-import { verifyToken } from "../middlewares/authMiddleware.js";
-const RegionRouter = Router();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const region_controller_js_1 = require("../controllers/region.controller.js");
+const authMiddleware_js_1 = require("../middlewares/authMiddleware.js");
+const RegionRouter = (0, express_1.Router)();
 /**
  * @swagger
  * tags:
@@ -18,7 +20,7 @@ const RegionRouter = Router();
  *       200:
  *         description: Liste des regions récupérée avec succès
  */
-RegionRouter.get("/", RegionController.getAllRegion);
+RegionRouter.get("/", region_controller_js_1.RegionController.getAllRegion);
 /**
  * @swagger
  * /regions/{id}:
@@ -29,7 +31,7 @@ RegionRouter.get("/", RegionController.getAllRegion);
  *       200:
  *         description: Region récupérée avec succès
  */
-RegionRouter.get("/:id", RegionController.getRegionById);
+RegionRouter.get("/:id", region_controller_js_1.RegionController.getRegionById);
 /**
  * @swagger
  * /regions/create:
@@ -53,7 +55,7 @@ RegionRouter.get("/:id", RegionController.getRegionById);
  *       201:
  *         description: Region enregistrée avec succès
  */
-RegionRouter.post("/create", RegionController.createRegion);
+RegionRouter.post("/create", region_controller_js_1.RegionController.createRegion);
 /**
  * @swagger
  * /arrets/remove/{id}:
@@ -78,6 +80,6 @@ RegionRouter.post("/create", RegionController.createRegion);
  *       404:
  *         description: Region non trouvé
  */
-RegionRouter.delete("/remove/:id", verifyToken(["admin"]), RegionController.removeRegion);
-export default RegionRouter;
+RegionRouter.delete("/remove/:id", (0, authMiddleware_js_1.verifyToken)(["admin"]), region_controller_js_1.RegionController.removeRegion);
+exports.default = RegionRouter;
 //# sourceMappingURL=region.route.js.map

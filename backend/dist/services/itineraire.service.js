@@ -1,8 +1,11 @@
-import { AppDataSource } from "../config/data-source.js";
-import { Itineraire } from "../entities/Itineraire.js";
-export class ItineraireService {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ItineraireService = void 0;
+const data_source_js_1 = require("../config/data-source.js");
+const Itineraire_js_1 = require("../entities/Itineraire.js");
+class ItineraireService {
     constructor() {
-        this.itineraireRepository = AppDataSource.getRepository(Itineraire);
+        this.itineraireRepository = data_source_js_1.AppDataSource.getRepository(Itineraire_js_1.Itineraire);
     }
     /**
      * Retrieves all itineraires from the database, including their associated lignes.
@@ -63,4 +66,5 @@ export class ItineraireService {
             relations: ["ligne"] });
     }
 }
+exports.ItineraireService = ItineraireService;
 //# sourceMappingURL=itineraire.service.js.map

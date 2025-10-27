@@ -1,7 +1,9 @@
-import { Router } from "express";
-import { ArretController } from "../controllers/arret.controller.js";
-import { verifyToken } from "../middlewares/authMiddleware.js";
-const ArretRouter = Router();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const arret_controller_js_1 = require("../controllers/arret.controller.js");
+const authMiddleware_js_1 = require("../middlewares/authMiddleware.js");
+const ArretRouter = (0, express_1.Router)();
 /**
  * @swagger
  * tags:
@@ -18,7 +20,7 @@ const ArretRouter = Router();
  *       200:
  *         description: Liste des arrêts récupérée avec succès
  */
-ArretRouter.get("/", ArretController.getAllArret);
+ArretRouter.get("/", arret_controller_js_1.ArretController.getAllArret);
 /**
  * @swagger
  * /arrets/{id}:
@@ -59,8 +61,8 @@ ArretRouter.get("/", ArretController.getAllArret);
  *       404:
  *         description: Arrêt non trouvé
  */
-ArretRouter.get("/:id", ArretController.getArretById);
-ArretRouter.delete("/:id", verifyToken(["admin"]), ArretController.RemoveArret);
+ArretRouter.get("/:id", arret_controller_js_1.ArretController.getArretById);
+ArretRouter.delete("/:id", (0, authMiddleware_js_1.verifyToken)(["admin"]), arret_controller_js_1.ArretController.RemoveArret);
 /**
  * @swagger
  * /arrets/create:
@@ -90,7 +92,7 @@ ArretRouter.delete("/:id", verifyToken(["admin"]), ArretController.RemoveArret);
  *       201:
  *         description: Arrêt créé avec succès
  */
-ArretRouter.post("/create", verifyToken(["admin"]), ArretController.createArret);
+ArretRouter.post("/create", (0, authMiddleware_js_1.verifyToken)(["admin"]), arret_controller_js_1.ArretController.createArret);
 /**
  * @swagger
  * /arrets/update/{id}:
@@ -125,7 +127,7 @@ ArretRouter.post("/create", verifyToken(["admin"]), ArretController.createArret)
  *       404:
  *         description: Arrêt non trouvé
  */
-ArretRouter.put("/update/:id", verifyToken(["admin"]), ArretController.updateArret);
+ArretRouter.put("/update/:id", (0, authMiddleware_js_1.verifyToken)(["admin"]), arret_controller_js_1.ArretController.updateArret);
 // /**
 //  * @swagger
 //  * /arrets/remove/{id}:
@@ -145,5 +147,5 @@ ArretRouter.put("/update/:id", verifyToken(["admin"]), ArretController.updateArr
 //  *         description: Arrêt supprimé avec succès
 //  */
 // ArretRouter.delete("/remove/:id", verifyToken(["admin"]), ArretController.RemoveArret);
-export default ArretRouter;
+exports.default = ArretRouter;
 //# sourceMappingURL=arret.router.js.map

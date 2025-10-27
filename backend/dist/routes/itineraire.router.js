@@ -1,6 +1,8 @@
-import { Router } from "express";
-import { ItineraireController } from "../controllers/itineraire.controller.js";
-const ItineraireRouter = Router();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const itineraire_controller_js_1 = require("../controllers/itineraire.controller.js");
+const ItineraireRouter = (0, express_1.Router)();
 /**
  * @swagger
  * tags:
@@ -17,7 +19,7 @@ const ItineraireRouter = Router();
  *       200:
  *         description: Liste des itinéraires récupérée avec succès
  */
-ItineraireRouter.get("/", ItineraireController.FindAllItineraire);
+ItineraireRouter.get("/", itineraire_controller_js_1.ItineraireController.FindAllItineraire);
 /**
  * @swagger
  * /itineraires/{id}:
@@ -37,7 +39,7 @@ ItineraireRouter.get("/", ItineraireController.FindAllItineraire);
  *       404:
  *         description: Itinéraire non trouvé
  */
-ItineraireRouter.get("/:id", ItineraireController.FindItineraireById);
+ItineraireRouter.get("/:id", itineraire_controller_js_1.ItineraireController.FindItineraireById);
 /**
  * @swagger
  * /itineraires/create:
@@ -73,7 +75,7 @@ ItineraireRouter.get("/:id", ItineraireController.FindItineraireById);
  *       201:
  *         description: Itinéraire créé avec succès
  */
-ItineraireRouter.post("/create", ItineraireController.CreateItineraire);
+ItineraireRouter.post("/create", itineraire_controller_js_1.ItineraireController.CreateItineraire);
 /**
  * @swagger
  * /itineraires/update/{id}:
@@ -114,7 +116,7 @@ ItineraireRouter.post("/create", ItineraireController.CreateItineraire);
  *       404:
  *         description: Itinéraire non trouvé
  */
-ItineraireRouter.put("/update/:id", ItineraireController.UpdateItineraire);
+ItineraireRouter.put("/update/:id", itineraire_controller_js_1.ItineraireController.UpdateItineraire);
 /**
  * @swagger
  * /itineraires/remove/{id}:
@@ -133,6 +135,6 @@ ItineraireRouter.put("/update/:id", ItineraireController.UpdateItineraire);
  *       404:
  *         description: Itinéraire non trouvé
  */
-ItineraireRouter.delete("/remove/:id", ItineraireController.RemoveItineraire);
-export default ItineraireRouter;
+ItineraireRouter.delete("/remove/:id", itineraire_controller_js_1.ItineraireController.RemoveItineraire);
+exports.default = ItineraireRouter;
 //# sourceMappingURL=itineraire.router.js.map

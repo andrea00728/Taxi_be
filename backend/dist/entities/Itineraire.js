@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,41 +8,43 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
-import { Ligne } from "./Ligne.js";
-import "reflect-metadata";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Itineraire = void 0;
+const typeorm_1 = require("typeorm");
+const Ligne_js_1 = require("./Ligne.js");
+require("reflect-metadata");
 let Itineraire = class Itineraire {
 };
+exports.Itineraire = Itineraire;
 __decorate([
-    PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Itineraire.prototype, "id", void 0);
 __decorate([
-    Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Itineraire.prototype, "depart", void 0);
 __decorate([
-    Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Itineraire.prototype, "destination", void 0);
 __decorate([
-    Column("decimal"),
+    (0, typeorm_1.Column)("decimal"),
     __metadata("design:type", Number)
 ], Itineraire.prototype, "distance", void 0);
 __decorate([
-    Column("decimal"),
+    (0, typeorm_1.Column)("decimal"),
     __metadata("design:type", Number)
 ], Itineraire.prototype, "duree", void 0);
 __decorate([
-    Column("decimal"),
+    (0, typeorm_1.Column)("decimal"),
     __metadata("design:type", Number)
 ], Itineraire.prototype, "tarif", void 0);
 __decorate([
-    ManyToOne(() => Ligne, (ligne) => ligne.itineraires),
-    __metadata("design:type", Ligne)
+    (0, typeorm_1.ManyToOne)(() => Ligne_js_1.Ligne, (ligne) => ligne.itineraires),
+    __metadata("design:type", Ligne_js_1.Ligne)
 ], Itineraire.prototype, "ligne", void 0);
-Itineraire = __decorate([
-    Entity()
+exports.Itineraire = Itineraire = __decorate([
+    (0, typeorm_1.Entity)()
 ], Itineraire);
-export { Itineraire };
 //# sourceMappingURL=Itineraire.js.map

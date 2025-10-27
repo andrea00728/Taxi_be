@@ -1,7 +1,9 @@
-import { Router } from "express";
-import { LigneController } from "../controllers/ligne.controller.js";
-import { verifyToken } from "../middlewares/authMiddleware.js";
-const ligneRouter = Router();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const ligne_controller_js_1 = require("../controllers/ligne.controller.js");
+const authMiddleware_js_1 = require("../middlewares/authMiddleware.js");
+const ligneRouter = (0, express_1.Router)();
 /**
  * @swagger
  * tags:
@@ -18,7 +20,7 @@ const ligneRouter = Router();
  *       200:
  *         description: Liste des lignes récupérée avec succès
  */
-ligneRouter.get("/", LigneController.getAllLignes);
+ligneRouter.get("/", ligne_controller_js_1.LigneController.getAllLignes);
 /**
  * @swagger
  * /lignes/{id}:
@@ -38,7 +40,7 @@ ligneRouter.get("/", LigneController.getAllLignes);
  *       404:
  *         description: Ligne non trouvée
  */
-ligneRouter.get("/:id", LigneController.getLigneById);
+ligneRouter.get("/:id", ligne_controller_js_1.LigneController.getLigneById);
 /**
  * @swagger
  * /lignes/create:
@@ -71,7 +73,7 @@ ligneRouter.get("/:id", LigneController.getLigneById);
  *       201:
  *         description: Ligne créée avec succès
  */
-ligneRouter.post("/create", verifyToken(["admin"]), LigneController.createLigne);
+ligneRouter.post("/create", (0, authMiddleware_js_1.verifyToken)(["admin"]), ligne_controller_js_1.LigneController.createLigne);
 /**
  * @swagger
  * /lignes/update/{id}:
@@ -100,7 +102,7 @@ ligneRouter.post("/create", verifyToken(["admin"]), LigneController.createLigne)
  *       404:
  *         description: Ligne non trouvée
  */
-ligneRouter.put("/update/:id", verifyToken(["admin"]), LigneController.updateLigne);
+ligneRouter.put("/update/:id", (0, authMiddleware_js_1.verifyToken)(["admin"]), ligne_controller_js_1.LigneController.updateLigne);
 /**
  * @swagger
  * /lignes/remove/{id}:
@@ -119,6 +121,6 @@ ligneRouter.put("/update/:id", verifyToken(["admin"]), LigneController.updateLig
  *       404:
  *         description: Ligne non trouvée
  */
-ligneRouter.delete("/remove/:id", verifyToken(["admin"]), LigneController.deleteLigne);
-export default ligneRouter;
+ligneRouter.delete("/remove/:id", (0, authMiddleware_js_1.verifyToken)(["admin"]), ligne_controller_js_1.LigneController.deleteLigne);
+exports.default = ligneRouter;
 //# sourceMappingURL=ligne.routes.js.map

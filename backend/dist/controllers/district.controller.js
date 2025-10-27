@@ -1,6 +1,9 @@
-import { DistrictService } from "../services/districts.service.js";
-const districtService = new DistrictService();
-export class DistrictController {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DistrictController = void 0;
+const districts_service_js_1 = require("../services/districts.service.js");
+const districtService = new districts_service_js_1.DistrictService();
+class DistrictController {
     /**
      * Retrieves all districts from the database, including their associated lignes and arrets.
      *
@@ -74,4 +77,5 @@ export class DistrictController {
         }
     }
 }
+exports.DistrictController = DistrictController;
 //# sourceMappingURL=district.controller.js.map

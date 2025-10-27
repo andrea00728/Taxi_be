@@ -1,18 +1,23 @@
-import express from "express";
-import "reflect-metadata";
-import { AppDataSource } from "./config/data-source.js";
-import swaggerUi from "swagger-ui-express";
-import swaggerJsdoc from "swagger-jsdoc";
-import ligneRouter from "./routes/ligne.routes.js";
-import ArretRouter from "./routes/arret.router.js";
-import ItineraireRouter from "./routes/itineraire.router.js";
-import TrajetRouter from "./routes/trajet.routes.js";
-import AuthRouter from "./routes/auth.routes.js";
-import ProvinceRouter from "./routes/province.router.js";
-import RegionRouter from "./routes/region.route.js";
-import { DistrictRoute } from "./routes/district.route.js";
-const app = express();
-app.use(express.json());
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+require("reflect-metadata");
+const data_source_js_1 = require("./config/data-source.js");
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
+const ligne_routes_js_1 = __importDefault(require("./routes/ligne.routes.js"));
+const arret_router_js_1 = __importDefault(require("./routes/arret.router.js"));
+const itineraire_router_js_1 = __importDefault(require("./routes/itineraire.router.js"));
+const trajet_routes_js_1 = __importDefault(require("./routes/trajet.routes.js"));
+const auth_routes_js_1 = __importDefault(require("./routes/auth.routes.js"));
+const province_router_js_1 = __importDefault(require("./routes/province.router.js"));
+const region_route_js_1 = __importDefault(require("./routes/region.route.js"));
+const district_route_js_1 = require("./routes/district.route.js");
+const app = (0, express_1.default)();
+app.use(express_1.default.json());
 // --- Swagger configuration ---
 const swaggerOptions = {
     definition: {
@@ -45,20 +50,20 @@ const swaggerOptions = {
     },
     apis: ["./dist/routes/*.js", "./src/routes/*.js"],
 };
-const swaggerSpec = swaggerJsdoc(swaggerOptions);
+const swaggerSpec = (0, swagger_jsdoc_1.default)(swaggerOptions);
 // Route pour accéder à Swagger UI
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/api-docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerSpec));
 // --- Routes ---
-app.use("/api/auth", AuthRouter);
-app.use("/api/lignes", ligneRouter);
-app.use("/api/arrets", ArretRouter);
-app.use("/api/itineraires", ItineraireRouter);
-app.use("/api/Trajet", TrajetRouter);
-app.use("/api/provinces", ProvinceRouter);
-app.use("/api/regions", RegionRouter);
-app.use("/api/districts", DistrictRoute);
-AppDataSource.initialize()
+app.use("/api/auth", auth_routes_js_1.default);
+app.use("/api/lignes", ligne_routes_js_1.default);
+app.use("/api/arrets", arret_router_js_1.default);
+app.use("/api/itineraires", itineraire_router_js_1.default);
+app.use("/api/Trajet", trajet_routes_js_1.default);
+app.use("/api/provinces", province_router_js_1.default);
+app.use("/api/regions", region_route_js_1.default);
+app.use("/api/districts", district_route_js_1.DistrictRoute);
+data_source_js_1.AppDataSource.initialize()
     .then(() => console.log("📦 Base de données connectée"))
     .catch((err) => console.error("Erreur de connexion DB :", err));
-export default app;
+exports.default = app;
 //# sourceMappingURL=app.js.map

@@ -1,8 +1,11 @@
-import { AppDataSource } from "../config/data-source.js";
-import { Arret } from "../entities/Arret.js";
-export class ArretService {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ArretService = void 0;
+const data_source_js_1 = require("../config/data-source.js");
+const Arret_js_1 = require("../entities/Arret.js");
+class ArretService {
     constructor() {
-        this.arretRepository = AppDataSource.getRepository(Arret);
+        this.arretRepository = data_source_js_1.AppDataSource.getRepository(Arret_js_1.Arret);
     }
     /**
      * Retrieves all arrets from the database, including their associated lignes.
@@ -72,4 +75,5 @@ export class ArretService {
             .getMany();
     }
 }
+exports.ArretService = ArretService;
 //# sourceMappingURL=arret.service.js.map

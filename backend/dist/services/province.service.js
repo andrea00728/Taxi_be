@@ -1,9 +1,12 @@
-import "reflect-metadata";
-import { AppDataSource } from "../config/data-source.js";
-import { Province } from "../entities/provinces.js";
-export class ProvinceService {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ProvinceService = void 0;
+require("reflect-metadata");
+const data_source_js_1 = require("../config/data-source.js");
+const provinces_js_1 = require("../entities/provinces.js");
+class ProvinceService {
     constructor() {
-        this.provinceRepository = AppDataSource.getRepository(Province);
+        this.provinceRepository = data_source_js_1.AppDataSource.getRepository(provinces_js_1.Province);
     }
     /**
      * Retrieves all provinces from the database, including their associated regions, districts and lignes.
@@ -42,4 +45,5 @@ export class ProvinceService {
         return await this.provinceRepository.delete({ id });
     }
 }
+exports.ProvinceService = ProvinceService;
 //# sourceMappingURL=province.service.js.map

@@ -1,6 +1,9 @@
-import { ProvinceService } from "../services/province.service.js";
-const pronvinceService = new ProvinceService();
-export class ProvinceController {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ProvinceController = void 0;
+const province_service_js_1 = require("../services/province.service.js");
+const pronvinceService = new province_service_js_1.ProvinceService();
+class ProvinceController {
     /**
      * Retrieves all provinces from the database, including their associated regions, districts and lignes.
      *
@@ -74,4 +77,5 @@ export class ProvinceController {
         }
     }
 }
+exports.ProvinceController = ProvinceController;
 //# sourceMappingURL=province.controller.js.map

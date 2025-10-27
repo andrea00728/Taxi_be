@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,29 +8,32 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
-import "reflect-metadata";
-export class CreateLigneDto {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CreateLigneDto = void 0;
+const class_validator_1 = require("class-validator");
+require("reflect-metadata");
+class CreateLigneDto {
 }
+exports.CreateLigneDto = CreateLigneDto;
 __decorate([
-    IsString(),
-    IsNotEmpty(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateLigneDto.prototype, "nom", void 0);
 __decorate([
-    IsNumber(),
+    (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateLigneDto.prototype, "tarif", void 0);
 __decorate([
-    IsString(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateLigneDto.prototype, "depart", void 0);
 __decorate([
-    IsString(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateLigneDto.prototype, "terminus", void 0);
 __decorate([
-    IsNumber(),
+    (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateLigneDto.prototype, "district_id", void 0);
 //# sourceMappingURL=create-ligne.dto.js.map

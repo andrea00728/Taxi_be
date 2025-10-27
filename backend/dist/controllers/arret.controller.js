@@ -1,6 +1,9 @@
-import { ArretService } from "../services/arret.service.js";
-const arretService = new ArretService();
-export class ArretController {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ArretController = void 0;
+const arret_service_js_1 = require("../services/arret.service.js");
+const arretService = new arret_service_js_1.ArretService();
+class ArretController {
     /**
      * Retrieves all arrets from the database, including their associated lignes.
      *
@@ -92,4 +95,5 @@ export class ArretController {
         }
     }
 }
+exports.ArretController = ArretController;
 //# sourceMappingURL=arret.controller.js.map

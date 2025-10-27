@@ -1,6 +1,9 @@
-import { ItineraireService } from "../services/itineraire.service.js";
-const itinerairesService = new ItineraireService();
-export class ItineraireController {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ItineraireController = void 0;
+const itineraire_service_js_1 = require("../services/itineraire.service.js");
+const itinerairesService = new itineraire_service_js_1.ItineraireService();
+class ItineraireController {
     /**
      * Retrieves all itineraires from the database.
      *
@@ -92,4 +95,5 @@ export class ItineraireController {
         }
     }
 }
+exports.ItineraireController = ItineraireController;
 //# sourceMappingURL=itineraire.controller.js.map

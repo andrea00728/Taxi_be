@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,45 +8,47 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import "reflect-metadata";
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from "typeorm";
-import { District } from "./districts.js";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Ligne = void 0;
+require("reflect-metadata");
+const typeorm_1 = require("typeorm");
+const districts_js_1 = require("./districts.js");
 let Ligne = class Ligne {
 };
+exports.Ligne = Ligne;
 __decorate([
-    PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Ligne.prototype, "id", void 0);
 __decorate([
-    Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Ligne.prototype, "nom", void 0);
 __decorate([
-    Column("decimal"),
+    (0, typeorm_1.Column)("decimal"),
     __metadata("design:type", Number)
 ], Ligne.prototype, "tarif", void 0);
 __decorate([
-    Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Ligne.prototype, "depart", void 0);
 __decorate([
-    Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Ligne.prototype, "terminus", void 0);
 __decorate([
-    OneToMany('Arret', 'ligne'),
+    (0, typeorm_1.OneToMany)('Arret', 'ligne'),
     __metadata("design:type", Array)
 ], Ligne.prototype, "arrets", void 0);
 __decorate([
-    OneToMany('Itineraire', 'ligne'),
+    (0, typeorm_1.OneToMany)('Itineraire', 'ligne'),
     __metadata("design:type", Array)
 ], Ligne.prototype, "itineraires", void 0);
 __decorate([
-    ManyToOne(() => District, (district) => district.lignes),
-    __metadata("design:type", District)
+    (0, typeorm_1.ManyToOne)(() => districts_js_1.District, (district) => district.lignes),
+    __metadata("design:type", districts_js_1.District)
 ], Ligne.prototype, "district", void 0);
-Ligne = __decorate([
-    Entity()
+exports.Ligne = Ligne = __decorate([
+    (0, typeorm_1.Entity)()
 ], Ligne);
-export { Ligne };
 //# sourceMappingURL=Ligne.js.map

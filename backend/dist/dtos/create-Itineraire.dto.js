@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,28 +8,31 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { IsNumber, IsString } from "class-validator";
-import "reflect-metadata";
-export class CreateItineraireDto {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CreateItineraireDto = void 0;
+const class_validator_1 = require("class-validator");
+require("reflect-metadata");
+class CreateItineraireDto {
 }
+exports.CreateItineraireDto = CreateItineraireDto;
 __decorate([
-    IsString(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateItineraireDto.prototype, "depart", void 0);
 __decorate([
-    IsString(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateItineraireDto.prototype, "destination", void 0);
 __decorate([
-    IsNumber(),
+    (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateItineraireDto.prototype, "distance", void 0);
 __decorate([
-    IsNumber(),
+    (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateItineraireDto.prototype, "duree", void 0);
 __decorate([
-    IsNumber(),
+    (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateItineraireDto.prototype, "tarif", void 0);
 //# sourceMappingURL=create-Itineraire.dto.js.map

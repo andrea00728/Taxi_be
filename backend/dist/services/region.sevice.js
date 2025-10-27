@@ -1,9 +1,12 @@
-import "reflect-metadata";
-import { AppDataSource } from "../config/data-source.js";
-import { Region } from "../entities/regions.js";
-export class RegionService {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RegionService = void 0;
+require("reflect-metadata");
+const data_source_js_1 = require("../config/data-source.js");
+const regions_js_1 = require("../entities/regions.js");
+class RegionService {
     constructor() {
-        this.regisionRepository = AppDataSource.getRepository(Region);
+        this.regisionRepository = data_source_js_1.AppDataSource.getRepository(regions_js_1.Region);
     }
     /**
      * Retrieves all regions from the database, including their associated districts.
@@ -50,4 +53,5 @@ export class RegionService {
         return this.regisionRepository.delete(id);
     }
 }
+exports.RegionService = RegionService;
 //# sourceMappingURL=region.sevice.js.map

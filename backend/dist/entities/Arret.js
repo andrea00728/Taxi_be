@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,37 +8,39 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
-import { Ligne } from "./Ligne.js"; // juste pour TypeScript
-import { District } from "./districts.js";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Arret = void 0;
+const typeorm_1 = require("typeorm");
+const Ligne_js_1 = require("./Ligne.js"); // juste pour TypeScript
+const districts_js_1 = require("./districts.js");
 let Arret = class Arret {
 };
+exports.Arret = Arret;
 __decorate([
-    PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Arret.prototype, "id", void 0);
 __decorate([
-    Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Arret.prototype, "nom", void 0);
 __decorate([
-    Column("decimal", { precision: 10, scale: 6 }),
+    (0, typeorm_1.Column)("decimal", { precision: 10, scale: 6 }),
     __metadata("design:type", Number)
 ], Arret.prototype, "latitude", void 0);
 __decorate([
-    Column("decimal", { precision: 10, scale: 6 }),
+    (0, typeorm_1.Column)("decimal", { precision: 10, scale: 6 }),
     __metadata("design:type", Number)
 ], Arret.prototype, "longitude", void 0);
 __decorate([
-    ManyToOne('Ligne', 'arrets'),
-    __metadata("design:type", Ligne)
+    (0, typeorm_1.ManyToOne)('Ligne', 'arrets'),
+    __metadata("design:type", Ligne_js_1.Ligne)
 ], Arret.prototype, "ligne", void 0);
 __decorate([
-    ManyToOne('District', 'arrets'),
-    __metadata("design:type", District)
+    (0, typeorm_1.ManyToOne)('District', 'arrets'),
+    __metadata("design:type", districts_js_1.District)
 ], Arret.prototype, "districts", void 0);
-Arret = __decorate([
-    Entity()
+exports.Arret = Arret = __decorate([
+    (0, typeorm_1.Entity)()
 ], Arret);
-export { Arret };
 //# sourceMappingURL=Arret.js.map

@@ -1,7 +1,9 @@
-import { Router } from "express";
-import { verifyToken } from "../middlewares/authMiddleware.js";
-import { ProvinceController } from "../controllers/province.controller.js";
-const ProvinceRouter = Router();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const authMiddleware_js_1 = require("../middlewares/authMiddleware.js");
+const province_controller_js_1 = require("../controllers/province.controller.js");
+const ProvinceRouter = (0, express_1.Router)();
 /**
  * @swagger
  * tags:
@@ -18,7 +20,7 @@ const ProvinceRouter = Router();
  *       200:
  *         description: Liste de tout les provinces récupérée avec succès
  */
-ProvinceRouter.get("/", ProvinceController.getAllProvinces);
+ProvinceRouter.get("/", province_controller_js_1.ProvinceController.getAllProvinces);
 /**
  * @swagger
  * /provinces/{id}:
@@ -38,7 +40,7 @@ ProvinceRouter.get("/", ProvinceController.getAllProvinces);
  *       404:
  *         description: Arrêt non trouvé
  */
-ProvinceRouter.get("/:id", ProvinceController.getProvinceById);
+ProvinceRouter.get("/:id", province_controller_js_1.ProvinceController.getProvinceById);
 /**
  * @swagger
  * /provinces/create:
@@ -59,7 +61,7 @@ ProvinceRouter.get("/:id", ProvinceController.getProvinceById);
  *       201:
  *         description: Province enregistrée avec succès
  */
-ProvinceRouter.post("/create", ProvinceController.createProvince);
+ProvinceRouter.post("/create", province_controller_js_1.ProvinceController.createProvince);
 /**
  * @swagger
  * /provinces/remove/{id}:
@@ -84,6 +86,6 @@ ProvinceRouter.post("/create", ProvinceController.createProvince);
  *       404:
  *         description: Arrêt non trouvé
  */
-ProvinceRouter.delete("/remove/:id", verifyToken(["admin"]), ProvinceController.removeProvince);
-export default ProvinceRouter;
+ProvinceRouter.delete("/remove/:id", (0, authMiddleware_js_1.verifyToken)(["admin"]), province_controller_js_1.ProvinceController.removeProvince);
+exports.default = ProvinceRouter;
 //# sourceMappingURL=province.router.js.map

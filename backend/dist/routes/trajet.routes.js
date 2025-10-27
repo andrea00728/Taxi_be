@@ -1,6 +1,8 @@
-import { Router } from "express";
-import { TrajetController } from "../controllers/trajet.controller.js";
-const TrajetRouter = Router();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const trajet_controller_js_1 = require("../controllers/trajet.controller.js");
+const TrajetRouter = (0, express_1.Router)();
 /**
  * @swagger
  * tags:
@@ -32,6 +34,6 @@ const TrajetRouter = Router();
  *       404:
  *         description: Aucun trajet trouvé
  */
-TrajetRouter.get("/search", TrajetController.search);
-export default TrajetRouter;
+TrajetRouter.get("/search", trajet_controller_js_1.TrajetController.search);
+exports.default = TrajetRouter;
 //# sourceMappingURL=trajet.routes.js.map

@@ -1,14 +1,17 @@
-import { ArretService } from "../services/arret.service.js";
-import { LigneService } from "../services/ligne.service.js";
-const arretSvc = new ArretService();
-const ligneSvc = new LigneService();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TrajetController = void 0;
+const arret_service_js_1 = require("../services/arret.service.js");
+const ligne_service_js_1 = require("../services/ligne.service.js");
+const arretSvc = new arret_service_js_1.ArretService();
+const ligneSvc = new ligne_service_js_1.LigneService();
 /**
  * Recherche très simple :
  * - on cherche les arrêts dont le nom contient le param départ et destination,
  * - on propose les lignes communes ou les lignes qui passent par ces arrêts.
  * (Ceci est un point de départ ; pour algo optimal utiliser graphe + Dijkstra/A*)
  */
-export class TrajetController {
+class TrajetController {
     static async search(req, res) {
         const depart = req.query.depart || "";
         const destination = req.query.destination || "";
@@ -64,4 +67,5 @@ export class TrajetController {
         });
     }
 }
+exports.TrajetController = TrajetController;
 //# sourceMappingURL=trajet.controller.js.map

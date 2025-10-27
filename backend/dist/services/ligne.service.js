@@ -1,8 +1,11 @@
-import { AppDataSource } from "../config/data-source.js";
-import { Ligne } from "../entities/Ligne.js";
-export class LigneService {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LigneService = void 0;
+const data_source_js_1 = require("../config/data-source.js");
+const Ligne_js_1 = require("../entities/Ligne.js");
+class LigneService {
     constructor() {
-        this.ligneRepository = AppDataSource.getRepository(Ligne);
+        this.ligneRepository = data_source_js_1.AppDataSource.getRepository(Ligne_js_1.Ligne);
     }
     /**
      * Retrieves all lignes with their associated arrets and itineraires.
@@ -66,4 +69,5 @@ export class LigneService {
         return await this.ligneRepository.delete({ id });
     }
 }
+exports.LigneService = LigneService;
 //# sourceMappingURL=ligne.service.js.map

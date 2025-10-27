@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,25 +8,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import "reflect-metadata";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Region } from "./regions.js";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Province = void 0;
+require("reflect-metadata");
+const typeorm_1 = require("typeorm");
+const regions_js_1 = require("./regions.js");
 let Province = class Province {
 };
+exports.Province = Province;
 __decorate([
-    PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Province.prototype, "id", void 0);
 __decorate([
-    Column({ unique: true }),
+    (0, typeorm_1.Column)({ unique: true }),
     __metadata("design:type", String)
 ], Province.prototype, "nom", void 0);
 __decorate([
-    OneToMany(() => Region, (region) => region.province),
+    (0, typeorm_1.OneToMany)(() => regions_js_1.Region, (region) => region.province),
     __metadata("design:type", Array)
 ], Province.prototype, "regions", void 0);
-Province = __decorate([
-    Entity()
+exports.Province = Province = __decorate([
+    (0, typeorm_1.Entity)()
 ], Province);
-export { Province };
 //# sourceMappingURL=provinces.js.map

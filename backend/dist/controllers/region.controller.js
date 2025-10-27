@@ -1,6 +1,9 @@
-import { RegionService } from "../services/region.sevice.js";
-const regionService = new RegionService();
-export class RegionController {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RegionController = void 0;
+const region_sevice_js_1 = require("../services/region.sevice.js");
+const regionService = new region_sevice_js_1.RegionService();
+class RegionController {
     /**
      * Retrieves all regions from the database.
      *
@@ -74,4 +77,5 @@ export class RegionController {
         }
     }
 }
+exports.RegionController = RegionController;
 //# sourceMappingURL=region.controller.js.map

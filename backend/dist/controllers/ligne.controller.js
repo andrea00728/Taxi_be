@@ -1,6 +1,9 @@
-import { LigneService } from "../services/ligne.service.js";
-const ligneService = new LigneService();
-export class LigneController {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LigneController = void 0;
+const ligne_service_js_1 = require("../services/ligne.service.js");
+const ligneService = new ligne_service_js_1.LigneService();
+class LigneController {
     /**
      * Retrieves all lignes from the database, including their associated arrets and itineraires.
      *
@@ -92,4 +95,5 @@ export class LigneController {
         }
     }
 }
+exports.LigneController = LigneController;
 //# sourceMappingURL=ligne.controller.js.map

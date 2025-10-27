@@ -1,9 +1,12 @@
-import "reflect-metadata";
-import { AppDataSource } from "../config/data-source.js";
-import { District } from "../entities/districts.js";
-export class DistrictService {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DistrictService = void 0;
+require("reflect-metadata");
+const data_source_js_1 = require("../config/data-source.js");
+const districts_js_1 = require("../entities/districts.js");
+class DistrictService {
     constructor() {
-        this.districtRepository = AppDataSource.getRepository(District);
+        this.districtRepository = data_source_js_1.AppDataSource.getRepository(districts_js_1.District);
     }
     /**
      * Retrieves all districts from the database, including their associated lignes and arrets.
@@ -48,4 +51,5 @@ export class DistrictService {
         return this.districtRepository.delete(id);
     }
 }
+exports.DistrictService = DistrictService;
 //# sourceMappingURL=districts.service.js.map

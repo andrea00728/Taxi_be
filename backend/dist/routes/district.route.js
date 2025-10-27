@@ -1,7 +1,11 @@
-import { Router } from "express";
-import { DistrictController } from "../controllers/district.controller.js";
-import { verifyToken } from "../middlewares/authMiddleware.js";
-const DistrictRoute = Router();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DistrictRoute = void 0;
+const express_1 = require("express");
+const district_controller_js_1 = require("../controllers/district.controller.js");
+const authMiddleware_js_1 = require("../middlewares/authMiddleware.js");
+const DistrictRoute = (0, express_1.Router)();
+exports.DistrictRoute = DistrictRoute;
 /**
  * @swagger
  * tags:
@@ -18,7 +22,7 @@ const DistrictRoute = Router();
  *       200:
  *         description: Liste des districts récupérée avec succès
  */
-DistrictRoute.get("/", DistrictController.getAllDistrict);
+DistrictRoute.get("/", district_controller_js_1.DistrictController.getAllDistrict);
 /**
  * @swagger
  * /districts/{id}:
@@ -35,7 +39,7 @@ DistrictRoute.get("/", DistrictController.getAllDistrict);
  *       200:
  *         description: District récupérée avec succès
  */
-DistrictRoute.get("/:id", DistrictController.getDistrictById);
+DistrictRoute.get("/:id", district_controller_js_1.DistrictController.getDistrictById);
 /**
  * @swagger
  * /districts/create:
@@ -59,7 +63,7 @@ DistrictRoute.get("/:id", DistrictController.getDistrictById);
  *       201:
  *         description: District enregistré avec succès
  */
-DistrictRoute.post("/create", DistrictController.createDistrict);
+DistrictRoute.post("/create", district_controller_js_1.DistrictController.createDistrict);
 /**
  * @swagger
  * /districts/remove/{id}:
@@ -84,6 +88,5 @@ DistrictRoute.post("/create", DistrictController.createDistrict);
  *       404:
  *         description: Districts non trouvé
  */
-DistrictRoute.delete("/remove/:id", verifyToken(["admin"]), DistrictController.removeDistrict);
-export { DistrictRoute };
+DistrictRoute.delete("/remove/:id", (0, authMiddleware_js_1.verifyToken)(["admin"]), district_controller_js_1.DistrictController.removeDistrict);
 //# sourceMappingURL=district.route.js.map
