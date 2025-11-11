@@ -55,7 +55,7 @@ RegionRouter.get("/:id", region_controller_js_1.RegionController.getRegionById);
  *       201:
  *         description: Region enregistrée avec succès
  */
-RegionRouter.post("/create", region_controller_js_1.RegionController.createRegion);
+RegionRouter.post("/create", authMiddleware_js_1.authenticate, (0, authMiddleware_js_1.authorize)("admin"), region_controller_js_1.RegionController.createRegion);
 /**
  * @swagger
  * /arrets/remove/{id}:
@@ -80,6 +80,6 @@ RegionRouter.post("/create", region_controller_js_1.RegionController.createRegio
  *       404:
  *         description: Region non trouvé
  */
-RegionRouter.delete("/remove/:id", (0, authMiddleware_js_1.verifyToken)(["admin"]), region_controller_js_1.RegionController.removeRegion);
+RegionRouter.delete("/remove/:id", authMiddleware_js_1.authenticate, (0, authMiddleware_js_1.authorize)("admin"), region_controller_js_1.RegionController.removeRegion);
 exports.default = RegionRouter;
 //# sourceMappingURL=region.route.js.map

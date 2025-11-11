@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from "express";
-interface CustomRequest extends Request {
+import { Request, Response, NextFunction } from 'express';
+export interface AuthRequest extends Request {
     user?: {
         uid: string;
         role: string;
     };
 }
-export declare const verifyToken: (roles?: string[]) => (req: CustomRequest, res: Response, next: NextFunction) => Response<any, Record<string, any>> | undefined;
-export {};
+export declare const authenticate: (req: AuthRequest, res: Response, next: NextFunction) => Response<any, Record<string, any>> | undefined;
+export declare const authorize: (...roles: string[]) => (req: AuthRequest, res: Response, next: NextFunction) => Response<any, Record<string, any>> | undefined;
 //# sourceMappingURL=authMiddleware.d.ts.map

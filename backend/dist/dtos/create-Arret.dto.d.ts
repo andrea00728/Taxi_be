@@ -3,6 +3,6 @@ export declare class CreateArretDto {
     nom: string;
     latitude: number;
     longitude: number;
-    ligneId?: number;
+    nomligne: string;
 }
 //# sourceMappingURL=create-Arret.dto.d.ts.map

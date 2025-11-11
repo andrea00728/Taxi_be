@@ -1,68 +1,66 @@
+
 import express, { Request, Response, NextFunction } from "express";
 import admin from "firebase-admin";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
+import rateLimit, { ipKeyGenerator } from "express-rate-limit";
+
 
 dotenv.config();
 
 const AuthRouter = express.Router();
 const SECRET = "taxibe_secret_key_2025";
 
+// Initialisation Firebase Admin
 const serviceAccount = {
   projectId: process.env.FIREBASE_PROJECT_ID,
   clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
   privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
 };
-
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
   });
 }
 
-// Configuration Nodemailer avec SMTP Gmail
+// Nodemailer config (ex: Gmail SMTP)
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
   },
 });
 
-export const verifyToken = (roles: string[] = []) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) return res.status(401).json({ message: "Token manquant" });
+// OTP in-memory store
+type OtpRecord = { code: string; expiresAt: number; attempts: number;role:string; };
+const pendingOtps = new Map<string, OtpRecord>();
 
-    const token = authHeader.split(" ")[1];
-    if (!token) return res.status(401).json({ message: "Token invalide" });
-
-    try {
-      const decoded = jwt.verify(token, SECRET) as any;
-      if (!decoded || typeof decoded === "string") return res.status(401).json({ message: "Token invalide" });
-      if (roles.length && !roles.includes(decoded.role)) return res.status(403).json({ message: "Accès refusé" });
-
-      (req as any).user = { uid: decoded.uid, role: decoded.role };
-      next();
-    } catch {
-      return res.status(401).json({ message: "Token invalide" });
-    }
-  };
-};
+function generateOtp(len = 6) {
+  return Array.from({ length: len }, () => Math.floor(Math.random() * 10)).join("");
+}
 
 /**
  * @swagger
  * tags:
  *   name: Auth
- *   description: Authentification utilisateurs
+ *   description: Authentification utilisateurs via OTP email
+ */
+
+
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Authentification avec confirmation email par code OTP
  */
 
 /**
  * @swagger
- * /auth/register:
+ * /auth/send-confirmation:
  *   post:
- *     summary: Créer un utilisateur
+ *     summary: Envoie un code de confirmation par email pour créer un utilisateur (email + rôle)
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -72,56 +70,69 @@ export const verifyToken = (roles: string[] = []) => {
  *             type: object
  *             required:
  *               - email
- *               - password
  *               - role
  *             properties:
  *               email:
  *                 type: string
  *                 format: email
- *                 example: exemple@domaine.com
- *               password:
- *                 type: string
- *                 example: MotDePasseFort123!
+ *                 example: user@example.com
  *               role:
  *                 type: string
  *                 enum: [user, admin]
  *                 example: user
  *     responses:
- *       201:
- *         description: Utilisateur créé avec succès
+ *       200:
+ *         description: Code envoyé avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 step:
+ *                   type: string
  *       400:
- *         description: Erreur de requête
+ *         description: Email ou rôle invalide / email déjà utilisé
  */
-AuthRouter.post("/register", async (req: Request, res: Response) => {
-  const { email, password, role } = req.body;
-  const validRoles = ["user", "admin"];
-  if (!role || !validRoles.includes(role)) {
-    return res.status(400).json({ error: "Role invalide ou manquant. Doit être 'user' ou 'admin'." });
+AuthRouter.post('/send-confirmation', async (req: Request, res: Response) => {
+  const { email, role } = req.body;
+  const validRoles = ['user', 'admin'];
+  if (!email || !role || !validRoles.includes(role)) {
+    return res.status(400).json({ error: 'Email ou rôle invalide' });
   }
 
   try {
-    try {
-      await admin.auth().getUserByEmail(email);
-      return res.status(400).json({ error: "L'adresse email est déjà utilisée." });
-    } catch (err) {
-      if ((err as any).code !== "auth/user-not-found") throw err;
-    }
-
-    const userRecord = await admin.auth().createUser({ email, password });
-    await admin.auth().setCustomUserClaims(userRecord.uid, { role });
-
-    res.status(201).json({ message: "Utilisateur créé", uid: userRecord.uid, role });
-  } catch (error: any) {
-    console.error("Erreur création utilisateur:", error);
-    res.status(400).json({ error: error.message || error });
+    await admin.auth().getUserByEmail(email);
+    return res.status(400).json({ error: "Email déjà utilisé" });
+  } catch {
+    // Utilisateur non trouvé, ok pour générer code
   }
+
+  const code = generateOtp(6);
+  pendingOtps.set(email, {
+    code,
+    role,
+    expiresAt: Date.now() + 5 * 60 * 1000,
+    attempts: 0
+  });
+
+  await transporter.sendMail({
+    from: `"Support TaxiBe" <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: "Code de confirmation pour inscription",
+    html: `<p>Votre code de confirmation (valide 5 minutes) : <b>${code}</b></p>`,
+  });
+
+  res.json({ message: "Code envoyé, veuillez confirmer", step: "CONFIRM_EMAIL" });
 });
+
 
 /**
  * @swagger
- * /auth/login:
+ * /auth/confirm:
  *   post:
- *     summary: Connexion utilisateur
+ *     summary: Confirme le code OTP et crée le compte utilisateur
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -131,37 +142,192 @@ AuthRouter.post("/register", async (req: Request, res: Response) => {
  *             type: object
  *             required:
  *               - email
- *             properties:
- *               email:
+ *               - code
+ *             properties:                                    
  *                 type: string
  *                 format: email
- *                 example: exemple@domaine.com
+ *                 example: user@example.com
+ *               code:
+ *                 type: string
+ *                 example: "123456"
  *     responses:
  *       200:
- *         description: Authentification réussie
+ *         description: Compte créé avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 uid:
+ *                   type: string
  *       400:
- *         description: Erreur de requête
+ *         description: Code invalide, expiré ou aucun code en attente
  */
+AuthRouter.post('/confirm', async (req: Request, res: Response) => {
+  const { email, code } = req.body;
+  const otpData = pendingOtps.get(email);
+
+  if (!otpData) return res.status(400).json({ error: "Aucun code en attente pour cet email" });
+
+  if (Date.now() > otpData.expiresAt) {
+    pendingOtps.delete(email);
+    return res.status(400).json({ error: "Code expiré" });
+  }
+
+  if (otpData.code !== code) {
+    return res.status(400).json({ error: "Code incorrect" });
+  }
+
+  try {
+    const userRecord = await admin.auth().createUser({ email });
+    await admin.auth().setCustomUserClaims(userRecord.uid, { role: otpData.role });
+    pendingOtps.delete(email);
+    return res.json({ message: "Compte créé avec succès", uid: userRecord.uid });
+  } catch (error) {
+    return res.status(400).json({ error: "Erreur lors de la création du compte" });
+  }
+});
+
+
+ /**
+  * @swagger
+  * /auth/login:
+  *   post:
+  *     summary: Vérification email, envoi OTP
+  *     tags: [Auth]
+  *     requestBody:
+  *       required: true
+  *       content:
+  *         application/json:
+  *           schema:
+  *             type: object
+  *             required: [email]
+  *             properties:
+  *               email:
+  *                 type: string
+  *                 format: email
+  *                 example: user@example.com
+  *     responses:
+  *       200:
+  *         description: Code envoyé
+  *         content:
+  *           application/json:
+  *             schema:
+  *               type: object
+  *               properties:
+  *                 message:
+  *                   type: string
+  *                 step:
+  *                   type: string
+  *                 uid:
+  *                   type: string
+  *       400:
+  *         description: Erreur d'email
+  */
 AuthRouter.post("/login", async (req: Request, res: Response) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ error: "Email manquant" });
 
   try {
     const user = await admin.auth().getUserByEmail(email);
+    const code = generateOtp(6);
+    pendingOtps.set(email, {
+      code, expiresAt: Date.now() + 5 * 60000, attempts: 0,
+      role: ""
+    });
+
+    await transporter.sendMail({
+      from: `"Support TaxiBe" <${process.env.SMTP_USER}>`,
+      to: email,
+      subject: "Votre code de vérification",
+      html: `<p>Voici votre code de vérification (valide 5 minutes): <b>${code}</b></p>`,
+    });
+
+    return res.json({ message: "Code envoyé par email", step: "VERIFY_OTP", uid: user.uid });
+  } catch (error: any) {
+    console.error("Erreur login/OTP:", error);
+    return res.status(400).json({ error: "Utilisateur introuvable ou erreur d'envoi" });
+  }
+});
+
+/**
+ * @swagger
+ * /auth/verify-otp:
+ *   post:
+ *     summary: Vérifie le code OTP reçu par email, délivre un JWT si correct
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, code]
+ *             properties:
+ *               email:
+ *                 type: string
+ *               code:
+ *                 type: string
+ *                 example: "123456"
+ *     responses:
+ *       200:
+ *         description: Connexion réussie (token)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                 role:
+ *                   type: string
+ *       400:
+ *         description: Code invalide ou expiré
+ *       429:
+ *         description: Trop de tentatives
+ */
+AuthRouter.post("/verify-otp", async (req: Request, res: Response) => {
+  const { email, code } = req.body;
+  if (!email || !code) return res.status(400).json({ error: "Email et code requis" });
+
+  const record = pendingOtps.get(email);
+  if (!record) return res.status(400).json({ error: "Aucun OTP en attente" });
+
+  if (record.attempts >= 5) {
+    pendingOtps.delete(email);
+    return res.status(429).json({ error: "Trop de tentatives, redemandez un code" });
+  }
+
+  if (Date.now() > record.expiresAt) {
+    pendingOtps.delete(email);
+    return res.status(400).json({ error: "Code expiré, redemandez un code" });
+  }
+
+  record.attempts += 1;
+
+  if (code !== record.code) {
+    return res.status(400).json({ error: "Code invalide" });
+  }
+
+  pendingOtps.delete(email);
+
+  try {
+    const user = await admin.auth().getUserByEmail(email);
     const role = user.customClaims?.role || "user";
     const token = jwt.sign({ uid: user.uid, role }, SECRET, { expiresIn: "2h" });
-    res.json({ token, role });
-  } catch (error: any) {
-    console.error("Erreur login utilisateur:", error);
-    res.status(400).json({ error: error.message || error });
+    return res.json({ token, role });
+  } catch {
+    return res.status(400).json({ error: "Utilisateur introuvable" });
   }
 });
 
 /**
  * @swagger
- * /auth/password-reset:
+ * /auth/resend-otp:
  *   post:
- *     summary: Envoyer un lien de réinitialisation de mot de passe
+ *     summary: Renvoyer un nouveau code OTP à l'email si délai/expiration
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -169,77 +335,47 @@ AuthRouter.post("/login", async (req: Request, res: Response) => {
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - email
+ *             required: [email]
  *             properties:
  *               email:
  *                 type: string
  *                 format: email
  *     responses:
  *       200:
- *         description: Lien de réinitialisation envoyé
+ *         description: Nouveau code envoyé
  *       400:
- *         description: Erreur de requête
+ *         description: Utilisateur introuvable
+ *       429:
+ *         description: Rate limit atteint
  */
-AuthRouter.post("/password-reset", async (req: Request, res: Response) => {
-  const { email } = req.body;
-  if (!email) return res.status(400).json({ error: "Email manquant" });
-
-  try {
-    const link = await admin.auth().generatePasswordResetLink(email);
-    await transporter.sendMail({
-      from: `"Support" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: "Réinitialisation de votre mot de passe",
-      html: `<p>Cliquez sur ce lien pour réinitialiser votre mot de passe :<br><a href="${link}">${link}</a></p>`,
-    });
-    res.json({ message: "Lien de réinitialisation envoyé par email" });
-  } catch (error: any) {
-    console.error("Erreur envoi lien réinitialisation:", error);
-    res.status(400).json({ error: error.message || error });
-  }
+const resendLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000,
+  max: 3,
+  // Utilise ipKeyGenerator pour gérer les IPv6 correctement
+  keyGenerator: (req) => req.body.email || ipKeyGenerator(req as any),
 });
-
-/**
- * @swagger
- * /auth/send-email-verification:
- *   post:
- *     summary: Envoyer un lien de vérification par email
- *     tags: [Auth]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *             properties:
- *               email:
- *                 type: string
- *                 format: email
- *     responses:
- *       200:
- *         description: Lien de vérification envoyé
- *       400:
- *         description: Erreur de requête
- */
-AuthRouter.post("/send-email-verification", async (req: Request, res: Response) => {
+AuthRouter.post("/resend-otp", resendLimiter, async (req: Request, res: Response) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ error: "Email manquant" });
 
   try {
-    const link = await admin.auth().generateEmailVerificationLink(email);
-    await transporter.sendMail({
-      from: `"Support" <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: "Vérification de votre adresse email",
-      html: `<p>Cliquez sur ce lien pour confirmer votre adresse email :<br><a href="${link}">${link}</a></p>`,
+    await admin.auth().getUserByEmail(email);
+    const code = generateOtp(6);
+    pendingOtps.set(email, {
+      code, expiresAt: Date.now() + 5 * 60000, attempts: 0,
+      role: ""
     });
-    res.json({ message: "Lien de vérification envoyé par email" });
-  } catch (error: any) {
-    console.error("Erreur envoi lien vérification email:", error);
-    res.status(400).json({ error: error.message || error });
+
+    await transporter.sendMail({
+      from: `"Support TaxiBe" <${process.env.SMTP_USER}>`,
+      to: email,
+      subject: "Nouveau code de vérification",
+      html: `<p>Nouveau code (valide 5 minutes): <b>${code}</b></p>`,
+    });
+
+    return res.json({ message: "Nouveau code envoyé" });
+  } catch {
+    return res.status(400).json({ error: "Utilisateur introuvable" });
   }
 });
 

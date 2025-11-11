@@ -1,4 +1,6 @@
 import app from "./app.js";
+import '@dotenvx/dotenvx/config';
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

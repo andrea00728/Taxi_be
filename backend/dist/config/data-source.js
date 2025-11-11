@@ -13,7 +13,7 @@ exports.AppDataSource = new typeorm_1.DataSource({
     host: process.env.DB_HOST || "localhost",
     port: Number(process.env.DB_PORT || 5432),
     username: process.env.DB_USER || "postgres",
-    password: process.env.DB_PASSWORD || "ton_mot_de_passe",
+    password: process.env.DB_PASSWORD || "aandrea",
     database: process.env.DB_NAME || "taxibe",
     // entities: ["dist/entities/*.js"],
     entities: [Ligne_js_1.Ligne, Arret_js_1.Arret, Itineraire_js_1.Itineraire, provinces_js_1.Province, regions_js_1.Region, districts_js_1.District],

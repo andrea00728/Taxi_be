@@ -1,3 +1,4 @@
+import { AuthRequest } from "../middlewares/authMiddleware.js";
 import { LigneService } from "../services/ligne.service.js";
 import { Request, Response } from "express";
 const ligneService= new LigneService();
@@ -15,6 +16,26 @@ export class LigneController {
   } catch (error) {
     res.status(500).json({ message: "Erreur lors de la récupération des lignes" });
   }
+}
+
+
+/**
+ * Retrieves all lignes belonging to a given user, including their associated arrets and itineraires.
+ *
+ * @param {AuthRequest} req The Express request object.
+ * @param {Response} res The Express response object.
+ * @returns {Promise<void>} A promise that resolves when the response has been sent.
+ * @throws {Error} If an error occurs while retrieving the lignes.
+ */
+static async getLigneByUser(req:AuthRequest,res:Response){
+  try {
+     const firebaseUid=req.user!.uid;
+     const data = await ligneService.getLigneUser(firebaseUid);
+     res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ message: "Erreur lors de la récupération des lignes" });
+  }
+
 }
 
 /**
@@ -47,15 +68,18 @@ static async getLigneById(req: Request, res: Response) {
  * @returns {Promise<void>} A promise that resolves when the response has been sent.
  * @throws {Error} If an error occurs while creating the ligne.
  */
-static async createLigne(req:Request,res:Response){
+static async createLigne(req:AuthRequest,res:Response){
     try {
     const payload=req.body;
-    const createLigne=await ligneService.createLign(payload);
+     const firebaseUid=req.user!.uid;
+    const createLigne=await ligneService.createLign(payload,firebaseUid);
     res.status(201).json({message:"ligne crée avec succès",createLigne});
     } catch (error) {
-       res.status(500).json({ message: "Erreur lors de la création de la ligne" }); 
+      console.log(error);
+       res.status(500).json({ message: "Erreur lors de la création de la ligne",error }); 
     }
 }
+
 
 
 /**
@@ -70,6 +94,16 @@ static async updateLigne(req:Request,res:Response){
     try {
     const id=Number(req.params.id);
     const updateLigne= await ligneService.updateLigne(id,req.body);
+    res.status(200).json({message:"ligne mise à jour avec succès",updateLigne});
+    } catch (error) {
+       res.status(500).json({ message: "Erreur lors de la mise à jour de la ligne" }); 
+    }
+}
+
+static async updateStatusLigne(req:Request,res:Response){
+    try {
+    const id=Number(req.params.id);
+    const updateLigne= await ligneService.updateStatusLigne(id,req.body);
     res.status(200).json({message:"ligne mise à jour avec succès",updateLigne});
     } catch (error) {
        res.status(500).json({ message: "Erreur lors de la mise à jour de la ligne" }); 

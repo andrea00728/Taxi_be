@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { verifyToken } from "../middlewares/authMiddleware.js";
+import { authenticate, authorize } from "../middlewares/authMiddleware.js";
 import { ProvinceController } from "../controllers/province.controller.js";
 
 const ProvinceRouter = Router();
@@ -64,7 +64,7 @@ ProvinceRouter.get("/:id", ProvinceController.getProvinceById);
  *       201:
  *         description: Province enregistrée avec succès
  */
-ProvinceRouter.post("/create",ProvinceController.createProvince);
+ProvinceRouter.post("/create",authenticate,authorize("admin"),ProvinceController.createProvince);
 
 
 
@@ -92,6 +92,6 @@ ProvinceRouter.post("/create",ProvinceController.createProvince);
  *       404:
  *         description: Arrêt non trouvé
  */
-ProvinceRouter.delete("/remove/:id",verifyToken(["admin"]), ProvinceController.removeProvince);
+ProvinceRouter.delete("/remove/:id",authenticate,authorize("admin"), ProvinceController.removeProvince);
 
 export default ProvinceRouter;

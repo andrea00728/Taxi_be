@@ -14,7 +14,7 @@ class DistrictService {
      * @returns {Promise<District[]>} A promise that resolves to an array of District objects.
      */
     async getAllDistricts() {
-        return this.districtRepository.find({ relations: ["lignes", "arrets"] });
+        return this.districtRepository.find({ relations: ["lignes", "lignes.arrets"] });
     }
     /**
      * Retrieves a district by its ID, including its associated lignes and arrets.
@@ -23,7 +23,7 @@ class DistrictService {
      * @returns {Promise<District | null>} A promise that resolves to the retrieved District object, or null if no district is found.
      */
     async getDistrictById(id) {
-        return this.districtRepository.findOne({ where: { id }, relations: ["lignes", "arrets"] });
+        return this.districtRepository.findOne({ where: { id }, relations: ["lignes", "lignes.arrets"] });
     }
     /**
      * Creates a new district and persists it to the database.

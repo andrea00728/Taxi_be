@@ -1,0 +1,28 @@
+	Taxi collectif Andrainjato-Anjoma
+	Taxi collectif Anjoma-Andrainjato
+	21 Mahazengy - Tambohobe
+	21 Tambohobe - Mahazengy
+	22 Ambozontany - Ampopoka
+	22 Ampopoka - Ambozontany
+	23 Anjoma - Ankofafa
+	23 Ankofafa - Anjoma
+	26 Anjoma - Beravina
+	26 Beravina - Anjoma
+	28 Beravina - Tsaramandroso
+	28 Tsaramandroso - Beravina
+	29 Ambozontany - Ankofafa Andrefana
+	29 Ankofafa Andrefana - Ambozontany
+	32 Ambatovory - Soanierana
+	32 Soanierana - Ambatovory
+	33 Tsianolondroa - Ankofafa
+	34 Ankazobe - Sahalava
+	34 Sahalava - Ankazobe
+	38 Andrainjato - Tsianolondroa
+	38 Tsianolondroa - Andrainjato
+	39 Ambonifahidrano - Soatsihadino
+	39 Soatsihadino - Ambonifahidrano
+	40-33 Ankofafa - Tsianolondroa
+	40 Andrainjato - Ankofafa Ambony
+	40 Ankofafa Ambony - Andrainjato
+	48 Ambalambositra - Cité des Profs Andrainjato
+	48 Cité des Profs Andrainjato - Ambalambositra

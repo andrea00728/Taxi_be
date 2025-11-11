@@ -15,6 +15,13 @@ export declare class LigneService {
      */
     getLigneByDistrict(districtId: number): Promise<Ligne[]>;
     /**
+     * Retrieves all lignes belonging to a given user, including their associated arrets and itineraires.
+     *
+     * @param {string} firebase_uid The Firebase UID of the user to retrieve lignes for.
+     * @returns {Promise<Ligne[]>} A promise that resolves to an array of Ligne objects.
+     */
+    getLigneUser(firebase_uid: string): Promise<Ligne[]>;
+    /**
      * Retrieves a ligne by its ID, including its associated arrets and itineraires.
      *
      * @param {number} id The ID of the ligne to retrieve.
@@ -29,7 +36,7 @@ export declare class LigneService {
      */
     createLign(data: Partial<Ligne> & {
         district_id?: number;
-    }): Promise<Ligne>;
+    }, firebaseUid: string): Promise<Ligne>;
     /**
      * Updates a ligne by its ID.
      *
@@ -38,6 +45,7 @@ export declare class LigneService {
      * @returns {Promise<Ligne>} A promise that resolves to the updated Ligne object.
      */
     updateLigne(id: number, data: Partial<Ligne>): Promise<Ligne | null>;
+    updateStatusLigne(id: number, data: Partial<Ligne>): Promise<Ligne | null>;
     /**
      * Deletes a ligne by its ID.
      *

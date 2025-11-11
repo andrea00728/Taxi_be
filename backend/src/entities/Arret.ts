@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Relation } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, Relation, Index } from "typeorm";
 import { Ligne } from "./Ligne.js"; // juste pour TypeScript
 import { District } from "./districts.js";
 import { Region } from "./regions.js";
@@ -24,5 +24,9 @@ export class Arret {
   
   @ManyToOne('District','arrets')
   districts!:District;
+
+  @Column()
+  @Index()
+  firebase_uid!:string
 
 }

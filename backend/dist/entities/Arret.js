@@ -40,6 +40,11 @@ __decorate([
     (0, typeorm_1.ManyToOne)('District', 'arrets'),
     __metadata("design:type", districts_js_1.District)
 ], Arret.prototype, "districts", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Index)(),
+    __metadata("design:type", String)
+], Arret.prototype, "firebase_uid", void 0);
 exports.Arret = Arret = __decorate([
     (0, typeorm_1.Entity)()
 ], Arret);

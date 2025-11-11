@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { RegionController } from "../controllers/region.controller.js";
-import { verifyToken } from "../middlewares/authMiddleware.js";
+import { authenticate, authorize} from "../middlewares/authMiddleware.js";
 
 const RegionRouter =Router();
 
@@ -61,7 +61,7 @@ RegionRouter.get("/:id",RegionController.getRegionById);
  *         description: Region enregistrée avec succès
  */
 
-RegionRouter.post("/create",RegionController.createRegion);
+RegionRouter.post("/create",authenticate,authorize("admin"),RegionController.createRegion);
 
 
 /**
@@ -88,7 +88,7 @@ RegionRouter.post("/create",RegionController.createRegion);
  *       404:
  *         description: Region non trouvé
  */
-RegionRouter.delete("/remove/:id",verifyToken(["admin"]),RegionController.removeRegion);
+RegionRouter.delete("/remove/:id",authenticate,authorize("admin"),RegionController.removeRegion);
 
 
 export default RegionRouter;

@@ -28,8 +28,4 @@ __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateArretDto.prototype, "longitude", void 0);
-__decorate([
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], CreateArretDto.prototype, "ligneId", void 0);
 //# sourceMappingURL=create-Arret.dto.js.map

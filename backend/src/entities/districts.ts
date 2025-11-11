@@ -9,7 +9,7 @@ export class District {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ unique: true })
   nom!: string;
 
   @ManyToOne(() => Region, (region) => region.districts, { onDelete: "CASCADE" })

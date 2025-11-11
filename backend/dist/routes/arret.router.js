@@ -4,6 +4,7 @@ const express_1 = require("express");
 const arret_controller_js_1 = require("../controllers/arret.controller.js");
 const authMiddleware_js_1 = require("../middlewares/authMiddleware.js");
 const ArretRouter = (0, express_1.Router)();
+ArretRouter.get("/search", arret_controller_js_1.ArretController.search);
 /**
  * @swagger
  * tags:
@@ -21,6 +22,17 @@ const ArretRouter = (0, express_1.Router)();
  *         description: Liste des arrêts récupérée avec succès
  */
 ArretRouter.get("/", arret_controller_js_1.ArretController.getAllArret);
+/**
+ * @swagger
+ * /arrets/me:
+ *   get:
+ *     summary: Récupérer la liste de tous les arrêts
+ *     tags: [Arrets]
+ *     responses:
+ *       200:
+ *         description: Liste des arrêts récupérée avec succès
+ */
+ArretRouter.get("/me", authMiddleware_js_1.authenticate, (0, authMiddleware_js_1.authorize)("user", "admin"), arret_controller_js_1.ArretController.getArretByUser);
 /**
  * @swagger
  * /arrets/{id}:
@@ -62,7 +74,7 @@ ArretRouter.get("/", arret_controller_js_1.ArretController.getAllArret);
  *         description: Arrêt non trouvé
  */
 ArretRouter.get("/:id", arret_controller_js_1.ArretController.getArretById);
-ArretRouter.delete("/:id", (0, authMiddleware_js_1.verifyToken)(["admin"]), arret_controller_js_1.ArretController.RemoveArret);
+ArretRouter.delete("/:id", authMiddleware_js_1.authenticate, (0, authMiddleware_js_1.authorize)("admin", "user"), arret_controller_js_1.ArretController.RemoveArret);
 /**
  * @swagger
  * /arrets/create:
@@ -85,14 +97,14 @@ ArretRouter.delete("/:id", (0, authMiddleware_js_1.verifyToken)(["admin"]), arre
  *               longitude:
  *                 type: number
  *                 example: 47.52875
- *               ligneId:
- *                 type: integer
- *                 example: 1
+ *               nomligne:
+ *                 type: string
+ *                 example: Ligne 101
  *     responses:
  *       201:
  *         description: Arrêt créé avec succès
  */
-ArretRouter.post("/create", (0, authMiddleware_js_1.verifyToken)(["admin"]), arret_controller_js_1.ArretController.createArret);
+ArretRouter.post("/create", authMiddleware_js_1.authenticate, (0, authMiddleware_js_1.authorize)("admin", "user"), arret_controller_js_1.ArretController.createArret);
 /**
  * @swagger
  * /arrets/update/{id}:
@@ -127,25 +139,6 @@ ArretRouter.post("/create", (0, authMiddleware_js_1.verifyToken)(["admin"]), arr
  *       404:
  *         description: Arrêt non trouvé
  */
-ArretRouter.put("/update/:id", (0, authMiddleware_js_1.verifyToken)(["admin"]), arret_controller_js_1.ArretController.updateArret);
-// /**
-//  * @swagger
-//  * /arrets/remove/{id}:
-//  *   delete:
-//  *     summary: Supprimer un arrêt (Admin seulement)
-//  *     tags: [Arrets]
-//  *     security:
-//  *       - bearerAuth: []
-//  *     parameters:
-//  *       - name: id
-//  *         in: path
-//  *         required: true
-//  *         schema:
-//  *           type: integer
-//  *     responses:
-//  *       200:
-//  *         description: Arrêt supprimé avec succès
-//  */
-// ArretRouter.delete("/remove/:id", verifyToken(["admin"]), ArretController.RemoveArret);
+ArretRouter.put("/update/:id", authMiddleware_js_1.authenticate, (0, authMiddleware_js_1.authorize)("admin"), arret_controller_js_1.ArretController.updateArret);
 exports.default = ArretRouter;
 //# sourceMappingURL=arret.router.js.map

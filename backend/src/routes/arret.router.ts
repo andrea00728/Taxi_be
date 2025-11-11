@@ -1,9 +1,11 @@
 import { Router } from "express";
 import { ArretController } from "../controllers/arret.controller.js";
-import { verifyToken } from "../middlewares/authMiddleware.js";
+import { authenticate, authorize } from "../middlewares/authMiddleware.js";
 
 const ArretRouter = Router();
 
+
+ArretRouter.get("/search", ArretController.search);
 /**
  * @swagger
  * tags:
@@ -22,6 +24,20 @@ const ArretRouter = Router();
  *         description: Liste des arrêts récupérée avec succès
  */
 ArretRouter.get("/", ArretController.getAllArret);
+
+
+
+/**
+ * @swagger
+ * /arrets/me:
+ *   get:
+ *     summary: Récupérer la liste de tous les arrêts
+ *     tags: [Arrets]
+ *     responses:
+ *       200:
+ *         description: Liste des arrêts récupérée avec succès
+ */
+ArretRouter.get("/me",authenticate,authorize("user","admin"), ArretController.getArretByUser);
 
 /**
  * @swagger
@@ -64,7 +80,7 @@ ArretRouter.get("/", ArretController.getAllArret);
  *         description: Arrêt non trouvé
  */
 ArretRouter.get("/:id", ArretController.getArretById);
-ArretRouter.delete("/:id", verifyToken(["admin"]), ArretController.RemoveArret);
+ArretRouter.delete("/:id",authenticate,authorize("admin","user"), ArretController.RemoveArret);
 
 /**
  * @swagger
@@ -88,14 +104,14 @@ ArretRouter.delete("/:id", verifyToken(["admin"]), ArretController.RemoveArret);
  *               longitude:
  *                 type: number
  *                 example: 47.52875
- *               ligneId:
- *                 type: integer
- *                 example: 1
+ *               nomligne:
+ *                 type: string
+ *                 example: Ligne 101
  *     responses:
  *       201:
  *         description: Arrêt créé avec succès
  */
-ArretRouter.post("/create",verifyToken(["admin"]), ArretController.createArret);
+ArretRouter.post("/create",authenticate,authorize("admin","user"), ArretController.createArret);
 
 /**
  * @swagger
@@ -131,27 +147,6 @@ ArretRouter.post("/create",verifyToken(["admin"]), ArretController.createArret);
  *       404:
  *         description: Arrêt non trouvé
  */
-ArretRouter.put("/update/:id",verifyToken(["admin"]), ArretController.updateArret);
-
-// /**
-//  * @swagger
-//  * /arrets/remove/{id}:
-//  *   delete:
-//  *     summary: Supprimer un arrêt (Admin seulement)
-//  *     tags: [Arrets]
-//  *     security:
-//  *       - bearerAuth: []
-//  *     parameters:
-//  *       - name: id
-//  *         in: path
-//  *         required: true
-//  *         schema:
-//  *           type: integer
-//  *     responses:
-//  *       200:
-//  *         description: Arrêt supprimé avec succès
-//  */
-// ArretRouter.delete("/remove/:id", verifyToken(["admin"]), ArretController.RemoveArret);
-
+ArretRouter.put("/update/:id",authenticate,authorize("admin"), ArretController.updateArret);
 
 export default ArretRouter;

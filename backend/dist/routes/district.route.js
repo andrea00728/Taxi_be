@@ -63,7 +63,7 @@ DistrictRoute.get("/:id", district_controller_js_1.DistrictController.getDistric
  *       201:
  *         description: District enregistré avec succès
  */
-DistrictRoute.post("/create", district_controller_js_1.DistrictController.createDistrict);
+DistrictRoute.post("/create", authMiddleware_js_1.authenticate, (0, authMiddleware_js_1.authorize)("admin"), district_controller_js_1.DistrictController.createDistrict);
 /**
  * @swagger
  * /districts/remove/{id}:
@@ -88,5 +88,5 @@ DistrictRoute.post("/create", district_controller_js_1.DistrictController.create
  *       404:
  *         description: Districts non trouvé
  */
-DistrictRoute.delete("/remove/:id", (0, authMiddleware_js_1.verifyToken)(["admin"]), district_controller_js_1.DistrictController.removeDistrict);
+DistrictRoute.delete("/remove/:id", authMiddleware_js_1.authenticate, (0, authMiddleware_js_1.authorize)("admin"), district_controller_js_1.DistrictController.removeDistrict);
 //# sourceMappingURL=district.route.js.map

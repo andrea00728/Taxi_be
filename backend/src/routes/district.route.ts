@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { DistrictController } from "../controllers/district.controller.js";
-import { verifyToken } from "../middlewares/authMiddleware.js";
+import { authenticate, authorize } from "../middlewares/authMiddleware.js";
 
 const DistrictRoute = Router();
 
@@ -68,7 +68,7 @@ DistrictRoute.get("/:id",DistrictController.getDistrictById);
  *         description: District enregistré avec succès
  */
 
-DistrictRoute.post("/create",DistrictController.createDistrict);
+DistrictRoute.post("/create",authenticate,authorize("admin"),DistrictController.createDistrict);
 
 
 /**
@@ -95,6 +95,6 @@ DistrictRoute.post("/create",DistrictController.createDistrict);
  *       404:
  *         description: Districts non trouvé
  */
-DistrictRoute.delete("/remove/:id",verifyToken(["admin"]),DistrictController.removeDistrict);
+DistrictRoute.delete("/remove/:id",authenticate,authorize("admin"),DistrictController.removeDistrict);
 
 export {DistrictRoute}

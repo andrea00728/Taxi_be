@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { LigneController } from "../controllers/ligne.controller.js";
-import { verifyToken } from "../middlewares/authMiddleware.js";
+import { authenticate, authorize } from "../middlewares/authMiddleware.js";
 
 const ligneRouter = Router();
 
@@ -22,6 +22,19 @@ const ligneRouter = Router();
  *         description: Liste des lignes récupérée avec succès
  */
 ligneRouter.get("/", LigneController.getAllLignes);
+
+
+/**
+ * @swagger
+ * /lignes/me:
+ *   get:
+ *     summary: Récupérer toutes les lignes de bus
+ *     tags: [Lignes]
+ *     responses:
+ *       200:
+ *         description: Liste des lignes récupérée avec succès
+ */
+ligneRouter.get("/me",authenticate,authorize("user"), LigneController.getLigneByUser);
 
 /**
  * @swagger
@@ -76,7 +89,7 @@ ligneRouter.get("/:id", LigneController.getLigneById);
  *       201:
  *         description: Ligne créée avec succès
  */
-ligneRouter.post("/create",verifyToken(["admin"]), LigneController.createLigne);
+ligneRouter.post("/create",authenticate,authorize("admin","user"), LigneController.createLigne);
 
 /**
  * @swagger
@@ -106,8 +119,38 @@ ligneRouter.post("/create",verifyToken(["admin"]), LigneController.createLigne);
  *       404:
  *         description: Ligne non trouvée
  */
-ligneRouter.put("/update/:id",verifyToken(["admin"]), LigneController.updateLigne);
+ligneRouter.put("/update/:id",authenticate,authorize("admin"), LigneController.updateLigne);
 
+/**
+ * @swagger
+ * /lignes/updateStatus/{id}:
+ *   put:
+ *     summary: Mettre à jour le statut d'une ligne existante
+ *     tags: [Lignes]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Identifiant de la ligne
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               statut:
+ *                 type: string
+ *                 example: Nouveau statut
+ *     responses:
+ *       200:
+ *         description: Ligne mise à jour avec succès
+ *       404:
+ *         description: Ligne non trouvée
+ */
+ligneRouter.put("/updateStatus/:id", authenticate, authorize("admin"), LigneController.updateLigne);
 /**
  * @swagger
  * /lignes/remove/{id}:
@@ -126,6 +169,6 @@ ligneRouter.put("/update/:id",verifyToken(["admin"]), LigneController.updateLign
  *       404:
  *         description: Ligne non trouvée
  */
-ligneRouter.delete("/remove/:id",verifyToken(["admin"]), LigneController.deleteLigne);
+ligneRouter.delete("/remove/:id", authenticate, authorize("admin","user"), LigneController.deleteLigne);
 
 export default ligneRouter;

@@ -7,5 +7,6 @@ export declare class Arret {
     longitude: number;
     ligne: Ligne;
     districts: District;
+    firebase_uid: string;
 }
 //# sourceMappingURL=Arret.d.ts.map

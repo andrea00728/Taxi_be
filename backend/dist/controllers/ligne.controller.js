@@ -20,6 +20,24 @@ class LigneController {
         }
     }
     /**
+     * Retrieves all lignes belonging to a given user, including their associated arrets and itineraires.
+     *
+     * @param {AuthRequest} req The Express request object.
+     * @param {Response} res The Express response object.
+     * @returns {Promise<void>} A promise that resolves when the response has been sent.
+     * @throws {Error} If an error occurs while retrieving the lignes.
+     */
+    static async getLigneByUser(req, res) {
+        try {
+            const firebaseUid = req.user.uid;
+            const data = await ligneService.getLigneUser(firebaseUid);
+            res.status(200).json(data);
+        }
+        catch (error) {
+            res.status(500).json({ message: "Erreur lors de la récupération des lignes" });
+        }
+    }
+    /**
      * Retrieves a ligne by its ID, including its associated arrets and itineraires.
      *
      * @param {Request} req The Express request object.
@@ -51,11 +69,13 @@ class LigneController {
     static async createLigne(req, res) {
         try {
             const payload = req.body;
-            const createLigne = await ligneService.createLign(payload);
+            const firebaseUid = req.user.uid;
+            const createLigne = await ligneService.createLign(payload, firebaseUid);
             res.status(201).json({ message: "ligne crée avec succès", createLigne });
         }
         catch (error) {
-            res.status(500).json({ message: "Erreur lors de la création de la ligne" });
+            console.log(error);
+            res.status(500).json({ message: "Erreur lors de la création de la ligne", error });
         }
     }
     /**
@@ -70,6 +90,16 @@ class LigneController {
         try {
             const id = Number(req.params.id);
             const updateLigne = await ligneService.updateLigne(id, req.body);
+            res.status(200).json({ message: "ligne mise à jour avec succès", updateLigne });
+        }
+        catch (error) {
+            res.status(500).json({ message: "Erreur lors de la mise à jour de la ligne" });
+        }
+    }
+    static async updateStatusLigne(req, res) {
+        try {
+            const id = Number(req.params.id);
+            const updateLigne = await ligneService.updateStatusLigne(id, req.body);
             res.status(200).json({ message: "ligne mise à jour avec succès", updateLigne });
         }
         catch (error) {

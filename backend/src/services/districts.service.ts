@@ -13,7 +13,7 @@ export class DistrictService{
      */
     async getAllDistricts(){
         return this.districtRepository.find(
-            {relations:["lignes","arrets"]}
+            {relations:["lignes","lignes.arrets"]}
         )
     }
     
@@ -26,7 +26,7 @@ export class DistrictService{
      */
      async getDistrictById(id:number){
         return this.districtRepository.findOne(
-            {where:{id},relations:["lignes","arrets"]}
+            {where:{id},relations:["lignes","lignes.arrets"]}
         )
      }
 

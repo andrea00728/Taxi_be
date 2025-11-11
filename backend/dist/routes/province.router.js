@@ -61,7 +61,7 @@ ProvinceRouter.get("/:id", province_controller_js_1.ProvinceController.getProvin
  *       201:
  *         description: Province enregistrée avec succès
  */
-ProvinceRouter.post("/create", province_controller_js_1.ProvinceController.createProvince);
+ProvinceRouter.post("/create", authMiddleware_js_1.authenticate, (0, authMiddleware_js_1.authorize)("admin"), province_controller_js_1.ProvinceController.createProvince);
 /**
  * @swagger
  * /provinces/remove/{id}:
@@ -86,6 +86,6 @@ ProvinceRouter.post("/create", province_controller_js_1.ProvinceController.creat
  *       404:
  *         description: Arrêt non trouvé
  */
-ProvinceRouter.delete("/remove/:id", (0, authMiddleware_js_1.verifyToken)(["admin"]), province_controller_js_1.ProvinceController.removeProvince);
+ProvinceRouter.delete("/remove/:id", authMiddleware_js_1.authenticate, (0, authMiddleware_js_1.authorize)("admin"), province_controller_js_1.ProvinceController.removeProvince);
 exports.default = ProvinceRouter;
 //# sourceMappingURL=province.router.js.map

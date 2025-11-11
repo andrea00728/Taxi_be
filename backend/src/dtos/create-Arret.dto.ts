@@ -13,6 +13,8 @@ export class CreateArretDto{
     @IsNumber()
     longitude!:number;
 
-    @IsNumber()
-     ligneId?: number;
+    // @IsNumber()
+    //  ligneId?: number;
+
+    nomligne!:string;
 }

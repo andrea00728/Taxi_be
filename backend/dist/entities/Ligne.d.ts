@@ -2,6 +2,10 @@ import "reflect-metadata";
 import { Arret } from "./Arret.js";
 import { Itineraire } from "./Itineraire.js";
 import { District } from "./districts.js";
+declare enum StatutLigne {
+    Attent = "Attent",
+    Accepted = "Accepted"
+}
 export declare class Ligne {
     id: number;
     nom: string;
@@ -11,5 +15,8 @@ export declare class Ligne {
     arrets: Arret[];
     itineraires: Itineraire[];
     district: District;
+    statut: StatutLigne;
+    firebase_uid: string;
 }
+export {};
 //# sourceMappingURL=Ligne.d.ts.map

@@ -13,6 +13,11 @@ exports.Ligne = void 0;
 require("reflect-metadata");
 const typeorm_1 = require("typeorm");
 const districts_js_1 = require("./districts.js");
+var StatutLigne;
+(function (StatutLigne) {
+    StatutLigne["Attent"] = "Attent";
+    StatutLigne["Accepted"] = "Accepted";
+})(StatutLigne || (StatutLigne = {}));
 let Ligne = class Ligne {
 };
 exports.Ligne = Ligne;
@@ -48,6 +53,15 @@ __decorate([
     (0, typeorm_1.ManyToOne)(() => districts_js_1.District, (district) => district.lignes),
     __metadata("design:type", districts_js_1.District)
 ], Ligne.prototype, "district", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: "enum", enum: StatutLigne, default: StatutLigne.Attent }),
+    __metadata("design:type", String)
+], Ligne.prototype, "statut", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Index)(),
+    __metadata("design:type", String)
+], Ligne.prototype, "firebase_uid", void 0);
 exports.Ligne = Ligne = __decorate([
     (0, typeorm_1.Entity)()
 ], Ligne);

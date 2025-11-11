@@ -1,11 +1,15 @@
 import "reflect-metadata";
 
-import { Entity, PrimaryGeneratedColumn, Column,OneToMany, Relation, ManyToMany, ManyToOne} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column,OneToMany, Relation, ManyToMany, ManyToOne, Index} from "typeorm";
 import { Arret } from "./Arret.js";
 import { Itineraire } from "./Itineraire.js";
 import { District } from "./districts.js";
 import { Region } from "./regions.js";
 
+ enum StatutLigne {
+   Attent= "Attent",
+   Accepted = "Accepted",
+}
 
 @Entity()
 export class Ligne {
@@ -33,4 +37,10 @@ export class Ligne {
  @ManyToOne(() => District, (district) => district.lignes)
   district!: District;
 
+  @Column({ type: "enum", enum: StatutLigne, default: StatutLigne.Attent })
+  statut!:StatutLigne;
+
+  @Column()
+  @Index()
+  firebase_uid!:string;
 }
