@@ -431,7 +431,7 @@ export default function MapScreen() {
           
           const borderLine = L.polyline(routeCoords, {
             color: '#FFFFFF',
-            weight: 8,
+            weight: 1,
             opacity: 0.6,
             smoothFactor: 1,
             lineCap: 'round',
@@ -440,7 +440,7 @@ export default function MapScreen() {
 
           const mainLine = L.polyline(routeCoords, {
             color: lineColor,
-            weight: 6,
+            weight: 3.5,
             opacity: 0.8,
             smoothFactor: 1,
             lineCap: 'round',
@@ -449,7 +449,6 @@ export default function MapScreen() {
 
           mainLine.bindPopup(
             '<div class="popup-header">' +
-            '<span class="popup-icon">🚌</span>' +
             '<span>Ligne ' + ligne.nom + '</span>' +
             '</div>' +
             '<div class="popup-details">' +
@@ -483,19 +482,19 @@ export default function MapScreen() {
       }
 
       currentLignes = lignesData;
-      console.log('✅ Carte mise à jour');
+      console.log(' Carte mise à jour');
     }
 
     window.updateUserLocation = function(coords) {
       const latLng = [coords.latitude, coords.longitude];
       if (userMarker) {
         userMarker.setLatLng(latLng);
-        console.log('📍 Position utilisateur mise à jour');
+        console.log('Position utilisateur mise à jour');
       }
     };
 
     window.updateLignes = function(newLignesData) {
-      console.log('🔄 Nouvelles données reçues de React Native');
+      console.log(' Nouvelles données reçues de React Native');
       processLignes(newLignesData, true);
     };
 
@@ -541,8 +540,8 @@ export default function MapScreen() {
           javaScriptEnabled={true}
           domStorageEnabled={true}
           originWhitelist={['*']}
-          onLoadStart={() => console.log('🔄 Chargement de la carte...')}
-          onLoadEnd={() => console.log('✅ Carte chargée')}
+          onLoadStart={() => console.log(' Chargement de la carte...')}
+          onLoadEnd={() => console.log(' Carte chargée')}
           onError={(syntheticEvent) => {
             console.error('❌ Erreur WebView:', syntheticEvent.nativeEvent);
           }}

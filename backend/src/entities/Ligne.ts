@@ -6,7 +6,7 @@ import { Itineraire } from "./Itineraire.js";
 import { District } from "./districts.js";
 import { Region } from "./regions.js";
 
- enum StatutLigne {
+ export enum StatutLigne {
    Attent= "Attent",
    Accepted = "Accepted",
 }

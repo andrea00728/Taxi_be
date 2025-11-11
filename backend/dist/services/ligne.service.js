@@ -26,6 +26,17 @@ class LigneService {
             relations: ["district", "arrets", "itineraires"] });
     }
     /**
+     * Retrieves all lignes that have been accepted and include their associated arrets.
+     *
+     * @returns {Promise<Ligne[]>} A promise that resolves to an array of Ligne objects.
+     */
+    async findAllWithArrets() {
+        return await this.ligneRepository.find({
+            where: { statut: Ligne_js_1.StatutLigne.Accepted },
+            relations: ["arrets"]
+        });
+    }
+    /**
      * Retrieves all lignes belonging to a given user, including their associated arrets and itineraires.
      *
      * @param {string} firebase_uid The Firebase UID of the user to retrieve lignes for.

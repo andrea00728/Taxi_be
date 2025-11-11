@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Ligne = void 0;
+exports.Ligne = exports.StatutLigne = void 0;
 require("reflect-metadata");
 const typeorm_1 = require("typeorm");
 const districts_js_1 = require("./districts.js");
@@ -17,7 +17,7 @@ var StatutLigne;
 (function (StatutLigne) {
     StatutLigne["Attent"] = "Attent";
     StatutLigne["Accepted"] = "Accepted";
-})(StatutLigne || (StatutLigne = {}));
+})(StatutLigne || (exports.StatutLigne = StatutLigne = {}));
 let Ligne = class Ligne {
 };
 exports.Ligne = Ligne;

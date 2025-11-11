@@ -18,6 +18,18 @@ class ArretService {
         return await this.arretRepository.find({ relations: ["ligne"] });
     }
     /**
+     * Normalise une chaîne : supprime accents, apostrophes et met en minuscule
+     */
+    normalizeString(str) {
+        return str
+            .normalize("NFD") // Décompose les caractères accentués
+            .replace(/[\u0300-\u036f]/g, "") // Supprime les accents
+            .replace(/[''`´]/g, "") // Supprime les apostrophes
+            .replace(/\s+/g, " ") // Normalise les espaces
+            .toLowerCase()
+            .trim();
+    }
+    /**
      * Retrieves an arret by its ID, including its associated ligne.
      *
      * @param {number} id The ID of the arret to retrieve.
@@ -78,7 +90,7 @@ class ArretService {
         if (!data.nom || data.latitude == null || data.longitude == null) {
             throw new Error("nom, latitude, longitude sont obligatoires");
         }
-        // 1 ✅ Trouver toutes les lignes portant ce nom
+        // 1 Trouver toutes les lignes portant ce nom
         const lignes = await this.ligneRepository.find({
             where: { nom: data.nomligne },
             relations: ["arrets"],
@@ -86,7 +98,7 @@ class ArretService {
         if (lignes.length === 0) {
             throw new Error(`La ligne '${data.nomligne}' n'existe pas`);
         }
-        // 2 ✅ Créer l’arrêt
+        // 2 Créer l’arrêt
         const arret = this.arretRepository.create({
             nom: data.nom,
             latitude: data.latitude,
@@ -94,7 +106,7 @@ class ArretService {
             firebase_uid: firebaseUid,
         });
         const newArret = await this.arretRepository.save(arret);
-        // 3 ✅ Ajouter l’arrêt à toutes les lignes
+        // 3  Ajouter l’arrêt à toutes les lignes
         for (const ligne of lignes) {
             if (!ligne.arrets)
                 ligne.arrets = []; // sécurité
@@ -127,17 +139,29 @@ class ArretService {
         return this.arretRepository.delete(id);
     }
     /**
-     * Retrieves all arrets with a name that matches the given name.
-     * The search is case-insensitive.
-     *
-     * @param {string} name The name to search for.
-     * @returns {Promise<Arret[]>} A promise that resolves to an array of Arret objects.
-     */
+    * Recherche d'arrêts avec normalisation (ignore accents, apostrophes, casse)
+    * @param {string} name Le nom à rechercher
+    * @returns {Promise<Arret[]>} Une liste d'arrêts correspondants
+    */
     async findByName(name) {
-        return await this.arretRepository.createQueryBuilder("arret")
-            .where("LOWER(arret.nom) LIKE LOWER(:name)", { name: `%${name}%` })
+        // Normaliser le terme de recherche
+        const normalizedSearch = this.normalizeString(name);
+        console.log(`🔍 Recherche d'arrêts: "${name}" → normalisé: "${normalizedSearch}"`);
+        // Récupérer tous les arrêts avec leurs lignes
+        const allArrets = await this.arretRepository
+            .createQueryBuilder("arret")
             .leftJoinAndSelect("arret.ligne", "ligne")
             .getMany();
+        // Filtrer avec normalisation
+        const matchingArrets = allArrets.filter((arret) => {
+            const normalizedName = this.normalizeString(arret.nom);
+            return normalizedName.includes(normalizedSearch);
+        });
+        console.log(`    ${matchingArrets.length} arrêt(s) trouvé(s)`);
+        matchingArrets.forEach(a => {
+            console.log(`      - ${a.nom} (${a.ligne?.nom || "Sans ligne"})`);
+        });
+        return matchingArrets;
     }
     /**
      * Trouver tous les arrêts d'une ligne spécifique

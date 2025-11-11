@@ -10,6 +10,10 @@ export declare class ArretService {
      */
     getAllArrets(): Promise<Arret[]>;
     /**
+     * Normalise une chaîne : supprime accents, apostrophes et met en minuscule
+     */
+    private normalizeString;
+    /**
      * Retrieves an arret by its ID, including its associated ligne.
      *
      * @param {number} id The ID of the arret to retrieve.
@@ -56,12 +60,10 @@ export declare class ArretService {
      */
     deleteArret(id: number): Promise<import("typeorm").DeleteResult>;
     /**
-     * Retrieves all arrets with a name that matches the given name.
-     * The search is case-insensitive.
-     *
-     * @param {string} name The name to search for.
-     * @returns {Promise<Arret[]>} A promise that resolves to an array of Arret objects.
-     */
+    * Recherche d'arrêts avec normalisation (ignore accents, apostrophes, casse)
+    * @param {string} name Le nom à rechercher
+    * @returns {Promise<Arret[]>} Une liste d'arrêts correspondants
+    */
     findByName(name: string): Promise<Arret[]>;
     /**
      * Trouver tous les arrêts d'une ligne spécifique

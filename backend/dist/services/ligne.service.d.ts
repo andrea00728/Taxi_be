@@ -15,6 +15,12 @@ export declare class LigneService {
      */
     getLigneByDistrict(districtId: number): Promise<Ligne[]>;
     /**
+     * Retrieves all lignes that have been accepted and include their associated arrets.
+     *
+     * @returns {Promise<Ligne[]>} A promise that resolves to an array of Ligne objects.
+     */
+    findAllWithArrets(): Promise<Ligne[]>;
+    /**
      * Retrieves all lignes belonging to a given user, including their associated arrets and itineraires.
      *
      * @param {string} firebase_uid The Firebase UID of the user to retrieve lignes for.

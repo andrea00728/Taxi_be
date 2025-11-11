@@ -1,6 +1,6 @@
 import { AppDataSource } from "../config/data-source.js";
 import { District } from "../entities/districts.js";
-import { Ligne } from "../entities/Ligne.js";
+import { Ligne, StatutLigne } from "../entities/Ligne.js";
 
 export class LigneService{
     private ligneRepository =   AppDataSource.getRepository(Ligne);
@@ -24,6 +24,19 @@ export class LigneService{
         return this.ligneRepository.find(
             {where:{district:{id:districtId}},
             relations:["district","arrets","itineraires"]});
+    }
+
+
+    /**
+     * Retrieves all lignes that have been accepted and include their associated arrets.
+     * 
+     * @returns {Promise<Ligne[]>} A promise that resolves to an array of Ligne objects.
+     */
+    async  findAllWithArrets(){
+     return await this.ligneRepository.find({
+        where:{statut:StatutLigne.Accepted},
+        relations:["arrets"]
+     });
     }
 
 
