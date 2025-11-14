@@ -5,8 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 import LigneScreen from './Screenuser/LigneScreen';
 import AjoutContributionScreen from './Screenuser/AjoutContribution';
 import MapScreen from './Screenuser/MapScreen';
-import HistoriqueScreen from './Screenuser/HistoriqueScreen';
 import tw from "twrnc";
+import NotificationScreen from './Screenuser/HistoriqueScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -107,10 +107,10 @@ export default function ContributionScreen() {
                     }}
             />
             <Tab.Screen 
-                name="Historique" 
-                component={HistoriqueScreen} 
+                name="notifications" 
+                component={NotificationScreen} 
                 options={{
-                        tabBarLabel: 'Historique',
+                        tabBarLabel: 'notifications',
                         tabBarIcon: ({ focused, color }) => (
                             <View style={tw`items-center justify-center`}>
                                 <View 
@@ -119,7 +119,7 @@ export default function ContributionScreen() {
                                     }`}
                                 >
                                     <Ionicons 
-                                        name={focused ? 'time-outline' : 'time-outline'} 
+                                        name={focused ? 'notifications-outline' : 'notifications-outline'} 
                                         size={24}
                                         color={color}
                                     />
