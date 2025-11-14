@@ -30,7 +30,7 @@ export default function  ButtonContribution ({ navigation }: ButtonContributionP
   const handleLogin = useCallback((token: string) => {
     console.log("Token reçu, sauvegarde dans le contexte...", token);
     
-    // 1. Sauvegarder le token dans le contexte
+    //  Sauvegarder le token dans le contexte
     login(token);
     
     // 2. Fermer la modale
@@ -61,7 +61,7 @@ export default function  ButtonContribution ({ navigation }: ButtonContributionP
       >
         <View style={tw`flex-row items-center`}>
           <Ionicons name="heart-outline" size={18} color="#fff" />
-          <Text style={tw`text-white font-bold ml-2`}>Connexion</Text>
+          <Text style={tw`text-white font-bold ml-2`}>nouveaux contribution</Text>
         </View>
       </Pressable>
 
