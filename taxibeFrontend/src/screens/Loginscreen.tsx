@@ -20,6 +20,15 @@ export default function LoginScreen({
   const [step, setStep] = useState<"email" | "otp">("email");
   const [isLoading, setIsLoading] = useState(false);
   const codeRef = useRef<TextInput>(null);
+
+
+
+/**
+ * Envoie un code de vérification par email.
+ * Si le code est envoyé avec succès, le champ de code est mis en focus.
+ * Si une erreur survient, un message d'erreur est affiché.
+ * Enfin, l'indicateur de chargement est réinitialisé à false.
+ */
   async function handleSendCode() {
     setIsLoading(true);
     try {
@@ -35,9 +44,12 @@ export default function LoginScreen({
       Alert.alert("Erreur", e.response?.data?.error || "Erreur réseau.");
     }
     setIsLoading(false);
+
   }
 
-  // async function handleVerifyCode() {
+
+  
+  //   async function handleVerifyCode() {
   //   if (!code) { 
   //     Alert.alert("Erreur", "Veuillez saisir le code reçu."); 
   //     return; 
@@ -46,7 +58,6 @@ export default function LoginScreen({
   //   try {
   //     const res = await axios.post(`${url}/auth/verify-otp`, { email, code });
   //     if (res.status === 200) {
-  //       Alert.alert("Bienvenue", "Connexion réussie !");
   //       onLoginSuccess?.(res.data.token);
   //     } else {
   //       Alert.alert("Erreur", "Code invalide.");
@@ -56,25 +67,31 @@ export default function LoginScreen({
   //   }
   //   setIsLoading(false);
   // }
-    async function handleVerifyCode() {
-    if (!code) { 
-      Alert.alert("Erreur", "Veuillez saisir le code reçu."); 
-      return; 
-    }
-    setIsLoading(true);
-    try {
-      const res = await axios.post(`${url}/auth/verify-otp`, { email, code });
-      if (res.status === 200) {
-        // L'alerte est retirée, on notifie simplement le parent.
-        onLoginSuccess?.(res.data.token);
-      } else {
-        Alert.alert("Erreur", "Code invalide.");
-      }
-    } catch (e: any) {
-      Alert.alert("Erreur", e.response?.data?.error || "Erreur réseau.");
-    }
-    setIsLoading(false);
+
+
+  async function handleVerifyCode() {
+  if (!code) { 
+    Alert.alert("Erreur", "Veuillez saisir le code reçu."); 
+    return; 
   }
+  setIsLoading(true);
+  try {
+    const res = await axios.post(`${url}/auth/verify-otp`, { email, code });
+    
+    if (res.status === 200) {
+      // Récupérer le token et le rôle de la réponse
+      const { token, role } = res.data;
+      
+      console.log("Token et rôle reçus:", { token, role });
+      onLoginSuccess?.(token);
+    } else {
+      Alert.alert("Erreur", "Code invalide.");
+    }
+  } catch (e: any) {
+    Alert.alert("Erreur", e.response?.data?.error || "Erreur réseau.");
+  }
+  setIsLoading(false);
+}
 
 
   return (
@@ -91,7 +108,9 @@ export default function LoginScreen({
           <View style={tw`bg-yellow-400 self-start rounded-full px-4 py-2 mb-4`}>
             <Text style={tw`text-white font-bold`}>Login</Text>
           </View>
-
+           <View style={tw`bg-gray-300 self-end rounded-lg px-4 py-2 mb-4`}>
+            <Text style={tw`text-gray-500 font-bold`}>conntecter vous avec votre compte utilisateur ou admin  avec l'authorisation de votre compte qu'il convient</Text>
+          </View>
           {step === "email" ? (
             <>
               <Text style={tw`text-gray-700 mb-2 font-medium`}>Email</Text>
@@ -168,7 +187,6 @@ export default function LoginScreen({
             style={tw`self-end mt-3`}
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            {/* <Text style={tw`text-[#FCB53B]`}>Mot de passe oublié ?</Text> */}
           </Pressable>
 
           <View style={tw`flex-row justify-center mt-3`}>

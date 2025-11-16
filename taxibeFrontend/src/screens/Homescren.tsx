@@ -19,11 +19,28 @@ interface District {
 // Définissez le type des props que Homescren va recevoir
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
+/**
+ * Écran d'accueil de l application Taxibe
+ * @param {Props} Props du composant
+ * @returns {JSX.Element} Le composant de l'écran d'accueil
+ * @example
+ * const HomeScreen = () => {
+ *   return (
+ *     <>
+ *       // Composants de l'écran d'accueil
+ *     </>
+ *   );
+ * };
+ */
 export default function HomeScreen({ navigation }: Props) {
   const [districts, setDistricts] = useState<District[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
+/**
+ * Récupère les lignes avec statut "Accepted"
+ * @returns Promesse qui résout en un tableau de lignes
+ */
   const fetchLignes = async () => {
     setLoading(true);
     try {
@@ -132,7 +149,7 @@ export default function HomeScreen({ navigation }: Props) {
 
         {/* Bouton flottant */}
         <View style={tw`absolute bottom-6 right-6`}>
-          <ButtonContribution navigation={navigation} />
+          <ButtonContribution  />
         </View>
       </View>
     </View>
