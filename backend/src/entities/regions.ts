@@ -17,7 +17,7 @@ export class Region{
      @JoinColumn({ name: "province_id" })
     province!: Province;
 
-    @OneToMany(() => District, (district) => district.region)
+    @OneToMany(() => District, (district) => district.region, { onDelete: "CASCADE" })
     districts!: District[];
 
 }

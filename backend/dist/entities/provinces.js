@@ -25,7 +25,7 @@ __decorate([
     __metadata("design:type", String)
 ], Province.prototype, "nom", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => regions_js_1.Region, (region) => region.province),
+    (0, typeorm_1.OneToMany)(() => regions_js_1.Region, (region) => region.province, { onDelete: "CASCADE" }),
     __metadata("design:type", Array)
 ], Province.prototype, "regions", void 0);
 exports.Province = Province = __decorate([

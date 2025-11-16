@@ -22,6 +22,6 @@ export class Itineraire {
   @Column("decimal")
   tarif!: number;
 
-  @ManyToOne(() => Ligne, (ligne) => ligne.itineraires)
+  @ManyToOne(() => Ligne, (ligne) => ligne.itineraires, { onDelete: "CASCADE" })
   ligne!: Ligne;
 }

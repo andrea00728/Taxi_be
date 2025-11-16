@@ -60,14 +60,16 @@ class LigneService {
      * @param {Partial<Ligne>} data The data of the ligne to create.
      * @returns {Promise<Ligne>} A promise that resolves to the created Ligne object.
      */
-    async createLign(data, firebaseUid) {
+    async createLign(data, firebaseUid, userRole) {
         if (data.district_id) {
             data.district = { id: data.district_id };
             delete data.district_id;
         }
+        const statut = userRole === "admin" ? Ligne_js_1.StatutLigne.Accepted : Ligne_js_1.StatutLigne.Attent;
         const ligne = this.ligneRepository.create({
             ...data,
-            firebase_uid: firebaseUid
+            firebase_uid: firebaseUid,
+            statut: statut,
         });
         return await this.ligneRepository.save(ligne);
     }

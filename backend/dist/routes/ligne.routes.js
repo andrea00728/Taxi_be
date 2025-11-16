@@ -31,7 +31,7 @@ ligneRouter.get("/", ligne_controller_js_1.LigneController.getAllLignes);
  *       200:
  *         description: Liste des lignes récupérée avec succès
  */
-ligneRouter.get("/me", authMiddleware_js_1.authenticate, (0, authMiddleware_js_1.authorize)("user"), ligne_controller_js_1.LigneController.getLigneByUser);
+ligneRouter.get("/me", authMiddleware_js_1.authenticate, (0, authMiddleware_js_1.authorize)("user", "admin"), ligne_controller_js_1.LigneController.getLigneByUser);
 /**
  * @swagger
  * /lignes/{id}:

@@ -40,6 +40,8 @@ export class LigneService{
     }
 
 
+
+
     /**
      * Retrieves all lignes belonging to a given user, including their associated arrets and itineraires.
      *
@@ -74,14 +76,19 @@ export class LigneService{
      * @param {Partial<Ligne>} data The data of the ligne to create.
      * @returns {Promise<Ligne>} A promise that resolves to the created Ligne object.
      */
-    async createLign(data:Partial<Ligne> & {district_id?:number},firebaseUid:string){
+    async createLign(data:Partial<Ligne> & {district_id?:number},firebaseUid:string,
+        userRole:string,
+    ){
         if(data.district_id){
             data.district = {id:data.district_id} as District;
             delete data.district_id;
         }
-        const ligne= this.ligneRepository.create({
+
+        const statut = userRole === "admin" ? StatutLigne.Accepted :StatutLigne.Attent;
+         const ligne= this.ligneRepository.create({
             ...data,
-            firebase_uid:firebaseUid
+            firebase_uid:firebaseUid,
+            statut :statut,
         })
          return await this.ligneRepository.save(ligne);
     }

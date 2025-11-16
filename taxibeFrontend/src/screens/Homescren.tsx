@@ -132,10 +132,10 @@ export default function HomeScreen({ navigation }: Props) {
                   <Text style={tw`text-gray-500`}>Aucun bus pour ce district</Text>
                 ) : (
                   distr.lignes.map((ligne) => (
-                    <View key={ligne.id} style={tw`bg-gray-800 rounded-2xl p-5 mb-4`}>
-                      <Text style={tw`text-white font-bold text-lg`}>{ligne.nom}</Text>
-                      <Text style={tw`text-white`}>⇄{ligne.depart} → {ligne.terminus}</Text>
-                       <Text style={tw`text-white`}>⇄{ligne.terminus} ←{ligne.depart}</Text>
+                    <View key={ligne.id} style={tw`bg-white  rounded-2xl border border-gray-500 p-5 mb-4`}>
+                      <Text style={tw`text-gray-800 font-bold text-lg`}>{ligne.nom}</Text>
+                      <Text style={tw`text-gray-800`}>⇄{ligne.depart} → {ligne.terminus}</Text>
+                       <Text style={tw`text-gray-800`}>⇄{ligne.terminus} ←{ligne.depart}</Text>
                       <View style={tw`ml-50 `}>
                         <ButtonDetails navigation={navigation} />
                       </View>

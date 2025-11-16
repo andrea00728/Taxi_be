@@ -28,13 +28,13 @@ export class Ligne {
   @Column()
   terminus!: string;
 
-  @OneToMany('Arret','ligne')
+  @OneToMany('Arret','ligne',{onDelete:"CASCADE"})
   arrets!: Arret[];
 
-  @OneToMany('Itineraire','ligne')
+  @OneToMany('Itineraire','ligne',{onDelete:"CASCADE"})
   itineraires!:Itineraire[];
 
- @ManyToOne(() => District, (district) => district.lignes)
+ @ManyToOne(() => District, (district) => district.lignes, { onDelete: "CASCADE" })
   district!: District;
 
   @Column({ type: "enum", enum: StatutLigne, default: StatutLigne.Attent })

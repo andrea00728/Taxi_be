@@ -18,11 +18,11 @@ export class Arret {
   longitude!: number;
 
   
-    @ManyToOne('Ligne','arrets')
+    @ManyToOne('Ligne','arrets',{onDelete:"CASCADE"})
   ligne!:Ligne;
 
   
-  @ManyToOne('District','arrets')
+  @ManyToOne('District','arrets',{onDelete:"CASCADE"})
   districts!:District;
 
   @Column()

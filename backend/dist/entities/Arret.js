@@ -33,11 +33,11 @@ __decorate([
     __metadata("design:type", Number)
 ], Arret.prototype, "longitude", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)('Ligne', 'arrets'),
+    (0, typeorm_1.ManyToOne)('Ligne', 'arrets', { onDelete: "CASCADE" }),
     __metadata("design:type", Ligne_js_1.Ligne)
 ], Arret.prototype, "ligne", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)('District', 'arrets'),
+    (0, typeorm_1.ManyToOne)('District', 'arrets', { onDelete: "CASCADE" }),
     __metadata("design:type", districts_js_1.District)
 ], Arret.prototype, "districts", void 0);
 __decorate([
