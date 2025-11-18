@@ -16,7 +16,7 @@ export class District {
   @JoinColumn({ name: "region_id" })
   region!: Region;
 
-  @OneToMany(() => Ligne, (ligne) => ligne.district)
+  @OneToMany(() => Ligne, (ligne) => ligne.district, { onDelete: "CASCADE" })
   lignes!: Ligne[];
 
    @OneToMany('Arret','districts')

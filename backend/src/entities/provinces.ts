@@ -10,6 +10,6 @@ export class Province {
      @Column({ unique: true })
      nom!: string;
 
-      @OneToMany(() => Region, (region) => region.province)
+      @OneToMany(() => Region, (region) => region.province, { onDelete: "CASCADE" })
        regions!: Region[];
 }

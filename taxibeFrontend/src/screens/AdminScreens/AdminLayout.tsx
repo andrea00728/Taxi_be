@@ -1,12 +1,38 @@
+
+// import { useAuth } from '@/src/contexts/AuthContext';
+// import { Pressable, Text, View } from 'react-native';
+// import tw from 'twrnc';
+
+// export default function AdminLayout() {
+//   const { logout } = useAuth();
+
+//   return (
+//     <View style={tw`flex-1 p-4`}>
+//       <Text style={tw`text-2xl font-bold`}>AdminLayout</Text>
+      
+//       <Pressable 
+//         onPress={logout}
+//         style={tw`bg-red-500 px-4 py-2 rounded-lg mt-4`}
+//       >
+//         <Text style={tw`text-white font-bold`}>Déconnexion</Text>
+//       </Pressable>
+//     </View>
+//   );
+// }
+
+
+
 import React from 'react';
 import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import LigneScreen from './Screenuser/LigneScreen';
-import AjoutContributionScreen from './Screenuser/AjoutContribution';
-import MapScreen from './Screenuser/MapScreen';
+import LigneScreen from '../Screenuser/LigneScreen';
+import AjoutContributionScreen from '../Screenuser/AjoutContribution';
+import MapScreen from '../Screenuser/MapScreen';
+import NotificationScreen from '../Screenuser/HistoriqueScreen';
 import tw from "twrnc";
-import NotificationScreen from './Screenuser/HistoriqueScreen';
+import DashboardAdmin from './Dashboard';
+import LigneScreenAdmin from './LigneScreen_Admin';
 
 const Tab = createBottomTabNavigator();
 
@@ -14,7 +40,7 @@ const Tab = createBottomTabNavigator();
 export default function ContributionScreen() {
     return (
         <Tab.Navigator
-            initialRouteName="Ligne"
+            initialRouteName="dashboard"
             screenOptions={{
                     headerShown: false,
                     tabBarShowLabel: true,
@@ -41,8 +67,31 @@ export default function ContributionScreen() {
                 }}
         >
             <Tab.Screen 
+                name="dashboard" 
+                component={DashboardAdmin}
+                options={{
+                        tabBarLabel: 'Dashboard',
+                        tabBarIcon: ({ focused, color }) => (
+                            <View style={tw`items-center justify-center`}>
+                                <View 
+                                    style={tw`w-12 h-12 rounded-2xl items-center justify-center ${
+                                        focused ? 'bg-yellow-100' : 'bg-transparent'
+                                    }`}
+                                >
+                                    <Ionicons 
+                                      name={focused ? 'stats-chart' : 'stats-chart-outline'}
+
+                                        size={24}
+                                        color={color}
+                                    />
+                                </View>
+                            </View>
+                        ),
+                    }}
+            />
+            <Tab.Screen 
                 name="Ligne" 
-                component={LigneScreen}
+                component={LigneScreenAdmin}
                 options={{
                         tabBarLabel: 'Bus',
                         tabBarIcon: ({ focused, color }) => (

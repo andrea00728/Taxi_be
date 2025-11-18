@@ -20,6 +20,8 @@ export class ArretService {
 
 
 
+
+
   /**
    * Normalise une chaîne : supprime accents, apostrophes et met en minuscule
    */
@@ -33,6 +35,9 @@ export class ArretService {
     .trim();
 }
 
+
+
+
     /**
      * Retrieves an arret by its ID, including its associated ligne.
      *
@@ -45,6 +50,10 @@ export class ArretService {
             relations:["ligne"]}
         );
     }
+
+
+
+
 
 
     /**
@@ -65,6 +74,7 @@ export class ArretService {
 
   
 
+
     /**
      * Creates a new arret and persists it to the database.
      * If the arret has a "nomigne" property, it is used to retrieve the associated ligne
@@ -75,31 +85,6 @@ export class ArretService {
      * @returns {Promise<Arret>} A promise that resolves to the created Arret object.
      * @throws {Error} If the ligne associated with the arret does not exist.
      */
-//   async createArret(data: Partial<Arret> & { nomligne?: string },firebaseUid:string) {
-// //   if (data.nomligne) {
-// //     data.ligne = { nom: data.nomligne } as Ligne;
-// //     delete data.nomligne;
-// //   }
-
-// if(data.nomligne){
-//     const ligne = await this.ligneRepository.findOne({
-//         where:{nom:data.nomligne},
-//     });
-
-//     if(!ligne){
-//         throw new Error(`ligne ${data.nomligne} n'existe pas`);
-//     }
-
-//     data.ligne=ligne;
-//     delete data.nomligne;
-// }
-//   const arret = this.arretRepository.create({
-//     ...data,
-//     firebase_uid:firebaseUid
-//   });
-//   return this.arretRepository.save(arret);
-// }
-
 
 async createArret(
   data: Partial<Arret> & { nomligne?: string },
@@ -160,6 +145,10 @@ async createArret(
         await this.arretRepository.update({id},data);
         return this.getArretById(id);
     }
+
+
+
+
 
     /**
      * Deletes an arret by its ID.
@@ -226,6 +215,10 @@ async findByName(name: string): Promise<Arret[]> {
       throw new Error("Impossible de récupérer les arrêts de cette ligne");
     }
   }
+
+
+
+
 
   /**
    * Trouver toutes les lignes qui passent par un arrêt (par nom)

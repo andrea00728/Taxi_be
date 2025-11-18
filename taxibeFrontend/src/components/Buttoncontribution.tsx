@@ -4,24 +4,23 @@ import { Modal, Pressable, Text, useWindowDimensions, View } from "react-native"
 import tw from "twrnc";
 import LoginScreen from "../screens/Loginscreen";
 import RegisterScreen from "../screens/RegistrerScreen";
-
-// Importez les types de navigation
-import { RootStackParamList } from '@/app/index'; // Assurez-vous que le chemin est correct
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAuth } from "../contexts/AuthContext";
 
-// Définissez les props que le bouton va recevoir
-interface ButtonContributionProps {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
-}
-
-
-export default function  ButtonContribution ({ navigation }: ButtonContributionProps) {
+/**
+ * Bouton pour ouvrir la modale de contribution, qui permet de se connecter ou de s'inscrire.
+ * La modale est composée d'un écran de login et d'un écran d'inscription.
+ * Lorsque le bouton est pressé, la modale s'ouvre.
+ * Lorsque le token est reçu, le token est sauvegardé dans le contexte.
+ * La navigation se fera automatiquement via le Stack.Navigator conditionnel.
+ */
+export default function ButtonContribution() {
   const [visible, setVisible] = useState(false);
   const [currentScreen, setCurrentScreen] = useState<'login' | 'register'>('login');
   const { height } = useWindowDimensions();
-   const { login } = useAuth();
+  const { login } = useAuth();
+
   const open = useCallback(() => setVisible(true), []);
+  
   const close = useCallback(() => {
     setVisible(false);
     setCurrentScreen('login');
@@ -30,16 +29,16 @@ export default function  ButtonContribution ({ navigation }: ButtonContributionP
   const handleLogin = useCallback((token: string) => {
     console.log("Token reçu, sauvegarde dans le contexte...", token);
     
-    // 1. Sauvegarder le token dans le contexte
+    // Sauvegarder le token (le rôle sera extrait automatiquement)
     login(token);
     
-    // 2. Fermer la modale
+    // Fermer la modale
     setVisible(false);
     setCurrentScreen('login');
     
-    // NE PAS appeler navigation.navigate() ici
-    // React Navigation va automatiquement naviguer vers le bon écran
+    // La navigation se fera automatiquement via le Stack.Navigator conditionnel
   }, [login]);
+
   const goToRegister = useCallback(() => {
     setCurrentScreen('register');
   }, []);
@@ -61,7 +60,7 @@ export default function  ButtonContribution ({ navigation }: ButtonContributionP
       >
         <View style={tw`flex-row items-center`}>
           <Ionicons name="heart-outline" size={18} color="#fff" />
-          <Text style={tw`text-white font-bold ml-2`}>Connexion</Text>
+          <Text style={tw`text-white font-bold ml-2`}>nouveaux contribution</Text>
         </View>
       </Pressable>
 
@@ -78,8 +77,8 @@ export default function  ButtonContribution ({ navigation }: ButtonContributionP
           <Pressable onPress={(e) => e.stopPropagation()}>
             <View 
               style={[
-                  tw`bg-white rounded-t-3xl px-5 py-4`, // Style pour l'effet "bottom sheet"
-                  { minHeight: modalHeight, maxHeight: height * 0.9 }
+                tw`bg-white rounded-t-3xl px-5 py-4`,
+                { minHeight: modalHeight, maxHeight: height * 0.9 }
               ]}
             >
               <View style={tw`flex-row items-center justify-end mb-3`}>
@@ -114,3 +113,6 @@ export default function  ButtonContribution ({ navigation }: ButtonContributionP
     </View>
   );
 }
+
+
+

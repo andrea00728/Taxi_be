@@ -34,7 +34,7 @@ ligneRouter.get("/", LigneController.getAllLignes);
  *       200:
  *         description: Liste des lignes récupérée avec succès
  */
-ligneRouter.get("/me",authenticate,authorize("user"), LigneController.getLigneByUser);
+ligneRouter.get("/me",authenticate,authorize("user","admin"), LigneController.getLigneByUser);
 
 /**
  * @swagger

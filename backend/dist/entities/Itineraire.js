@@ -41,7 +41,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Itineraire.prototype, "tarif", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => Ligne_js_1.Ligne, (ligne) => ligne.itineraires),
+    (0, typeorm_1.ManyToOne)(() => Ligne_js_1.Ligne, (ligne) => ligne.itineraires, { onDelete: "CASCADE" }),
     __metadata("design:type", Ligne_js_1.Ligne)
 ], Itineraire.prototype, "ligne", void 0);
 exports.Itineraire = Itineraire = __decorate([

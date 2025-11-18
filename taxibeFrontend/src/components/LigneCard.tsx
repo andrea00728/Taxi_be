@@ -22,10 +22,10 @@ export interface LigneCardProps {
 }
 
 export const LigneCard = React.memo(({ ligneGroup }: LigneCardProps) => (
-  <View style={[tw`bg-gray-800 rounded-2xl p-5 mb-4`, styles.cardShadow]}>
+  <View style={[tw`bg-white rounded-2xl border-2  border-gray-100 p-5 mb-4`, styles.cardShadow]}>
     {/* Nom de la ligne */}
     <View style={tw`flex-row items-center justify-between mb-3`}>
-      <Text style={tw`text-white font-bold text-2xl`}>{ligneGroup.nom}</Text>
+      <Text style={tw`text-gray-800 font-bold text-2xl`}>{ligneGroup.nom}</Text>
       <View style={tw`bg-yellow-400 px-3 py-1 rounded-full`}>
         <Text style={tw`text-gray-900 font-bold`}>{ligneGroup.tarif} Ar</Text>
       </View>
@@ -42,7 +42,7 @@ export const LigneCard = React.memo(({ ligneGroup }: LigneCardProps) => (
           size={18} 
           color="#FCD34D" 
         />
-        <Text style={tw`text-gray-300 text-base ml-2`}>
+        <Text style={tw`text-gray-800 text-base ml-2`}>
           {trajet.depart} 
           <Text style={tw`text-yellow-400 mx-2`}>
             {trajet.direction === 'aller' ? '→' : '←'}
@@ -58,7 +58,7 @@ export const LigneCard = React.memo(({ ligneGroup }: LigneCardProps) => (
           size={18} 
           color="#FCD34D" 
         />
-        <Text style={tw`text-gray-300 text-base ml-2`}>
+        <Text style={tw`text-gray-800 text-base ml-2`}>
           {trajet.terminus} 
           <Text style={tw`text-yellow-400 mx-2`}>
             {trajet.direction === 'aller' ? '←' : '→'}

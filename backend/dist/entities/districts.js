@@ -31,7 +31,7 @@ __decorate([
     __metadata("design:type", regions_js_1.Region)
 ], District.prototype, "region", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => Ligne_js_1.Ligne, (ligne) => ligne.district),
+    (0, typeorm_1.OneToMany)(() => Ligne_js_1.Ligne, (ligne) => ligne.district, { onDelete: "CASCADE" }),
     __metadata("design:type", Array)
 ], District.prototype, "lignes", void 0);
 __decorate([

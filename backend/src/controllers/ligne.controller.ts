@@ -19,6 +19,7 @@ export class LigneController {
 }
 
 
+
 /**
  * Retrieves all lignes belonging to a given user, including their associated arrets and itineraires.
  *
@@ -37,6 +38,8 @@ static async getLigneByUser(req:AuthRequest,res:Response){
   }
 
 }
+
+
 
 /**
  * Retrieves a ligne by its ID, including its associated arrets and itineraires.
@@ -60,6 +63,8 @@ static async getLigneById(req: Request, res: Response) {
 }
 
 
+
+
 /**
  * Creates a new ligne and persists it to the database.
  *
@@ -72,13 +77,15 @@ static async createLigne(req:AuthRequest,res:Response){
     try {
     const payload=req.body;
      const firebaseUid=req.user!.uid;
-    const createLigne=await ligneService.createLign(payload,firebaseUid);
+      const role = req.user!.role;
+    const createLigne=await ligneService.createLign(payload,firebaseUid,role);
     res.status(201).json({message:"ligne crée avec succès",createLigne});
     } catch (error) {
       console.log(error);
        res.status(500).json({ message: "Erreur lors de la création de la ligne",error }); 
     }
 }
+
 
 
 
@@ -99,6 +106,8 @@ static async updateLigne(req:Request,res:Response){
        res.status(500).json({ message: "Erreur lors de la mise à jour de la ligne" }); 
     }
 }
+
+ 
 
 static async updateStatusLigne(req:Request,res:Response){
     try {

@@ -187,6 +187,15 @@ export const getLigneById = async (id: number): Promise<Ligne> => {
 };
 
 
+export const UpdateStatusLigne =async (id:number,data:Partial<LigneDto>):Promise<Ligne>=> {
+  try {
+    const response = await api.put(`${url}/lignes/updateStatus/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error(`Erreur lors de la mise à jour de la ligne ${id}:`, error);
+    throw error;
+  }
+};
 
 /**
  * Met à jour une ligne
@@ -213,7 +222,7 @@ export const updateLigne = async (id: number, data: Partial<LigneDto>): Promise<
  */
 export const deleteLigne = async (id: number): Promise<void> => {
   try {
-    await api.delete(`${url}/lignes/${id}`);
+    await api.delete(`${url}/lignes/remove/${id}`);
   } catch (error) {
     console.error(`Erreur lors de la suppression de la ligne ${id}:`, error);
     throw error;

@@ -42,7 +42,7 @@ export declare class LigneService {
      */
     createLign(data: Partial<Ligne> & {
         district_id?: number;
-    }, firebaseUid: string): Promise<Ligne>;
+    }, firebaseUid: string, userRole: string): Promise<Ligne>;
     /**
      * Updates a ligne by its ID.
      *

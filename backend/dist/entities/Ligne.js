@@ -42,15 +42,15 @@ __decorate([
     __metadata("design:type", String)
 ], Ligne.prototype, "terminus", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)('Arret', 'ligne'),
+    (0, typeorm_1.OneToMany)('Arret', 'ligne', { onDelete: "CASCADE" }),
     __metadata("design:type", Array)
 ], Ligne.prototype, "arrets", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)('Itineraire', 'ligne'),
+    (0, typeorm_1.OneToMany)('Itineraire', 'ligne', { onDelete: "CASCADE" }),
     __metadata("design:type", Array)
 ], Ligne.prototype, "itineraires", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => districts_js_1.District, (district) => district.lignes),
+    (0, typeorm_1.ManyToOne)(() => districts_js_1.District, (district) => district.lignes, { onDelete: "CASCADE" }),
     __metadata("design:type", districts_js_1.District)
 ], Ligne.prototype, "district", void 0);
 __decorate([

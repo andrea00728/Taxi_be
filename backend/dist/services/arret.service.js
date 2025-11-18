@@ -62,27 +62,6 @@ class ArretService {
      * @returns {Promise<Arret>} A promise that resolves to the created Arret object.
      * @throws {Error} If the ligne associated with the arret does not exist.
      */
-    //   async createArret(data: Partial<Arret> & { nomligne?: string },firebaseUid:string) {
-    // //   if (data.nomligne) {
-    // //     data.ligne = { nom: data.nomligne } as Ligne;
-    // //     delete data.nomligne;
-    // //   }
-    // if(data.nomligne){
-    //     const ligne = await this.ligneRepository.findOne({
-    //         where:{nom:data.nomligne},
-    //     });
-    //     if(!ligne){
-    //         throw new Error(`ligne ${data.nomligne} n'existe pas`);
-    //     }
-    //     data.ligne=ligne;
-    //     delete data.nomligne;
-    // }
-    //   const arret = this.arretRepository.create({
-    //     ...data,
-    //     firebase_uid:firebaseUid
-    //   });
-    //   return this.arretRepository.save(arret);
-    // }
     async createArret(data, firebaseUid) {
         if (!data.nomligne) {
             throw new Error("nomligne est requis");

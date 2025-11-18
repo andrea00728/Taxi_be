@@ -37,6 +37,7 @@ export interface District {
 }
 
 export interface LigneDto{
+  statut:string;
   nom: string;
   tarif: string;
   depart: string;

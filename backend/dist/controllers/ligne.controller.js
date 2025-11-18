@@ -70,7 +70,8 @@ class LigneController {
         try {
             const payload = req.body;
             const firebaseUid = req.user.uid;
-            const createLigne = await ligneService.createLign(payload, firebaseUid);
+            const role = req.user.role;
+            const createLigne = await ligneService.createLign(payload, firebaseUid, role);
             res.status(201).json({ message: "ligne crée avec succès", createLigne });
         }
         catch (error) {
