@@ -89,4 +89,21 @@ DistrictRoute.post("/create", authMiddleware_js_1.authenticate, (0, authMiddlewa
  *         description: Districts non trouvé
  */
 DistrictRoute.delete("/remove/:id", authMiddleware_js_1.authenticate, (0, authMiddleware_js_1.authorize)("admin"), district_controller_js_1.DistrictController.removeDistrict);
+/**
+ * @swagger
+ * /districts/countByDistrict/{id}:
+ *   get:
+ *     summary: Compter les lignes d'un district
+ *     tags: [Districts]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Nombre de lignes (integer)
+ */
+DistrictRoute.get("/countByDistrict/:id", authMiddleware_js_1.authenticate, (0, authMiddleware_js_1.authorize)("admin"), district_controller_js_1.DistrictController.ligneCountByDistrict);
 //# sourceMappingURL=district.route.js.map

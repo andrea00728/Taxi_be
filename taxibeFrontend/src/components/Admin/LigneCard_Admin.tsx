@@ -211,13 +211,6 @@ export const LigneCard = React.memo(({ ligne, onUpdate, onDelete }: LigneCardPro
           </View>
         </View>
       )}
-
-      {/* Badge du statut dynamique avec couleur */}
-      {/* <View style={tw`${getStatusColor(currentStatut)} px-3 py-1 items-center rounded-lg mt-3`}>
-        <Text style={tw`text-white font-bold`}>{currentStatut}</Text>
-      </View> */}
-
-
       {/* Modal de confirmation de suppression */}
       <Modal
         visible={showDeleteModal}
@@ -313,7 +306,7 @@ export const LigneCard = React.memo(({ ligne, onUpdate, onDelete }: LigneCardPro
                 disabled={loading}
               >
                 <Text style={tw`text-white font-bold text-center`}>
-                   En attente
+                   Suspendu
                 </Text>
               </TouchableOpacity>
 

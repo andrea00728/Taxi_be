@@ -51,6 +51,12 @@ export declare class LigneService {
      * @returns {Promise<Ligne>} A promise that resolves to the updated Ligne object.
      */
     updateLigne(id: number, data: Partial<Ligne>): Promise<Ligne | null>;
+    /**
+     * Updates the status of a ligne by its ID.
+     *
+     * @throws {Error} If the status of the ligne is not provided in the data.
+     * @returns {Promise<Ligne>} A promise that resolves to the updated Ligne object.
+     */
     updateStatusLigne(id: number, data: Partial<Ligne>): Promise<Ligne | null>;
     /**
      * Deletes a ligne by its ID.

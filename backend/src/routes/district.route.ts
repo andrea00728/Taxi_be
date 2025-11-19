@@ -97,4 +97,22 @@ DistrictRoute.post("/create",authenticate,authorize("admin"),DistrictController.
  */
 DistrictRoute.delete("/remove/:id",authenticate,authorize("admin"),DistrictController.removeDistrict);
 
+/**
+ * @swagger
+ * /districts/countByDistrict/{id}:
+ *   get:
+ *     summary: Compter les lignes d'un district
+ *     tags: [Districts]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Nombre de lignes (integer)
+ */
+DistrictRoute.get("/countByDistrict/:id",DistrictController.ligneCountByDistrict);
+
 export {DistrictRoute}
