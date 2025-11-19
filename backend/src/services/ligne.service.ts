@@ -4,7 +4,6 @@ import { Ligne, StatutLigne } from "../entities/Ligne.js";
 
 export class LigneService{
     private ligneRepository =   AppDataSource.getRepository(Ligne);
-
     /**
      * Retrieves all lignes with their associated arrets and itineraires.
      * 
@@ -107,6 +106,12 @@ export class LigneService{
 
 
 
+    /**
+     * Updates the status of a ligne by its ID.
+     *
+     * @throws {Error} If the status of the ligne is not provided in the data.
+     * @returns {Promise<Ligne>} A promise that resolves to the updated Ligne object.
+     */
     async updateStatusLigne(id:number,data:Partial<Ligne>){
         if(!data.statut){
             throw new Error("Statut de la ligne manquant");
@@ -124,4 +129,9 @@ export class LigneService{
     async deleteLigne(id:number){
         return await this.ligneRepository.delete({id});
     }
+
+
+
+
+        
 }

@@ -34,5 +34,14 @@ export declare class DistrictController {
      * @throws {Error} If an error occurs while deleting the district.
      */
     static removeDistrict(req: Request, res: Response): Promise<void>;
+    /**
+     * Retrieves the number of lignes associated with a district by its ID.
+     *
+     * @param {Request} req The Express request object.
+     * @param {Response} res The Express response object.
+     * @returns {Promise<void>} A promise that resolves when the response has been sent.
+     * @throws {Error} If an error occurs while retrieving the count.
+     */
+    static ligneCountByDistrict(req: Request, res: Response): Promise<void>;
 }
 //# sourceMappingURL=district.controller.d.ts.map

@@ -16,6 +16,16 @@ export declare class DistrictService {
      */
     getDistrictById(id: number): Promise<District | null>;
     /**
+     * Retrieves the number of lignes associated with a given district.
+     *
+     * @param {number} id The ID of the district to retrieve the ligne count for.
+     * @returns {Promise<number>} A promise that resolves to the number of lignes associated with the district, or 0 if no district is found.
+     */
+    ligneCountByDistrict(id: number): Promise<0 | {
+        count: number;
+        nom: string;
+    }>;
+    /**
      * Creates a new district and persists it to the database.
      * If a regionId is provided in the data, it will be used to create a
      * Region object and associate it with the district.

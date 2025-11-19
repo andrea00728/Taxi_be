@@ -171,4 +171,7 @@ ligneRouter.put("/updateStatus/:id", authenticate, authorize("admin"), LigneCont
  */
 ligneRouter.delete("/remove/:id", authenticate, authorize("admin","user"), LigneController.deleteLigne);
 
+
+
+
 export default ligneRouter;

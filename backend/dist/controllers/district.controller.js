@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DistrictController = void 0;
 const districts_service_js_1 = require("../services/districts.service.js");
+const console_1 = require("console");
 const districtService = new districts_service_js_1.DistrictService();
 class DistrictController {
     /**
@@ -74,6 +75,24 @@ class DistrictController {
         }
         catch (error) {
             res.status(500).json({ message: "Erreur lors de la suppression du district" });
+        }
+    }
+    /**
+     * Retrieves the number of lignes associated with a district by its ID.
+     *
+     * @param {Request} req The Express request object.
+     * @param {Response} res The Express response object.
+     * @returns {Promise<void>} A promise that resolves when the response has been sent.
+     * @throws {Error} If an error occurs while retrieving the count.
+     */
+    static async ligneCountByDistrict(req, res) {
+        try {
+            const id = Number(req.params.id);
+            const count = await districtService.ligneCountByDistrict(id);
+            res.json({ count });
+        }
+        catch (error) {
+            res.status(500).json({ message: `Erreur lors de la recuperation du ${console_1.count}` });
         }
     }
 }

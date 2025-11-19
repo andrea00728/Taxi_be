@@ -331,6 +331,23 @@ export const getDistrictById = async (id: number): Promise<District> => {
 };
 
 
+/**
+ * Compte le nombre de lignes associées à un district
+ * @param id - ID du district
+ * @returns Promesse qui résout en le nombre de lignes associées au district
+ * @throws Erreur lors de la récupération du nombre de lignes
+ */
+export const countLigneByDistrict = async (id:number): Promise<number> => {
+  try {
+    const response = await api.get(`${url}/districts/countByDistrict/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la recounts des lignes par district:", error);
+    throw error;
+  }
+}
+
+
 
 
 // ==================== SERVICES Des Arretes ====================
@@ -350,5 +367,8 @@ export const createArret = async (data: ArretDto): Promise<Arret> => {
     throw error;
   }
 };
+
+
+
 
 export default api;

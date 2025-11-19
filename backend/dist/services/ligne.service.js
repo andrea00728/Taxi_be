@@ -84,6 +84,12 @@ class LigneService {
         await this.ligneRepository.update({ id }, data);
         return this.getLigneById(id);
     }
+    /**
+     * Updates the status of a ligne by its ID.
+     *
+     * @throws {Error} If the status of the ligne is not provided in the data.
+     * @returns {Promise<Ligne>} A promise that resolves to the updated Ligne object.
+     */
     async updateStatusLigne(id, data) {
         if (!data.statut) {
             throw new Error("Statut de la ligne manquant");

@@ -30,6 +30,31 @@ export class DistrictService{
         )
      }
 
+
+    /**
+     * Retrieves the number of lignes associated with a given district.
+     *
+     * @param {number} id The ID of the district to retrieve the ligne count for.
+     * @returns {Promise<number>} A promise that resolves to the number of lignes associated with the district, or 0 if no district is found.
+     */
+    async ligneCountByDistrict(id:number){
+      const district = await this.districtRepository.findOne({
+        where:{id},
+        relations:["lignes"]
+      });
+
+      if(!district){
+        return 0;
+      }
+
+      const countLinge= district.lignes.length;
+      return {
+        count:countLinge,
+        nom:district.nom
+      }
+
+    }
+
     /**
      * Creates a new district and persists it to the database.
      * If a regionId is provided in the data, it will be used to create a
