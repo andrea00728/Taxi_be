@@ -1,8 +1,8 @@
-import React, { useRef, useState } from "react";
-import { View, Text, TextInput, Pressable, Alert, ActivityIndicator, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
-import tw from "twrnc";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
+import React, { useRef, useState } from "react";
+import { ActivityIndicator, Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import tw from "twrnc";
 import { url } from "../utils/url";
 
 export default function RegisterScreen({ 
@@ -89,6 +89,12 @@ export default function RegisterScreen({
         <View style={tw`flex-1 bg-white px-1`}>
           <View style={tw`bg-yellow-400 self-start rounded-full px-4 py-2 mb-4`}>
             <Text style={tw`text-white font-bold`}>Créer un compte</Text>
+          </View>
+           <View style={tw`bg-gray-300 self-end rounded-lg px-4 py-2 mb-4`}>
+          <Text style={tw`text-gray-500 font-bold`}>
+            Rejoignez-nous et débloquez toutes les fonctionnalités personnalisées selon vos autorisations.
+          </Text>
+
           </View>
 
           {step === "email" ? (

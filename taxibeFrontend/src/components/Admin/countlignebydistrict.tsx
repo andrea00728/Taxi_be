@@ -21,7 +21,7 @@ export default function CountLigne() {
       try {
         setLoading(true);
         
-        // 1. RÉCUPÈRE TOUS LES DISTRICTS DYNAMIQUEMENT
+        // Récupère tous les districts
         const allDistricts = await getDistricts();
         
         if (!allDistricts || allDistricts.length === 0) {
@@ -32,16 +32,17 @@ export default function CountLigne() {
           return;
         }
 
-        // 2. POUR CHAQUE DISTRICT, RÉCUPÈRE LE COUNT
+        // Pour chaque district, récupère le count depuis l'API
         const districtsWithCount = await Promise.all(
           allDistricts.map(async (district) => {
             try {
-              const count = await countLigneByDistrict(district.id);
-              const validCount = typeof count === 'number' && !isNaN(count) ? count : 0;
+              // L'API retourne {count: number, nom: string}
+              const response = await countLigneByDistrict(district.id);
+              
               return {
                 id: district.id,
-                nom: district.nom,
-                count: validCount
+                nom: response.nom, // Utilise le nom de la réponse API
+                count: response.count // Utilise le count de la réponse API
               };
             } catch (err) {
               console.error(`Erreur pour le district ${district.id}:`, err);
@@ -106,9 +107,9 @@ export default function CountLigne() {
 
   return (
     <View style={tw`mb-6`}>
-      <Text style={tw`text-xl font-semibold text-gray-800 mb-4`}>
+      {/* <Text style={tw`text-xl font-semibold text-gray-800 mb-4`}>
         Lignes par District
-      </Text>
+      </Text> */}
 
       {districts.map((district, index) => {
         const percentage = (district.count / maxCount) * 100;

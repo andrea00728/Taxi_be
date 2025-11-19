@@ -3,6 +3,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { url } from '../utils/url';
 import { Ligne, LigneDto, District, Region, Province, ArretDto, Arret } from '../type/ligneType';
+import { CountByDistrictResponse } from '../type/districtType';
 
 const api = axios.create({
   baseURL: url,
@@ -334,19 +335,18 @@ export const getDistrictById = async (id: number): Promise<District> => {
 /**
  * Compte le nombre de lignes associées à un district
  * @param id - ID du district
- * @returns Promesse qui résout en le nombre de lignes associées au district
- * @throws Erreur lors de la récupération du nombre de lignes
+ * @returns Promesse qui résout avec count et nom du district
  */
-export const countLigneByDistrict = async (id:number): Promise<number> => {
+export const countLigneByDistrict = async (id: number): Promise<CountByDistrictResponse['count']> => {
   try {
-    const response = await api.get(`${url}/districts/countByDistrict/${id}`);
-    return response.data;
+    const response = await api.get<CountByDistrictResponse>(`${url}/districts/countByDistrict/${id}`);
+    // Retourne l'objet count qui contient {count: number, nom: string}
+    return response.data.count;
   } catch (error) {
-    console.error("Erreur lors de la recounts des lignes par district:", error);
+    console.error("Erreur lors de la récupération des lignes par district:", error);
     throw error;
   }
 }
-
 
 
 

@@ -67,7 +67,8 @@ export default function LigneForm({ onCreated }: LigneFormProps) {
       tarif: tarif,
       depart: depart,
       terminus: terminus,
-      district_id: selectedDistrict!
+      district_id: selectedDistrict!,
+      statut: ''
     };
 
     try {

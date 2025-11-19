@@ -105,5 +105,5 @@ DistrictRoute.delete("/remove/:id", authMiddleware_js_1.authenticate, (0, authMi
  *       200:
  *         description: Nombre de lignes (integer)
  */
-DistrictRoute.get("/countByDistrict/:id", authMiddleware_js_1.authenticate, (0, authMiddleware_js_1.authorize)("admin"), district_controller_js_1.DistrictController.ligneCountByDistrict);
+DistrictRoute.get("/countByDistrict/:id", district_controller_js_1.DistrictController.ligneCountByDistrict);
 //# sourceMappingURL=district.route.js.map
