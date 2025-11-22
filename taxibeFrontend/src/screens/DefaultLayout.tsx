@@ -7,11 +7,32 @@ import AjoutContributionScreen from './Screenuser/AjoutContribution';
 import MapScreen from './Screenuser/MapScreen';
 import tw from "twrnc";
 import NotificationScreen from './Screenuser/HistoriqueScreen';
+import { useSocket } from '../contexts/socketContext';
+import { useAuth } from '../contexts/AuthContext';
+
 
 const Tab = createBottomTabNavigator();
 
 // --- Le composant ContributionScreen devient le conteneur du menu ---
 export default function ContributionScreen() {
+     const { notifications } = useSocket();
+        // const unreadCount = notifications.filter(n => !n.isRead).length;
+        const { userRole } = useAuth();
+         const unreadCount = notifications.filter(n => {
+            //  Si déjà lu, on ignore
+            if (n.isRead) return false;
+            const title = (n.title || "").toLowerCase();
+            
+            // Cas Admin
+            if (title.includes("nouvelle ligne") || title.includes("nouveelle ligne")) {
+                return userRole === "admin";
+            }
+            // Cas User
+            if (title.includes("changement de statut") || title.includes("statut modifié")) {
+                return userRole === "user";
+            }
+            return true;
+        }).length;
     return (
         <Tab.Navigator
             initialRouteName="Ligne"
@@ -106,27 +127,29 @@ export default function ContributionScreen() {
                         ),
                     }}
             />
-            <Tab.Screen 
+             <Tab.Screen 
                 name="notifications" 
                 component={NotificationScreen} 
-                options={{
-                        tabBarLabel: 'notifications',
-                        tabBarIcon: ({ focused, color }) => (
-                            <View style={tw`items-center justify-center`}>
-                                <View 
-                                    style={tw`w-12 h-12 rounded-2xl items-center justify-center ${
-                                        focused ? 'bg-yellow-100' : 'bg-transparent'
-                                    }`}
-                                >
-                                    <Ionicons 
-                                        name={focused ? 'notifications-outline' : 'notifications-outline'} 
-                                        size={24}
-                                        color={color}
-                                    />
-                                </View>
-                            </View>
-                        ),
-                    }}
+                 options={{
+                tabBarLabel: 'notifications',
+                tabBarBadge: unreadCount > 0 ? unreadCount : undefined,
+                                    
+                tabBarIcon: ({ focused, color }) => (
+                    <View style={tw`items-center justify-center`}>
+                        <View 
+                            style={tw`w-12 h-12 rounded-2xl items-center justify-center ${
+                                focused ? 'bg-yellow-100' : 'bg-transparent'
+                             }`}
+                            >
+                            <Ionicons 
+                                name={focused ? 'notifications' : 'notifications-outline'} 
+                                size={24}
+                                color={color}
+                            />
+                        </View>
+                    </View>
+                ),
+            }}
             />
         </Tab.Navigator>
     );

@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { url } from '../utils/url';
 import { Ligne, LigneDto, District, Region, Province, ArretDto, Arret } from '../type/ligneType';
 import { CountByDistrictResponse } from '../type/districtType';
+import { NotificationData } from '../type/notificationType';
 
 const api = axios.create({
   baseURL: url,
@@ -188,6 +189,13 @@ export const getLigneById = async (id: number): Promise<Ligne> => {
 };
 
 
+/**
+ * Met à jour le statut d'une ligne
+ * @param id - ID de la ligne à mettre à jour
+ * @param data - Nouvelles données de la ligne (uniquement le statut)
+ * @returns Promesse qui résout en la ligne mise à jour
+ * @throws Erreur lors de la mise à jour de la ligne
+ */
 export const UpdateStatusLigne =async (id:number,data:Partial<LigneDto>):Promise<Ligne>=> {
   try {
     const response = await api.put(`${url}/lignes/updateStatus/${id}`, data);
@@ -370,5 +378,44 @@ export const createArret = async (data: ArretDto): Promise<Arret> => {
 
 
 
+
+// ==================== SERVICES NOTIFICATION ====================
+
+export const getAllNotification = async (): Promise<NotificationData[]> => {
+  try {
+    const response = await api.get(`${url}/notifications`);
+    return response.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des notification:", error);
+    throw error;
+  }
+};
+
+
+
+/**
+ * Supprime un notification
+ * @param id - ID de la notification à supprimer
+ * @returns Promesse qui résout quand le notification est supprimée
+ */
+export const removeNotification = async (id: number): Promise<void> => {
+  try {
+    await api.delete(`${url}/notifications/remove/${id}`);
+  } catch (error) {
+    console.error(`Erreur lors de la suppression de la ligne ${id}:`, error);
+    throw error;
+  }
+};
+
+
+
+export const markNotificationAsRead = async (id: number) => {
+    try {
+    await api.put(`${url}/notifications/read/${id}`);
+  } catch (error) {
+    console.error(`Erreur lors de la mark ${id}:`, error);
+    throw error;
+  }
+};
 
 export default api;

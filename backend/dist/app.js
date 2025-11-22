@@ -18,6 +18,7 @@ const province_router_js_1 = __importDefault(require("./routes/province.router.j
 const region_route_js_1 = __importDefault(require("./routes/region.route.js"));
 const district_route_js_1 = require("./routes/district.route.js");
 const cors_1 = __importDefault(require("cors"));
+const notification_routes_js_1 = __importDefault(require("./routes/notification.routes.js"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 console.log('EMAIL_USER=', process.env.SMTP_USER);
@@ -78,6 +79,7 @@ app.use("/api/Trajet", trajet_routes_js_1.default);
 app.use("/api/provinces", province_router_js_1.default);
 app.use("/api/regions", region_route_js_1.default);
 app.use("/api/districts", district_route_js_1.DistrictRoute);
+app.use("/api/notifications", notification_routes_js_1.default);
 data_source_js_1.AppDataSource.initialize()
     .then(() => console.log("📦 Base de données connectée"))
     .catch((err) => console.error("Erreur de connexion DB :", err));

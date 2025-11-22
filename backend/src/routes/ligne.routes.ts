@@ -150,7 +150,7 @@ ligneRouter.put("/update/:id",authenticate,authorize("admin"), LigneController.u
  *       404:
  *         description: Ligne non trouvée
  */
-ligneRouter.put("/updateStatus/:id", authenticate, authorize("admin"), LigneController.updateLigne);
+ligneRouter.put("/updateStatus/:id", authenticate, authorize("admin"), LigneController.updateStatusLigne);
 /**
  * @swagger
  * /lignes/remove/{id}:

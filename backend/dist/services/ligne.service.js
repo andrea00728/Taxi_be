@@ -3,9 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LigneService = void 0;
 const data_source_js_1 = require("../config/data-source.js");
 const Ligne_js_1 = require("../entities/Ligne.js");
+const notification_js_1 = require("../entities/notification.js");
+const server_js_1 = require("../server.js");
 class LigneService {
     constructor() {
         this.ligneRepository = data_source_js_1.AppDataSource.getRepository(Ligne_js_1.Ligne);
+        this.notificationGat = server_js_1.notificationGateway;
+        this.notificationRepo = data_source_js_1.AppDataSource.getRepository(notification_js_1.NotificationEntity);
     }
     /**
      * Retrieves all lignes with their associated arrets and itineraires.
@@ -71,7 +75,19 @@ class LigneService {
             firebase_uid: firebaseUid,
             statut: statut,
         });
-        return await this.ligneRepository.save(ligne);
+        const saveLigne = await this.ligneRepository.save(ligne);
+        const notif = this.notificationRepo.create({
+            title: "Nouvelle Ligne creee",
+            message: `La ligne ${data.nom} du district ${data.district} a été mise en attente de validation`,
+            type: 'info',
+            date: new Date(),
+        });
+        await this.notificationRepo.save(notif);
+        this.notificationGat?.emitNotifRegisterToAdmin({
+            ...notif,
+            date: notif.date.toISOString(),
+        });
+        return saveLigne;
     }
     /**
      * Updates a ligne by its ID.
@@ -90,12 +106,52 @@ class LigneService {
      * @throws {Error} If the status of the ligne is not provided in the data.
      * @returns {Promise<Ligne>} A promise that resolves to the updated Ligne object.
      */
+    // Dans ligne.service.ts
     async updateStatusLigne(id, data) {
+        console.log(` Début updateStatusLigne pour ID ${id}`);
         if (!data.statut) {
             throw new Error("Statut de la ligne manquant");
         }
-        await this.ligneRepository.update({ id }, { statut: data.statut });
-        return this.getLigneById(id);
+        try {
+            // 1. Mise à jour de la ligne
+            await this.ligneRepository.update({ id }, { statut: data.statut });
+            const update_Status = await this.getLigneById(id);
+            if (!update_Status) {
+                console.error(" Erreur: Ligne introuvable après update");
+                return null;
+            }
+            // 2. Création de la notif
+            const notif = this.notificationRepo.create({
+                title: 'Changement de statut',
+                message: `Le statut de la ligne ${update_Status.nom} est passé à ${data.statut}`,
+                type: 'info',
+                date: new Date(),
+            });
+            // 3. Sauvegarde Notif (AVEC GESTION D'ERREUR DÉDIÉE)
+            try {
+                console.log(" Tentative sauvegarde notification...");
+                const savedNotif = await this.notificationRepo.save(notif);
+                console.log(" Notification update sauvegardée (ID:", savedNotif.id, ")");
+                if (server_js_1.notificationGateway) {
+                    server_js_1.notificationGateway.emitNotification({
+                        ...savedNotif, // Utilise l'objet retourné par save
+                        date: savedNotif.date.toISOString(),
+                    });
+                    console.log(" Notification update envoyée via Socket");
+                }
+                else {
+                    console.error("Socket non disponible (problème d'import circulaire)");
+                }
+            }
+            catch (notifError) {
+                console.error(" ERREUR CRITIQUE SAUVEGARDE NOTIFICATION:", notifError);
+            }
+            return update_Status;
+        }
+        catch (error) {
+            console.error(" Erreur générale dans updateStatusLigne:", error);
+            throw error;
+        }
     }
     /**
      * Deletes a ligne by its ID.
@@ -104,7 +160,19 @@ class LigneService {
      * @returns {Promise<void>} A promise that resolves when the ligne has been deleted.
      */
     async deleteLigne(id) {
-        return await this.ligneRepository.delete({ id });
+        try {
+            const ligne = await this.ligneRepository.findOneBy({ id });
+            if (!ligne) {
+                throw new Error(`la ligne ${id} est introuvable`);
+            }
+            const RemoveLigne = await this.ligneRepository.delete({ id });
+            return RemoveLigne;
+        }
+        catch (error) {
+            console.error(`Erreur lors de la suppression du ligne ave l'id #${id}`);
+            throw error;
+        }
+        // return await this.ligneRepository.delete({id});
     }
 }
 exports.LigneService = LigneService;
