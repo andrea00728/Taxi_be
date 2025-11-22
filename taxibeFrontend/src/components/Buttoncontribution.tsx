@@ -71,7 +71,7 @@ export default function ButtonContribution() {
         onRequestClose={close}
       >
         <Pressable 
-          style={tw`flex-1 mt-100`} 
+          style={tw`flex-1 mt-70`} 
           onPress={close}
         >
           <Pressable onPress={(e) => e.stopPropagation()}>

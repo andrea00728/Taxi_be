@@ -143,7 +143,7 @@ ligneRouter.put("/update/:id", authMiddleware_js_1.authenticate, (0, authMiddlew
  *       404:
  *         description: Ligne non trouvée
  */
-ligneRouter.put("/updateStatus/:id", authMiddleware_js_1.authenticate, (0, authMiddleware_js_1.authorize)("admin"), ligne_controller_js_1.LigneController.updateLigne);
+ligneRouter.put("/updateStatus/:id", authMiddleware_js_1.authenticate, (0, authMiddleware_js_1.authorize)("admin"), ligne_controller_js_1.LigneController.updateStatusLigne);
 /**
  * @swagger
  * /lignes/remove/{id}:

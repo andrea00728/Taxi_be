@@ -24,7 +24,7 @@ export const SubmitButton = React.memo(({ loading, onPress }: SubmitButtonProps)
       </View>
     ) : (
       <Text style={tw`text-center text-white font-bold text-base`}>
-        ✓ Créer la Ligne
+         Créer la Ligne
       </Text>
     )}
   </TouchableOpacity>

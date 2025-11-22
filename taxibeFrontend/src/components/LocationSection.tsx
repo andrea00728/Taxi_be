@@ -29,14 +29,10 @@ export const LocationSection = React.memo(({
   onDistrictChange
 }: LocationSectionProps) => (
   <View style={tw`mb-6`}>
-    <Text style={tw`text-base font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2`}>
-      📍 Localisation
-    </Text>
-
     {/* Province */}
     <View style={tw`mb-4`}>
       <Text style={tw`text-sm font-semibold mb-2 text-gray-700`}>
-        Province <Text style={tw`text-red-500`}>*</Text>
+        Province 
       </Text>
       <Dropdown
         data={provinces}
@@ -59,7 +55,7 @@ export const LocationSection = React.memo(({
     {/* Région */}
     <View style={tw`mb-4`}>
       <Text style={tw`text-sm font-semibold mb-2 text-gray-700`}>
-        Région <Text style={tw`text-red-500`}>*</Text>
+        Région
       </Text>
       <Dropdown
         data={regions}
@@ -91,7 +87,7 @@ export const LocationSection = React.memo(({
     {/* District */}
     <View style={tw`mb-4`}>
       <Text style={tw`text-sm font-semibold mb-2 text-gray-700`}>
-        District <Text style={tw`text-red-500`}>*</Text>
+        District 
       </Text>
       <Dropdown
         data={districts}

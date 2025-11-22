@@ -22,12 +22,11 @@ import TrajetSearchScreen from "../Screenuser/Trajet";
 import { useLignesAdmin } from "@/src/hooks/useLignes_Admin";
 import { DistrictSection } from "@/src/components/Admin/DistricSection_Admin";
 
+
+
 export default function LigneScreenAdmin() {
   const [search, setSearch] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-  
-  const { logout } = useAuth();
-  const router = useRouter();
   
   const {
     districts,
@@ -77,24 +76,6 @@ export default function LigneScreenAdmin() {
       .filter((d): d is District => d !== null);
   }, [districts, search]);
 
-  //  Gestion de la déconnexion
-  const handleLogout = useCallback(async () => {
-    Alert.alert(
-      'Déconnexion',
-      'Êtes-vous sûr de vouloir vous déconnecter ?',
-      [
-        { text: 'Annuler', style: 'cancel' },
-        {
-          text: 'Déconnecter',
-          style: 'destructive',
-          onPress: async () => {
-            await logout();
-            router.replace('/');
-          },
-        },
-      ]
-    );
-  }, [logout, router]);
 
   // Gestion du scroll pour fermer le clavier
   const handleScroll = useCallback(() => {
@@ -210,18 +191,7 @@ export default function LigneScreenAdmin() {
             <Ionicons name="refresh" size={24} color="white" />
           )}
         </TouchableOpacity>
-
-        {/* Bouton Logout */}
-        <TouchableOpacity 
-          onPress={() => {
-            Keyboard.dismiss();
-            handleLogout();
-          }}
-          style={tw`w-14 h-14 bg-red-600 rounded-full items-center justify-center shadow-xl`}
-          activeOpacity={0.7}
-        >
-          <Ionicons name="log-out" size={24} color="white" />
-        </TouchableOpacity>
+      
       </View>
 
       {/* Modal Trajet */}

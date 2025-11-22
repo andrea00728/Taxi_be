@@ -1,27 +1,4 @@
 
-// import { useAuth } from '@/src/contexts/AuthContext';
-// import { Pressable, Text, View } from 'react-native';
-// import tw from 'twrnc';
-
-// export default function AdminLayout() {
-//   const { logout } = useAuth();
-
-//   return (
-//     <View style={tw`flex-1 p-4`}>
-//       <Text style={tw`text-2xl font-bold`}>AdminLayout</Text>
-      
-//       <Pressable 
-//         onPress={logout}
-//         style={tw`bg-red-500 px-4 py-2 rounded-lg mt-4`}
-//       >
-//         <Text style={tw`text-white font-bold`}>Déconnexion</Text>
-//       </Pressable>
-//     </View>
-//   );
-// }
-
-
-
 import React from 'react';
 import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -33,11 +10,35 @@ import NotificationScreen from '../Screenuser/HistoriqueScreen';
 import tw from "twrnc";
 import DashboardAdmin from './Dashboard';
 import LigneScreenAdmin from './LigneScreen_Admin';
+import { useSocket } from '@/src/contexts/socketContext';
+import { useAuth } from '@/src/contexts/AuthContext';
 
 const Tab = createBottomTabNavigator();
 
 // --- Le composant ContributionScreen devient le conteneur du menu ---
 export default function ContributionScreen() {
+
+    const { notifications } = useSocket();
+    // const unreadCount = notifications.filter(n => !n.isRead).length;
+    const { userRole } = useAuth();
+     const unreadCount = notifications.filter(n => {
+        //  Si déjà lu, on ignore
+        if (n.isRead) return false;
+
+        //  Applique EXACTEMENT le même filtre que dans NotificationScreen
+        const title = (n.title || "").toLowerCase();
+        
+        // Cas Admin
+        if (title.includes("nouvelle ligne") || title.includes("nouveelle ligne")) {
+            return userRole === "admin";
+        }
+        // Cas User
+        if (title.includes("changement de statut") || title.includes("statut modifié")) {
+            return userRole === "user";
+        }
+        // Par défaut visible
+        return true;
+    }).length;
     return (
         <Tab.Navigator
             initialRouteName="dashboard"
@@ -155,11 +156,15 @@ export default function ContributionScreen() {
                         ),
                     }}
             />
-            <Tab.Screen 
+                <Tab.Screen 
                 name="notifications" 
                 component={NotificationScreen} 
                 options={{
                         tabBarLabel: 'notifications',
+                        
+                        // 2. AJOUTE CETTE LIGNE ICI :
+                        tabBarBadge: unreadCount > 0 ? unreadCount : undefined,
+                        
                         tabBarIcon: ({ focused, color }) => (
                             <View style={tw`items-center justify-center`}>
                                 <View 
@@ -168,7 +173,7 @@ export default function ContributionScreen() {
                                     }`}
                                 >
                                     <Ionicons 
-                                        name={focused ? 'notifications-outline' : 'notifications-outline'} 
+                                        name={focused ? 'notifications' : 'notifications-outline'} 
                                         size={24}
                                         color={color}
                                     />

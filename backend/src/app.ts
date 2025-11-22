@@ -14,6 +14,7 @@ import ProvinceRouter from "./routes/province.router.js";
 import RegionRouter from "./routes/region.route.js";
 import { DistrictRoute } from "./routes/district.route.js";
 import cors from "cors";
+import NotificationRouter from './routes/notification.routes.js';
 
 const app = express();
 app.use(express.json());
@@ -60,6 +61,10 @@ const swaggerOptions = {
   }
 } ,
 
+
+
+
+
 // Ajoutez la configuration de security
 security: [
       {
@@ -85,7 +90,7 @@ app.use("/api/Trajet",TrajetRouter);
 app.use("/api/provinces",ProvinceRouter);
 app.use("/api/regions",RegionRouter);
 app.use("/api/districts",DistrictRoute);
-
+app.use("/api/notifications",NotificationRouter);
 
 AppDataSource.initialize()
   .then(() => console.log("📦 Base de données connectée"))

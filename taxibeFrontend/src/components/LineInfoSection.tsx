@@ -25,10 +25,6 @@ export const LineInfoSection = React.memo(({
   onTerminusChange
 }: LineInfoSectionProps) => (
   <View style={tw`mb-6`}>
-    <Text style={tw`text-base font-bold text-gray-800 mb-4 border-b border-gray-200 pb-2`}>
-      🚌 Informations de la ligne
-    </Text>
-
     <View style={tw`flex-row mb-4`}>
       <View style={tw`flex-1 mr-2`}>
         <Text style={tw`text-sm font-semibold mb-2 text-gray-700`}>
@@ -60,7 +56,7 @@ export const LineInfoSection = React.memo(({
 
     <View style={tw`mb-4`}>
       <Text style={tw`text-sm font-semibold mb-2 text-gray-700`}>
-        Point de Départ <Text style={tw`text-red-500`}>*</Text>
+        Point de Départ 
       </Text>
       <TextInput
         value={depart}
@@ -73,7 +69,7 @@ export const LineInfoSection = React.memo(({
 
     <View style={tw`mb-4`}>
       <Text style={tw`text-sm font-semibold mb-2 text-gray-700`}>
-        Terminus <Text style={tw`text-red-500`}>*</Text>
+        Terminus 
       </Text>
       <TextInput
         value={terminus}

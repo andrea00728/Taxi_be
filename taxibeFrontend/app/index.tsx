@@ -8,6 +8,7 @@ import { AuthProvider, useAuth } from '@/src/contexts/AuthContext';
 import ContributionScreen from '@/src/screens/DefaultLayout';
 import { ActivityIndicator, View } from 'react-native';
 import AdminLayout from '@/src/screens/AdminScreens/AdminLayout';
+import { SocketProvider } from '@/src/contexts/socketContext';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -67,11 +68,14 @@ export default function Page() {
   useDeviceContext(tw);
   return (
     <AuthProvider>
-      <NavigationIndependentTree>
-        <NavigationContainer>
-          <RootNavigator />
-        </NavigationContainer>
-      </NavigationIndependentTree>
+      <SocketProvider>
+        <NavigationIndependentTree>
+          <NavigationContainer>
+            <RootNavigator />
+          </NavigationContainer>
+        </NavigationIndependentTree>
+      </SocketProvider>
     </AuthProvider>
   );
 }
+

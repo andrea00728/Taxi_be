@@ -1,14 +1,18 @@
-import { View, Text, ActivityIndicator } from "react-native";
+import { View, Text, ActivityIndicator, Dimensions, ScrollView } from "react-native";
 import { useState, useEffect } from "react";
 import tw from "twrnc";
 import { countLigneByDistrict, getDistricts } from "@/src/services/api";
+import { BarChart, PieChart } from "react-native-chart-kit";
 
 interface StatistiqueData {
   totalLignes: number;
   moyenneLignes: number;
   districtMax: { nom: string; count: number };
   districtMin: { nom: string; count: number };
+  allDistricts: Array<{ id: number; nom: string; count: number }>;
 }
+
+const screenWidth = Dimensions.get("window").width;
 
 export default function Statistique() {
   const [stats, setStats] = useState<StatistiqueData | null>(null);
@@ -22,7 +26,6 @@ export default function Statistique() {
       try {
         setLoading(true);
         
-        // 1. RÉCUPÈRE TOUS LES DISTRICTS DYNAMIQUEMENT
         const allDistricts = await getDistricts();
         
         if (!allDistricts || allDistricts.length === 0) {
@@ -33,16 +36,14 @@ export default function Statistique() {
           return;
         }
 
-        // 2. POUR CHAQUE DISTRICT, RÉCUPÈRE LE COUNT
         const counts = await Promise.all(
           allDistricts.map(async (district) => {
             try {
-              const count = await countLigneByDistrict(district.id);
-              const validCount = typeof count === 'number' && !isNaN(count) ? count : 0;
+              const response = await countLigneByDistrict(district.id);
               return {
                 id: district.id,
-                nom: district.nom,
-                count: validCount
+                nom: response.nom,
+                count: response.count
               };
             } catch (err) {
               console.error(`Erreur district ${district.id}:`, err);
@@ -55,7 +56,6 @@ export default function Statistique() {
           })
         );
 
-        // 3. CALCUL DES STATISTIQUES
         const total = counts.reduce((sum, d) => sum + d.count, 0);
         const moyenne = counts.length > 0 ? total / counts.length : 0;
         const max = counts.reduce((prev, current) => 
@@ -71,6 +71,7 @@ export default function Statistique() {
             moyenneLignes: moyenne,
             districtMax: max,
             districtMin: min,
+            allDistricts: counts
           });
           setError(null);
         }
@@ -110,63 +111,140 @@ export default function Statistique() {
     );
   }
 
+  // Configuration du chart
+  const chartConfig = {
+    backgroundColor: "#ffffff",
+    backgroundGradientFrom: "#ffffff",
+    backgroundGradientTo: "#ffffff",
+    decimalPlaces: 0,
+    color: (opacity = 1) => `rgba(59, 130, 246, ${opacity})`,
+    labelColor: (opacity = 1) => `rgba(55, 65, 81, ${opacity})`,
+    style: {
+      borderRadius: 16
+    },
+    propsForLabels: {
+      fontSize: 10
+    }
+  };
+
+  // Données pour le Bar Chart
+  const barChartData = {
+    labels: stats.allDistricts.map(d => d.nom.substring(0, 8)),
+    datasets: [{
+      data: stats.allDistricts.map(d => d.count)
+    }]
+  };
+
+  // Données pour le Pie Chart (Top 5 districts)
+  const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+  const pieChartData = stats.allDistricts
+    .slice(0, 5)
+    .map((district, index) => ({
+      name: district.nom,
+      population: district.count,
+      color: colors[index],
+      legendFontColor: "#374151",
+      legendFontSize: 12
+    }));
+
   return (
-    <View style={tw`mb-6`}>
-      <Text style={tw`text-xl font-semibold text-gray-800 mb-4`}>
-        Statistiques Globales
-      </Text>
-      
-      <View style={tw`flex-row flex-wrap -mx-2`}>
-        <View style={tw`w-1/2 px-2 mb-4`}>
-          <View style={tw`bg-white rounded-xl p-5 shadow-sm border border-gray-100`}>
-            <Text style={tw`text-gray-500 text-xs font-medium mb-2`}>
-              TOTAL DE LIGNES
-            </Text>
-            <Text style={tw`text-gray-800 text-3xl font-bold`}>
-              {stats.totalLignes}
-            </Text>
+    <ScrollView style={tw`flex-1`}>
+      <View style={tw`mb-6`}>
+        
+        {/* Cards statistiques */}
+        <View style={tw`flex-row flex-wrap -mx-2 mb-6`}>
+          <View style={tw`w-1/2 px-2 mb-4`}>
+            <View style={tw`bg-white rounded-xl p-5 shadow-sm border border-gray-100`}>
+              <Text style={tw`text-gray-500 text-xs font-medium mb-2`}>
+                TOTAL DE LIGNES
+              </Text>
+              <Text style={tw`text-gray-800 text-3xl font-bold`}>
+                {stats.totalLignes}
+              </Text>
+            </View>
           </View>
+
+          <View style={tw`w-1/2 px-2 mb-4`}>
+            <View style={tw`bg-white rounded-xl p-5 shadow-sm border border-gray-100`}>
+              <Text style={tw`text-gray-500 text-xs font-medium mb-2`}>
+                MOYENNE
+              </Text>
+              <Text style={tw`text-gray-800 text-3xl font-bold`}>
+                {stats.moyenneLignes.toFixed(1)}
+              </Text>
+            </View>
+          </View>
+{/* 
+          <View style={tw`w-1/2 px-2 mb-4`}>
+            <View style={tw`bg-white rounded-xl p-5 shadow-sm border border-gray-100`}>
+              <Text style={tw`text-gray-500 text-xs font-medium mb-2`}>
+                MAXIMUM
+              </Text>
+              <Text style={tw`text-gray-800 text-xl font-bold mb-1`}>
+                {stats.districtMax.nom}
+              </Text>
+              <Text style={tw`text-blue-600 text-2xl font-bold`}>
+                {stats.districtMax.count}
+              </Text>
+            </View>
+          </View> */}
+
+          {/* <View style={tw`w-1/2 px-2 mb-4`}>
+            <View style={tw`bg-white rounded-xl p-5 shadow-sm border border-gray-100`}>
+              <Text style={tw`text-gray-500 text-xs font-medium mb-2`}>
+                MINIMUM
+              </Text>
+              <Text style={tw`text-gray-800 text-xl font-bold mb-1`}>
+                {stats.districtMin.nom}
+              </Text>
+              <Text style={tw`text-orange-600 text-2xl font-bold`}>
+                {stats.districtMin.count}
+              </Text>
+            </View>
+          </View> */}
         </View>
 
-        <View style={tw`w-1/2 px-2 mb-4`}>
-          <View style={tw`bg-white rounded-xl p-5 shadow-sm border border-gray-100`}>
-            <Text style={tw`text-gray-500 text-xs font-medium mb-2`}>
-              MOYENNE
-            </Text>
-            <Text style={tw`text-gray-800 text-3xl font-bold`}>
-              {stats.moyenneLignes.toFixed(1)}
-            </Text>
-          </View>
+        {/* Bar Chart */}
+        <View style={tw`bg-white rounded-xl p-4 mb-4 shadow-sm border border-gray-100`}>
+          <Text style={tw`text-gray-800 font-semibold text-base mb-3`}>
+            Répartition par District
+          </Text>
+          <BarChart
+            data={barChartData}
+            width={screenWidth - 60}
+            height={220}
+            yAxisLabel=""
+            yAxisSuffix=""
+            chartConfig={chartConfig}
+            verticalLabelRotation={30}
+            showValuesOnTopOfBars={true}
+            fromZero={true}
+            style={{
+              borderRadius: 12
+            }}
+          />
         </View>
 
-        <View style={tw`w-1/2 px-2 mb-4`}>
-          <View style={tw`bg-white rounded-xl p-5 shadow-sm border border-gray-100`}>
-            <Text style={tw`text-gray-500 text-xs font-medium mb-2`}>
-              MAXIMUM
-            </Text>
-            <Text style={tw`text-gray-800 text-xl font-bold mb-1`}>
-              {stats.districtMax.nom}
-            </Text>
-            <Text style={tw`text-blue-600 text-2xl font-bold`}>
-              {stats.districtMax.count}
-            </Text>
-          </View>
-        </View>
-
-        <View style={tw`w-1/2 px-2 mb-4`}>
-          <View style={tw`bg-white rounded-xl p-5 shadow-sm border border-gray-100`}>
-            <Text style={tw`text-gray-500 text-xs font-medium mb-2`}>
-              MINIMUM
-            </Text>
-            <Text style={tw`text-gray-800 text-xl font-bold mb-1`}>
-              {stats.districtMin.nom}
-            </Text>
-            <Text style={tw`text-orange-600 text-2xl font-bold`}>
-              {stats.districtMin.count}
-            </Text>
-          </View>
+        {/* Pie Chart */}
+        <View style={tw`bg-white rounded-xl p-4 shadow-sm border border-gray-100`}>
+          <Text style={tw`text-gray-800 font-semibold text-base mb-3`}>
+            Top 5 Districts
+          </Text>
+          <PieChart
+            data={pieChartData}
+            width={screenWidth - 60}
+            height={200}
+            chartConfig={chartConfig}
+            accessor="population"
+            backgroundColor="transparent"
+            paddingLeft="15"
+            absolute={false}
+            style={{
+              borderRadius: 12
+            }}
+          />
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }

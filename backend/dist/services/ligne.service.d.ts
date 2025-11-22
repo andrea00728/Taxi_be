@@ -1,6 +1,8 @@
 import { Ligne } from "../entities/Ligne.js";
 export declare class LigneService {
     private ligneRepository;
+    private notificationGat;
+    private notificationRepo;
     /**
      * Retrieves all lignes with their associated arrets and itineraires.
      *

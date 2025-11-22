@@ -60,3 +60,9 @@ Application React Native avec carte interactive affichant les lignes de transpor
 
 ### 1. Installer les dépendances npm
 
+
+
+####utilisation de 
+npm install react-native-chart-kit react-native-svg
+
+pour le graph statistique Chart
