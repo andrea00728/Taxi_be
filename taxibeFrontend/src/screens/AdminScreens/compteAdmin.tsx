@@ -5,6 +5,14 @@ import React, { useRef, useState } from "react";
 import { ActivityIndicator, Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import tw from "twrnc";
 
+/**
+ * Écran de création de compte administrateur.
+ * 
+ * @param {function} onRegistered - Fonction appelée lorsque le compte est créé.
+ * @param {function} goToLogin - Fonction appelée lorsque l'utilisateur souhaite se connecter.
+ */
+//  * @returns {JSX.Element} - L'écran de création de compte administrateur.
+
 export default function CompteAdmin({ 
   onRegistered, 
   goToLogin 
@@ -18,6 +26,12 @@ export default function CompteAdmin({
   const [isLoading, setIsLoading] = useState(false);
   const codeRef = useRef<TextInput>(null);
 
+/**
+ * Envoie un code de vérification par email.
+ * Si le code est envoyé avec succès, le champ de code est mis en focus.
+ * Si une erreur survient, un message d'erreur est affiché.
+ * Enfin, l'indicateur de chargement est réinitialisé à false.
+ */
   async function handleSendCode() {
     if (!email) { 
       Alert.alert("Erreur", "Email requis"); 
@@ -39,6 +53,12 @@ export default function CompteAdmin({
     setIsLoading(false);
   }
 
+/**
+ * Vérifie le code de vérification envoyé par email.
+ * Si le code est valide, le compte est créé, onRegistered est appelé avec l'UID du compte créé.
+ * Si une erreur survient, un message d'erreur est affiché.
+ * Enfin, l'indicateur de chargement est réinitialisé à false.
+ */
   async function handleVerifyCode() {
     if (!code) { 
       Alert.alert("Erreur", "Code requis"); 
@@ -60,6 +80,12 @@ export default function CompteAdmin({
     setIsLoading(false);
   }
 
+/**
+ * Envoie un nouveau code de vérification par email.
+ * Si le code est envoyé avec succès, un message d'alerte est affiché avec le message "Un nouveau code a été envoyé.".
+ * Si une erreur survient, un message d'erreur est affiché avec le message "Impossible de renvoyer le code.".
+ * Enfin, l'indicateur de chargement est réinitialisé à false.
+ */
   async function handleResend() {
     if (!email) return;
     setIsLoading(true);

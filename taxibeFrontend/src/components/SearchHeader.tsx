@@ -13,7 +13,17 @@ interface SearchHeaderProps {
   showDebugInfo?: boolean;
 }
 
-// Pas de React.memo pour éviter les problèmes avec TextInput
+
+/**
+ * Barre de recherche pour trouver des lignes de Taxibe
+ * @param {SearchHeaderProps} props
+ * @property {string} search - Valeur de recherche actuelle
+ * @property {(text: string) => void} onSearchChange - Fonction appelée lorsque le champ de recherche change
+ * @property {Date} lastUpdate - Date de dernière mise à jour
+ * @property {string | null} error - Message d'erreur en cas d'erreur
+ * @property {() => void} onRetry - Fonction appelée lorsque le bouton "Réessayer" est pressé
+ * @property {boolean} [showDebugInfo=false] - Affiche ou non des informations de debug
+ */
 export const SearchHeader = ({
   search,
   onSearchChange,

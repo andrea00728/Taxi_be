@@ -1,4 +1,3 @@
-// src/components/contribution/hooks/useLocationData.ts
 import { useState, useEffect } from 'react';
 import { Alert } from 'react-native';
 import { getProvinces, getRegions } from '@/src/services/api';
@@ -9,6 +8,27 @@ export interface SelectOption {
   value: number;
 }
 
+/**************************/
+/**
+ * Hook pour gérer les données de localisation.
+ * Fournit les états pour stocker les provinces, les régions et les districts.
+ * Fournit également les états pour stocker les sélections de la province, de la région et du district.
+ * Fournit enfin les états pour les options filtrées.
+ * 
+ * @returns {
+ *  - provinces: les provinces
+ *  - regions: les régions
+ *  - districts: les districts
+ *  - selectedProvince: l'ID de la province sélectionnée
+ *  - selectedRegion: l'ID de la région sélectionnée
+ *  - selectedDistrict: l'ID du district sélectionné
+ *  - setSelectedProvince: fonction pour mettre à jour l'état de la province sélectionnée
+
+ *  - setSelectedRegion: fonction pour mettre à jour l'état de la région sélectionnée
+ *  - setSelectedDistrict: fonction pour mettre à jour l'état du district sélectionné
+ *  - loadingData: booléen indiquant si les données sont en train d'être chargées
+ *  - resetSelections: fonction pour réinitialiser les sélections de la province, de la région et du district
+ */
 export const useLocationData = () => {
   // États pour les données brutes
   const [provincesData, setProvincesData] = useState<Province[]>([]);
@@ -27,8 +47,15 @@ export const useLocationData = () => {
 
   const [loadingData, setLoadingData] = useState(true);
 
-  // Chargement initial des données
+ 
   useEffect(() => {
+/**
+ * Charge les données de base pour le formulaire de création d'arrêt.
+ * Charge les provinces et les régions.
+ * Extraie les districts de chaque région.
+ * En cas d'erreur, affiche un message d'erreur.
+ * En fin de chargement, met à jour l'état de chargement.
+ */
     const fetchData = async () => {
       setLoadingData(true);
       try {
@@ -134,6 +161,10 @@ export const useLocationData = () => {
     }
   }, [selectedRegion, regionsData]);
 
+/**
+ * Réinitialise les sélections de la province, de la région et du district.
+ * Appelé lorsque le formulaire de création d'arrêt est soumis.
+ */
   const resetSelections = () => {
     setSelectedProvince(null);
     setSelectedRegion(null);

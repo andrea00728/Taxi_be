@@ -1,4 +1,3 @@
-// src/screens/Screenuser/LigneScreen.tsx
 import React, { useState, useMemo, useCallback } from "react";
 import { 
   View, 
@@ -22,6 +21,21 @@ import { SearchHeader } from "@/src/components/SearchHeader";
 import { EmptyState } from "@/src/components/EmptyState";
 import { useLignes } from "@/src/hooks/useLignes";
 
+/**
+ * Écran d affichage des lignes de Taxibe
+ * @description
+ * Ce composant affiche la liste des lignes de Taxibe
+ * avec des filtres de recherche et de tri.
+ * Les données sont mises à jour toutes les 5 minutes
+ * et peuvent être rafraîchies manuellement.
+ * @example
+ * import LigneScreen from "@/src/screens/Screenuser/LigneScreen";
+ * <LigneScreen />
+ */
+/**
+ * @param {Props} Props du composant
+ * @returns {JSX.Element} Le composant de l'écran des lignes
+ */
 export default function LigneScreen() {
   const [search, setSearch] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
@@ -87,6 +101,10 @@ export default function LigneScreen() {
         {
           text: 'Déconnecter',
           style: 'destructive',
+        /**
+         * Fonction appelée lorsque le bouton "Déconnecter" est pressé.
+         * Elle logout l'utilisateur et redirige vers la page d accueil.
+         */
           onPress: async () => {
             await logout();
             router.replace('/');

@@ -15,7 +15,18 @@ import { useAuth } from '@/src/contexts/AuthContext';
 
 const Tab = createBottomTabNavigator();
 
-// --- Le composant ContributionScreen devient le conteneur du menu ---
+
+/**
+ * ContributionScreen est le composant principal de l'application pour les utilisateurs.
+ * Il est composé d'un BottomTabNavigator qui permet de naviguer entre les différentes écrans de l'application.
+ * Les écrans disponibles sont :
+ * - Dashboard : écran d'accueil de l'application qui affiche les informations de base de l'utilisateur.
+ * - Ligne : écran qui permet de consulter les lignes de bus.
+ * - Ajouter : écran qui permet d'ajouter une nouvelle contribution.
+ * - Map : écran qui permet de consulter la carte.
+ * - Notifications : écran qui affiche les notifications de l'application.
+ * Le badge de l'onglet Notifications affiche le nombre de notifications non lues.
+ */
 export default function ContributionScreen() {
 
     const { notifications } = useSocket();

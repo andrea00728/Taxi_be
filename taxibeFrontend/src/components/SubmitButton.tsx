@@ -1,4 +1,3 @@
-// src/components/contribution/components/SubmitButton.tsx
 import React from 'react';
 import { TouchableOpacity, View, Text, ActivityIndicator } from 'react-native';
 import tw from 'twrnc';

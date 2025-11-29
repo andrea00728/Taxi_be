@@ -15,6 +15,20 @@ interface TreeNodeProps {
   isTransfer?: boolean;
 }
 
+/**
+ * TreeNode component
+ * 
+ * @param {TreeNodeProps} props - The props to pass to the component
+ * @param {string} props.icon - The icon to display
+ * @param {string} props.iconColor - The color of the icon
+ * @param {string} props.title - The title of the node
+ * @param {string} [props.subtitle] - The subtitle of the node
+ * @param {string} [props.badge] - The badge to display
+ * @param {boolean} [props.isStart=false] - If the node is the start of a journey
+ * @param {boolean} [props.isEnd=false] - If the node is the end of a journey
+ * @param {boolean} [props.isBus=false] - If the node is a bus stop
+ * @param {boolean} [props.isTransfer=false] - If the node is a transfer stop
+ */
 export const TreeNode: React.FC<TreeNodeProps> = ({ 
   icon, 
   iconColor, 

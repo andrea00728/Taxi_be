@@ -1,4 +1,3 @@
-// src/screens/Screenuser/components/EmptyLignesState.tsx
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import tw from 'twrnc';

@@ -6,6 +6,14 @@ import { getLigneByUser } from '@/src/services/api';
 import { useAuth } from '@/src/contexts/AuthContext';
 import { useRouter } from 'expo-router';
 
+/**
+ * Hook qui fournit les lignes associées à l'utilisateur courant.
+ * Fournit également des indicateurs de chargement et d'erreur.
+ * Les données sont automatiquement mises à jour toutes les 30 secondes si
+ * ENABLE_AUTO_REFRESH est à true.
+ * @returns Un objet contenant les données des lignes, ainsi que des
+ * indicateurs de chargement et d'erreur.
+ */
 export const useUserLignes = () => {
   const [lignes, setLignes] = useState<Ligne[]>([]);
   const [loading, setLoading] = useState(true);
@@ -44,6 +52,10 @@ export const useUserLignes = () => {
           [
             {
               text: 'OK',
+/**
+ * Fonction appelée lorsque le bouton "OK" est pressé.
+ * Elle logout l'utilisateur et redirige vers la page d accueil.
+ */
               onPress: async () => {
                 await logout();
                 router.replace('/');

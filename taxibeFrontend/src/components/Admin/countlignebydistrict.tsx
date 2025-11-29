@@ -9,6 +9,14 @@ interface District {
   count: number;
 }
 
+/**
+ * Composant qui affiche le nombre de lignes par district
+ * Récupère tous les districts, puis pour chaque district, récupère le nombre de lignes associées
+ * Utilise l'API pour récupérer les données
+ * Affiche un message d'erreur si les données ne peuvent pas être récupérées
+ * Affiche le nombre de lignes pour chaque district
+ * Utilise un composant de barre pour afficher les données
+ */
 export default function CountLigne() {
   const [districts, setDistricts] = useState<District[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -17,6 +25,13 @@ export default function CountLigne() {
   useEffect(() => {
     let isMounted = true;
 
+/**
+ * Récupère tous les districts, puis pour chaque district, récupère le nombre de lignes associées
+ * Utilise l'API pour récupérer les données
+ * Affiche un message d'erreur si les données ne peuvent pas être récupérées
+ * Affiche le nombre de lignes pour chaque district
+ * Utilise un composant de barre pour afficher les données
+ */
     const fetchDistrictsWithCount = async () => {
       try {
         setLoading(true);

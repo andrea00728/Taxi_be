@@ -18,7 +18,14 @@ export type RootStackParamList = {
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-// Créez un composant séparé pour la navigation
+
+/**
+ * RootNavigator est le composant qui gère la navigation en fonction de l'état d'authentification.
+ * Si l'utilisateur est en train de se connecter, il affiche un écran de chargement.
+ * Si l'utilisateur n'est pas connecté, il affiche l'écran d'accueil.
+ * Si l'utilisateur est connecté en tant qu'administrateur, il affiche l'écran d'administration.
+ * Si l'utilisateur est connecté en tant qu'utilisateur, il affiche l'écran de contribution.
+ */
 function RootNavigator() {
   const { userToken,userRole,isLoading } = useAuth(); // Récupérez l'état d'authentification
 

@@ -24,6 +24,20 @@ interface Arret_busModalprops {
   onSuccess?: () => void;
 }
 
+/**
+ * Component de création d'arrêt.
+ * Affiche un modal contenant un formulaire pour créer un arrêt.
+ * Le formulaire contient un champ pour le nom de l'arrêt, un champ pour la position
+ * de l'arrêt (sélectionnable sur une carte) et un champ pour la ligne associée
+ * à l'arrêt.
+ * Si le formulaire est valide, charge la création de l'arrêt avec les données du formulaire.
+ * Si la création réussit, affiche un message de succès et réinitialise le formulaire.
+ * Si une erreur survient, affiche un message d'erreur.
+ * Enfin, réinitialise l'indicateur de chargement à false.
+ * @param {boolean} visible Indique si le modal doit être affiché.
+ * @param {() => void} onClose Fonction appelée lorsque le modal est fermé.
+ * @param {() => void} onSuccess Fonction appelée si la création de l'arrêt réussit.
+ */
 const ArretBus: React.FC<Arret_busModalprops> = ({
   visible,
   onClose,
@@ -55,6 +69,10 @@ const ArretBus: React.FC<Arret_busModalprops> = ({
     }
   }, [visible]);
 
+/**
+ * Récupère les lignes associées à l'utilisateur courant.
+ * @returns Une promesse qui résout en un tableau de lignes.
+ */
   const fetchLignes = async () => {
     setLoadingLignes(true);
     try {
@@ -68,6 +86,16 @@ const ArretBus: React.FC<Arret_busModalprops> = ({
     }
   };
 
+
+  
+/**
+ * Met à jour la position de l'arrêt avec les coordonnées
+ * géographiques données en paramètres.
+ * Si une erreur est présente pour la position, la supprime.
+ * @param {number} lat Latitude de l'arrêt.
+ * @param {number} lng Longitude de l'arrêt.
+ * 
+ * **/
   const handleLocationSelect = (lat: number, lng: number) => {
     setSelectedPosition({ latitude: lat, longitude: lng });
     setLatitude(lat.toString());
@@ -78,6 +106,12 @@ const ArretBus: React.FC<Arret_busModalprops> = ({
     }
   };
 
+/**
+ * Valide le formulaire de création d'arrêt.
+ * Retourne true si le formulaire est valide, false sinon.
+ * Met à jour les erreurs en fonction des erreurs de validation.
+ * @returns {boolean} True si le formulaire est valide, false sinon.
+ */
   const validateForm = (): boolean => {
     const newErrors: typeof errors = {};
 
@@ -97,6 +131,11 @@ const ArretBus: React.FC<Arret_busModalprops> = ({
     return Object.keys(newErrors).length === 0;
   };
 
+/**
+ * Réinitialise le formulaire de création d'arrêt.
+ * Supprime le nom, la latitude, la longitude, la ligne sélectionnée et la position.
+ * Réinitialise les erreurs.
+ */
   const resetForm = () => {
     setNom("");
     setLatitude("");
@@ -106,6 +145,14 @@ const ArretBus: React.FC<Arret_busModalprops> = ({
     setErrors({});
   };
 
+/**
+ * Soumet le formulaire de création d'arrêt
+ * Si le formulaire est invalide, on ne fait rien
+ * Sinon, on charge la création de l'arrêt avec les données du formulaire
+ * Si la création réussit, on affiche un message de succès et on réinitialise le formulaire
+ * Si une erreur survient, on affiche un message d'erreur
+ * Enfin, on réinitialise l'indicateur de chargement à false
+ */
   const handleSubmit = async () => {
     if (!validateForm()) {
       return;
@@ -134,6 +181,9 @@ const ArretBus: React.FC<Arret_busModalprops> = ({
     }
   };
 
+/**
+ * Ferme le modal et réinitialise le formulaire
+ */
   const handleClose = () => {
     resetForm();
     onClose();

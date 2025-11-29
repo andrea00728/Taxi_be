@@ -1,4 +1,3 @@
-// src/components/contribution/utils/formValidation.ts
 import { Alert } from 'react-native';
 
 export interface LigneFormData {
@@ -9,6 +8,13 @@ export interface LigneFormData {
   districtId: number | null;
 }
 
+/**
+ * Valide les données d'une ligne pour s'assurer que tous les champs sont remplis.
+ * Si un champ est vide ou incorrect, affiche un message d'erreur.
+ * Retourne true si toutes les données sont valides, false sinon.
+ * @param {LigneFormData} data - Données de la ligne à valider
+ * @returns {boolean} - Résultat de la validation (true si valide, false sinon)
+ */
 export const validateLigneForm = (data: LigneFormData): boolean => {
   if (!data.districtId) {
     Alert.alert('Validation', 'Veuillez sélectionner un district');

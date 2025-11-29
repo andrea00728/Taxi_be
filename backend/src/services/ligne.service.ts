@@ -77,10 +77,16 @@ export class LigneService{
     }
 
 
+    
     /**
      * Creates a new ligne and persists it to the database.
+     * If a district_id is provided, it is used to create a District object.
+     * The statut of the ligne depends on the userRole provided: if the user is an admin, the statut is set to Accepted, otherwise it is set to Attent.
+     * A notification is also created and persisted to the database, and an event is emitted to the admin to notify them of the new ligne.
      *
-     * @param {Partial<Ligne>} data The data of the ligne to create.
+     * @param {Partial<Ligne> & {district_id?:number}} data The data of the ligne to be created.
+     * @param {string} firebaseUid The Firebase UID of the user who created the ligne.
+     * @param {string} userRole The role of the user who created the ligne.
      * @returns {Promise<Ligne>} A promise that resolves to the created Ligne object.
      */
     async createLign(data:Partial<Ligne> & {district_id?:number},firebaseUid:string,

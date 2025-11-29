@@ -1,5 +1,13 @@
 import { Arret } from "../type/trajetType";
 
+/**
+ * Calcul la distance entre deux arrêts.
+ * Si l'un des deux arrêts est undefined, la fonction retourne 0.
+ * La distance est calculée en utilisant la formule de Haversine.
+ * @param {Arret | undefined} arret1 - Premier arrêt.
+ * @param {Arret | undefined} arret2 - Deuxième arrêt.
+ * @returns {number} La distance entre les deux arrêts en mètres.
+ */
 export const calculateDistance = (
   arret1: Arret | undefined, 
   arret2: Arret | undefined

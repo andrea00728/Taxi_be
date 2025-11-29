@@ -34,6 +34,15 @@ interface Props {
   children: ReactNode;
 }
 
+/**
+ * SocketProvider est un composant qui fournit un contexte de
+ * notification pour ses enfants. Il utilise le token d'authentification
+ * pour se connecter au socket et recevoir les notifications en
+ * direct. Il offre également des fonctions pour marquer une
+ * notification comme lue et pour supprimer toutes les notifications.
+ * @param {ReactNode} children - Les enfants du composant.
+ * @returns Un élément JSX qui contient le contexte de notification.
+ */
 export const SocketProvider: FC<Props> = ({ children }) => {
   const { userToken, userRole } = useAuth();
   const user = useMemo(() => {
@@ -56,6 +65,15 @@ export const SocketProvider: FC<Props> = ({ children }) => {
   useEffect(() => {
     if (!user) return;
 
+    
+
+/**
+ * Charge l'historique des notifications depuis l'API et les
+ * trie par date décroissante.
+ * Met à jour l'état local avec les notifications chargées.
+ * @throws {Error} - Si une erreur survient lors du chargement de
+ * l'historique.
+ */
     const loadHistory = async () => {
       try {
         console.log(" Chargement historique notifications API...");

@@ -10,6 +10,16 @@ interface LocationCoords {
   longitude: number;
 }
 
+/**
+ * Génération de la carte avec les lignes de transport acceptées
+ * @param {LocationCoords | null} location - Coordonnées de l'utilisateur
+ * @param {Ligne[]} lignes - Lignes de transport acceptées
+ * @param {boolean} loading - Indicateur si la carte est en train de chargement
+ * @param {string | null} errorMsg - Message d'erreur si la carte ne peut pas être chargée
+ * @param {Ligne[]} currentLignes - Lignes de transport acceptées actuels
+ * @param {boolean} showIndicator - Indicateur si la carte doit afficher une indication de mise à jour
+ */
+
 export default function MapScreen() {
   const [location, setLocation] = useState<LocationCoords | null>(null);
   const [lignes, setLignes] = useState<Ligne[]>([]);
@@ -31,7 +41,7 @@ export default function MapScreen() {
         const hasChanged = JSON.stringify(prevLignes) !== JSON.stringify(lignesAcceptees);
         
         if (hasChanged) {
-          console.log(`🔄 Mise à jour: ${lignesAcceptees.length} ligne(s) acceptée(s)`);
+          console.log(` Mise à jour: ${lignesAcceptees.length} ligne(s) acceptée(s)`);
           
           if (webViewRef.current) {
             const lignesData = lignesAcceptees.map(ligne => ({
@@ -66,6 +76,16 @@ export default function MapScreen() {
     let isMounted = true;
     let locationSubscription: Location.LocationSubscription | null = null;
 
+/**
+ * Initialise les données de l'utilisateur et lance le polling
+ * pour les lignes acceptées.
+ * Vérifie si l'utilisateur a accepté la permission de localisation
+ * et récupère la position actuelle.
+ * Si la permission est acceptée, lance le polling pour les lignes
+ * acceptées avec une fréquence de 30 secondes.
+ * Si une erreur est levée, affiche un message d'erreur.
+ * @throws {Error} si la permission de localisation est refusée
+ */
     const initialize = async () => {
       try {
         const { status } = await Location.requestForegroundPermissionsAsync();
@@ -134,6 +154,14 @@ export default function MapScreen() {
     };
   }, [fetchLignes]);
 
+/**
+ * Génère le code HTML de la carte avec les marqueurs et les polylignes.
+ * La carte est générée en utilisant Leaflet.
+ * Les marqueurs et les polylignes sont générés en fonction des données de
+ * lignes reçues en paramètres.
+ * 
+ * @returns Le code HTML de la carte.
+ */
   const generateMapHTML = () => {
     if (!location) return '';
 

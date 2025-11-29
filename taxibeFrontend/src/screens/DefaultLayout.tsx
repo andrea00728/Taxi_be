@@ -13,7 +13,13 @@ import { useAuth } from '../contexts/AuthContext';
 
 const Tab = createBottomTabNavigator();
 
-// --- Le composant ContributionScreen devient le conteneur du menu ---
+
+/**
+ * ContributionScreen est le composant racine de l'application qui permet de gérer la navigation.
+ * Il utilise les hook useSocket pour récupérer les notifications et useAuth pour récupérer le rôle de l'utilisateur.
+ * Il utilise également le composant <Tab.Navigator> pour gérer la navigation entre les différents écrans.
+ * @returns {JSX.Element} Le composant ContributionScreen.
+ */
 export default function ContributionScreen() {
      const { notifications } = useSocket();
         // const unreadCount = notifications.filter(n => !n.isRead).length;

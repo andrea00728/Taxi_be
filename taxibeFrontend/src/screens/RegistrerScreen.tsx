@@ -5,6 +5,14 @@ import { ActivityIndicator, Alert, KeyboardAvoidingView, Platform, Pressable, Sc
 import tw from "twrnc";
 import { url } from "../utils/url";
 
+/**
+ * Écran d'inscription.
+ * 
+ * @param {onRegistered?: (uid: string) => void} - Fonction appelée lorsque le compte est créé.
+ * @param {goToLogin?: () => void} - Fonction appelée lorsque le bouton "Connexion" est pressé.
+ * 
+ * @returns Un JSX.Element qui représente l'écran d'inscription.
+ */
 export default function RegisterScreen({ 
   onRegistered, 
   goToLogin 
@@ -18,6 +26,14 @@ export default function RegisterScreen({
   const [isLoading, setIsLoading] = useState(false);
   const codeRef = useRef<TextInput>(null);
 
+
+
+/**
+ * Envoie un code de vérification par email.
+ * Si le code est envoyé avec succès, le champ de code est mis en focus.
+ * Si une erreur survient, un message d'erreur est affiché.
+ * Enfin, l'indicateur de chargement est réinitialisé à false.
+ */
   async function handleSendCode() {
     if (!email) { 
       Alert.alert("Erreur", "Email requis"); 
@@ -39,6 +55,12 @@ export default function RegisterScreen({
     setIsLoading(false);
   }
 
+/**
+ * Vérifie le code de vérification envoyé par email.
+ * Si le code est valide, le compte est créé, onRegistered est appelé avec l'UID du compte créé.
+ * Si une erreur survient, un message d'erreur est affiché.
+ * Enfin, l'indicateur de chargement est réinitialisé à false.
+ */
   async function handleVerifyCode() {
     if (!code) { 
       Alert.alert("Erreur", "Code requis"); 
@@ -60,6 +82,12 @@ export default function RegisterScreen({
     setIsLoading(false);
   }
 
+/**
+ * Envoie un nouveau code de vérification par email.
+ * Si le code est envoyé avec succès, un message d'alerte est affiché avec le message "Un nouveau code a été envoyé.".
+ * Si une erreur survient, un message d'erreur est affiché avec le message "Impossible de renvoyer le code.".
+ * Enfin, l'indicateur de chargement est réinitialisé à false.
+ */
   async function handleResend() {
     if (!email) return;
     setIsLoading(true);

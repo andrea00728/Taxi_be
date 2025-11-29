@@ -6,13 +6,33 @@ import LigneForm from "@/src/components/contribution/LigneForm";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import LigneNoActive from "./LigneNoActive";
 import ArretBus from "./Arret_byUser";
+
+
+/**
+ * Écran pour ajouter une contribution.
+ * Affiche un formulaire pour créer une ligne (LigneForm) et un bouton pour ouvrir le formulaire d'arrêt.
+ * Lorsque le formulaire de création de ligne est validé, charge la mise à jour de la liste des lignes.
+ * Si la création réussit, ferme le modal et réinitialise l'indicateur de chargement à false.
+ * Si une erreur survient, affiche un message d'erreur.
+ * Enfin, réinitialise l'indicateur de chargement à false.
+ */
 export default function AjoutContributionScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
   const [modalVisible,setModalVisible] = useState(false);
   const [modalVisible2,setModalVisible2] = useState(false);
+
   const handleRefresh = () => {
-    setRefreshing(true);
+    
+/************* *************/
+/**
+ * Fonction appelée lorsque l'utilisateur fait un rafraichissement
+ * de la liste des lignes.
+ * Met à jour l'indicateur de chargement à true, puis
+ * incrémente la clé de rechargement et met à jour
+ * l'indicateur de chargement à false après 600ms.
+ */
+/*******  9d3710df-339c-4c93-a8ce-76101f7ca02d  *******/    setRefreshing(true);
     setReloadKey(old => old + 1);
     setTimeout(() => setRefreshing(false), 600);
   };

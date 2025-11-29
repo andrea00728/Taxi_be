@@ -6,6 +6,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { ScrollView, View, Text, TouchableOpacity, Keyboard, StyleSheet } from "react-native";
 import tw from "twrnc";
 
+/**
+ * Écran d'accueil de l'administrateur, affichant les différentes statistiques
+ * sur les lignes de transport, ainsi qu'un bouton pour créer une nouvelle
+ * ligne et un bouton de déconnexion.
+ * @returns {JSX.Element} - Écran d'accueil de l'administrateur
+ * @example
+ * <DashboardAdmin />
+ */
 export default function DashboardAdmin() {
   const { handleLogout } = useLogout();
   

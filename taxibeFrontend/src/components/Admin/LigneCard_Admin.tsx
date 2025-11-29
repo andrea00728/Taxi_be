@@ -1,4 +1,3 @@
-// src/screens/Screenuser/components/LigneCard.tsx
 import React, { useState } from "react";
 import { 
   View, 
@@ -30,7 +29,12 @@ export const LigneCard = React.memo(({ ligne, onUpdate, onDelete }: LigneCardPro
   const [currentStatut, setCurrentStatut] = useState(ligne.statut); 
   const { userRole } = useAuth();
   const statut = ligne?.statut || 'Attent';
-  // Fonction de suppression
+  
+
+/**
+ * Supprime une ligne.
+ * @throws Erreur si la suppression échoue
+ */
   const handleDelete = async () => {
     if (!ligne.id || ligne.id === 0) {
       Alert.alert("Erreur", "ID de ligne invalide");
@@ -74,7 +78,13 @@ export const LigneCard = React.memo(({ ligne, onUpdate, onDelete }: LigneCardPro
     }
   };
 
-  // Fonction de mise à jour du statut
+ 
+/**
+ * Met à jour le statut d'une ligne.
+ * @param newStatus - Nouveau statut de la ligne
+ * @returns Une promesse qui résout en la ligne mise à jour
+ * @throws Erreur lors de la mise à jour de la ligne
+ */
   const handleUpdateStatus = async (newStatus: string) => {
     if (!ligne.id || ligne.id === 0) {
       Alert.alert("Erreur", "ID de ligne invalide");
@@ -123,22 +133,7 @@ export const LigneCard = React.memo(({ ligne, onUpdate, onDelete }: LigneCardPro
     }
   };
 
-  // ✅ Fonction pour déterminer la couleur du badge selon le statut
-  const getStatusColor = (statut: string) => {
-    switch (statut.toLowerCase()) {
-      case 'accepted':
-      case 'accepté':
-        return 'bg-green-500';
-      case 'attent':
-      case 'en attente':
-        return 'bg-yellow-400';
-      case 'rejected':
-      case 'rejeté':
-        return 'bg-red-500';
-      default:
-        return 'bg-gray-400';
-    }
-  };
+  
 
   return (
     <View style={[tw`bg-white rounded-2xl border-2 border-gray-100 p-5 mb-4`, styles.cardShadow]}>

@@ -8,6 +8,14 @@ import { useAuth } from "@/src/contexts/AuthContext";
 const AUTO_REFRESH_INTERVAL = 30000;
 const ENABLE_AUTO_REFRESH = true;
 
+/**
+ * Hook qui fournit les lignes associées à l'utilisateur courant.
+ * Fournit également des indicateurs de chargement et d'erreur.
+ * Les données sont automatiquement mises à jour toutes les 30 secondes si
+ * ENABLE_AUTO_REFRESH est à true.
+ * @returns Un objet contenant les données des lignes, ainsi que des
+ * indicateurs de chargement et d'erreur.
+ */
 export const useLignes = () => {
   const [districts, setDistricts] = useState<District[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,6 +67,10 @@ export const useLignes = () => {
           [
             {
               text: 'OK',
+/**
+ * Fonction appelée lorsque le bouton "OK" est pressé.
+ * Elle logout l'utilisateur et redirige vers la page d accueil.
+ */
               onPress: async () => {
                 await logout();
                 router.replace('/');

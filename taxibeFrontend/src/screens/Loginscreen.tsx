@@ -6,6 +6,15 @@ import axios from "axios";
 import { url } from "../utils/url";
 
 
+/**
+ * Écran de connexion utilisateur ou admin.
+ * 
+ * @param {onLoginSuccess} Fonction à appeler lorsque l'utilisateur est connecté avec succès.
+ * @param {onForgotPassword} Fonction à appeler lorsque l'utilisateur clique sur le lien "Mot de passe oublié ?".
+ * @param {onGoRegister} Fonction à appeler lorsque l'utilisateur clique sur le lien "Créer un compte".
+ * 
+ * @returns {JSX.Element} Élément JSX de l'écran de connexion.
+ */
 export default function LoginScreen({
   onLoginSuccess,
   onForgotPassword,
@@ -47,6 +56,12 @@ export default function LoginScreen({
 
   }
 
+/**
+ * Vérifie le code de vérification envoyé par email.
+ * Si le code est valide, le token et le rôle de l'utilisateur sont récupérés et onLoginSuccess est appelé avec le token.
+ * Si une erreur survient, un message d'erreur est affiché.
+ * Enfin, l'indicateur de chargement est réinitialisé à false.
+ */
   async function handleVerifyCode() {
   if (!code) { 
     Alert.alert("Erreur", "Veuillez saisir le code reçu."); 

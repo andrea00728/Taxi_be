@@ -9,6 +9,11 @@ interface ResultsSectionProps {
   result: TrajetResult;
 }
 
+/**
+ * Affiche une liste de trajets avec leur coût total.
+ * Si aucun trajet n'est trouvé, affiche un message d'erreur.
+ * @param {TrajetResult} result - Résultat de la recherche de trajet.
+ */
 const ResultsSection: React.FC<ResultsSectionProps> = ({ result }) => {
   const routesWithCost = useMemo(() => {
     return result.routes.map(route => ({

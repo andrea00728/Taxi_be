@@ -1,4 +1,3 @@
-// src/components/contribution/components/FormHeader.tsx
 import React from 'react';
 import { View, Text } from 'react-native';
 import tw from 'twrnc';

@@ -1,4 +1,3 @@
-// src/screens/Screenuser/components/StatusBadge.tsx
 import React from 'react';
 import { View, Text } from 'react-native';
 import tw from 'twrnc';
@@ -8,6 +7,16 @@ interface StatusBadgeProps {
   status: string;
 }
 
+/**
+ * Retourne un objet avec les propriétés de style pour un badge en fonction
+ * de l'état (actif, en attente, inactif, rejeté) passé en paramètre.
+ * Les propriétés de l'objet sont :
+ * - bg: la couleur de fond du badge
+ * - text: la couleur du texte du badge
+ * - icon: le nom de l'icone Ionicons à utiliser
+ * - iconColor: la couleur de l'icone
+ * - label: le texte à afficher dans le badge
+ */
 const getStatusConfig = (status: string) => {
   switch (status.toLowerCase()) {
     case 'actif':

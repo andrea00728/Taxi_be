@@ -11,6 +11,15 @@ interface MapPickerProps {
   initialLng?: number;
 }
 
+/**
+ * Component de carte pour sélectionner une position
+ * 
+ * @param {function} onLocationSelect - Fonction appelée lorsque l'utilisateur sélectionne une position
+ * @param {number} initialLat - Latitude initiale de la carte
+ * @param {number} initialLng - Longitude initiale de la carte
+ * 
+ * @returns {JSX.Element} - Composant JSX de la carte
+ */
 const MapPicker: React.FC<MapPickerProps> = ({
   onLocationSelect,
   initialLat = 48.8566,
@@ -26,6 +35,16 @@ const MapPicker: React.FC<MapPickerProps> = ({
   useEffect(() => {
     getCurrentLocation();
   }, []);
+
+/**
+ * Récupère la position actuelle de l'utilisateur.
+ * Demande la permission de localisation, puis récupère la position actuelle.
+ * Si la permission est refusée, affiche un message d'erreur.
+ * Si une erreur survient, affiche un message d'erreur.
+ * Enfin, centrer la carte sur la position de l'utilisateur et affiche un marqueur.
+ * @returns {Promise<void>} - Promesse qui résout lorsque la position actuelle est récupérée.
+***/  
+
 
   const getCurrentLocation = async () => {
     try {
@@ -75,7 +94,16 @@ const MapPicker: React.FC<MapPickerProps> = ({
     }
   };
 
-  // Fonction pour recentrer sur la position actuelle
+ 
+/**
+ * Recentre la carte sur la position de l'utilisateur.
+ * Si la position de l'utilisateur est disponible et que le référent
+ * du composant WebView est défini, injecte du code JavaScript
+ * pour centrer la carte sur la position de l'utilisateur.
+ * Sinon, appelle la fonction pour récupérer la position actuelle.
+ * 
+ * @returns {void}
+ */
   const recenterMap = () => {
     if (currentLocation && webViewRef.current) {
       webViewRef.current.injectJavaScript(`
@@ -146,6 +174,15 @@ const MapPicker: React.FC<MapPickerProps> = ({
     </html>
   `;
 
+/**
+ * Gère un événement de type 'message' pour le composant WebView.
+ * Lorsque cet événement est déclenché, essaie de parser le contenu
+ * de l'événement en un objet JSON contenant les coordonnées
+ * géographiques d'un point.
+ * Si le parsing réussit, appelle la fonction onLocationSelect avec
+ * les coordonnées géographiques.
+ * Si une erreur est levée, affiche un message d'erreur.
+ */
   const handleMessage = (event: any) => {
     try {
       const data = JSON.parse(event.nativeEvent.data);

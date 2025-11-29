@@ -17,6 +17,12 @@ interface SearchFormProps {
   onResult: (result: TrajetResult) => void;
 }
 
+/**
+ * Formulaire de recherche de trajet
+ * @param {SearchFormProps} props - Informations de fermeture pour la recherche
+ * @property {() => void} onClose - Fonction appelée lorsque le bouton "Fermer" est pressé
+ * @property {(result: TrajetResult) => void} onResult - Fonction appelée lorsque la recherche a abouti
+ */
 const SearchForm: React.FC<SearchFormProps> = ({ onClose, onResult }) => {
   const [depart, setDepart] = useState("");
   const [destination, setDestination] = useState("");

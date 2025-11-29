@@ -1,4 +1,3 @@
-// src/screens/Screenuser/components/LigneCard.tsx
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import tw from "twrnc";

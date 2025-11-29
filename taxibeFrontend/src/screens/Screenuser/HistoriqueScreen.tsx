@@ -10,17 +10,30 @@ import { getAllNotification, markNotificationAsRead, removeNotification } from "
 import { useAuth } from "@/src/contexts/AuthContext"; 
 import { Notification } from "@/src/type/notificationType";
 
+/**
+ * Écran des notifications.
+ * Récupère les notifications depuis l'API et les fusionne avec
+ * les notifications du Socket. Trie les notifications par date
+ * décroissante.
+ * Met à jour l'état local et envoie une requête API pour mettre à jour la notification en base.
+ * @returns Une promesse qui résout lorsque le chargement est terminé
+ */
 export default function NotificationScreen() {
   const { notifications, markAsRead, clearAll } = useSocket();
   
-  // Récupération du rôle utilisateur
   const { userRole } = useAuth(); 
 
   const [loading, setLoading] = useState(false);
   const [allNotifs, setAllNotifs] = useState<Notification[]>([]);
 
-  // Chargement initial API + Fusion Socket
+ 
   useEffect(() => {
+/**
+ * Récupère les notifications depuis l'API et les fusionne avec
+ * les notifications du Socket. Trie les notifications par date
+ * décroissante.
+ * @returns Une promesse qui résout lorsque le chargement est terminé
+ */
     const fetchApiData = async () => {
       setLoading(true);
       try {
@@ -61,6 +74,11 @@ export default function NotificationScreen() {
   }, [notifications]);
 
 
+/**
+ * Marque une notification comme lue.
+ * Met à jour l'état local et envoie une requête API pour mettre à jour la notification en base.
+ * @param {Notification} item - La notification à marquer comme lue
+ */
     const handleMarkAsRead = async (item: Notification) => {
       setAllNotifs(prev => prev.map(n => 
           n.id === item.id ? { ...n, isRead: true } : n
@@ -80,7 +98,13 @@ export default function NotificationScreen() {
       }
   };
 
-  // LOGIQUE DE SUPPRESSION
+ 
+/**
+ * Supprime une notification.
+ * @param {number} id - ID de la notification à supprimer
+ * @returns Promesse qui résout lorsque la suppression est terminée
+ * @throws Erreur si la suppression échoue
+ */
   const handleDelete = async (id: number) => {
       Alert.alert(
           "Supprimer",
@@ -105,6 +129,10 @@ export default function NotificationScreen() {
       );
   };
 
+/**
+ * Vide le context des notifications (Badge -> 0) et marque toutes les notifications comme lues localement sans les supprimer.
+ * Utilisé pour réinitialiser le context des notifications.
+ */
    const handleClearAll = () => {
       clearAll(); // Vide le context (Badge -> 0)
       // Marque tout comme lu localement sans supprimer
@@ -139,6 +167,12 @@ export default function NotificationScreen() {
   });
 
 
+/**
+ * Formatte une date en string en utilisant le format "d MMM yyyy 'à' HH:mm".
+ * Si la date est invalide, renvoie "-".
+ * @param {string} dateString - La date à formatter.
+ * @returns {string} La date formattée.
+ */
   const formatDate = (dateString?: string) => {
     if (!dateString) return "-";
     try {
@@ -146,7 +180,14 @@ export default function NotificationScreen() {
     } catch (e) { return "-"; }
   };
 
-  // Rendu d'une notification
+
+  
+/**
+ * Render une notification avec un bouton pour la marquer comme lue, un bouton pour la supprimer et un affichage de la ligne associée.
+ * @param {object} item - La notification à afficher.
+ * @param {number} index - L'index de la notification dans la liste.
+ * @returns {JSX.Element} La notification affichée.
+ */
    const renderNotification = ({ item, index }: { item: Notification; index: number }) => (
     <TouchableOpacity
       style={tw`${item.isRead ? "bg-white" : "bg-blue-50"} p-4 rounded-xl mb-3 border border-gray-100 shadow-sm`}

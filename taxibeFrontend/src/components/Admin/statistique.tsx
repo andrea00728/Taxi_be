@@ -14,6 +14,13 @@ interface StatistiqueData {
 
 const screenWidth = Dimensions.get("window").width;
 
+/**
+ * Composant qui affiche des statistiques sur les lignes (nombre total, moyenne, district avec le plus de lignes, district avec le moins de lignes, etc.)
+ * Utilise l'API pour récupérer les données
+ * Affiche un message d'erreur si les données ne peuvent pas être récupérées
+ * Affiche un indicateur de chargement si les données sont en train de chargement
+ * Utilise un composant de barre pour afficher les données
+ */
 export default function Statistique() {
   const [stats, setStats] = useState<StatistiqueData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -22,6 +29,13 @@ export default function Statistique() {
   useEffect(() => {
     let isMounted = true;
 
+/**
+ * Récupère les statistiques sur les lignes (nombre total, moyenne, district avec le plus de lignes, district avec le moins de lignes, etc.)
+ * Utilise l'API pour récupérer les données
+ * Affiche un message d'erreur si les données ne peuvent pas être récupérées
+ * Affiche un indicateur de chargement si les données sont en train de chargement
+ * Utilise un composant de barre pour afficher les données
+ */
     const fetchStatistiques = async () => {
       try {
         setLoading(true);
@@ -174,34 +188,6 @@ export default function Statistique() {
               </Text>
             </View>
           </View>
-{/* 
-          <View style={tw`w-1/2 px-2 mb-4`}>
-            <View style={tw`bg-white rounded-xl p-5 shadow-sm border border-gray-100`}>
-              <Text style={tw`text-gray-500 text-xs font-medium mb-2`}>
-                MAXIMUM
-              </Text>
-              <Text style={tw`text-gray-800 text-xl font-bold mb-1`}>
-                {stats.districtMax.nom}
-              </Text>
-              <Text style={tw`text-blue-600 text-2xl font-bold`}>
-                {stats.districtMax.count}
-              </Text>
-            </View>
-          </View> */}
-
-          {/* <View style={tw`w-1/2 px-2 mb-4`}>
-            <View style={tw`bg-white rounded-xl p-5 shadow-sm border border-gray-100`}>
-              <Text style={tw`text-gray-500 text-xs font-medium mb-2`}>
-                MINIMUM
-              </Text>
-              <Text style={tw`text-gray-800 text-xl font-bold mb-1`}>
-                {stats.districtMin.nom}
-              </Text>
-              <Text style={tw`text-orange-600 text-2xl font-bold`}>
-                {stats.districtMin.count}
-              </Text>
-            </View>
-          </View> */}
         </View>
 
         {/* Bar Chart */}

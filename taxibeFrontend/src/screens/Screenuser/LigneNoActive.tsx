@@ -24,6 +24,22 @@ interface LigneNoActiveModalProps {
   onSuccess?: () => void;
 }
 
+/**
+ * Écran pour afficher la liste des lignes non actives de l'utilisateur.
+ * Affiche un FlatList avec les lignes non actives de l'utilisateur.
+ * Si la liste est vide, affiche un EmptyState.
+ * Lorsque l'utilisateur clique sur le bouton "Ajouter une ligne", ferme le modal et ouvre le formulaire de création.
+ * Si une erreur survient lors de la chargement des lignes, affiche un message d'erreur.
+ * Lorsque l'utilisateur clique sur le bouton "Fermer", ferme le modal.
+ * Lorsque l'utilisateur clique sur le bouton "Actualiser", charge la mise à jour de la liste des lignes.
+ * Si la mise à jour réussit, ferme le modal et réinitialise l'indicateur de chargement à false.
+ * Si une erreur survient, affiche un message d'erreur.
+ * Enfin, réinitialise l'indicateur de chargement à false.
+ */
+//  * @param {boolean} visible - Indique si le modal est visible ou non.
+//  * @param {function} onClose - Fonction appelée lorsque l'utilisateur clique sur le bouton "Fermer".
+//  * @param {function} onSuccess - Fonction appelée lorsque la mise à jour de la liste des lignes réussit.
+//  ****/
 const LigneNoActive: React.FC<LigneNoActiveModalProps> = ({ 
   visible, 
   onClose, 
@@ -40,10 +56,16 @@ const LigneNoActive: React.FC<LigneNoActiveModalProps> = ({
 
  
 
+
+/**
+ * Ferme le modal et affiche un alert pour informer l'utilisateur qu'il
+ * doit naviguer vers le formulaire de création de ligne pour ajouter une
+ * nouvelle ligne.
+ */
   const handleAddLigne = () => {
-    // Fermer le modal et ouvrir le formulaire de création
+   
     onClose();
-    // router.push('/ligne/create');
+    
     Alert.alert('Info', 'Naviguer vers formulaire de création');
   };
 

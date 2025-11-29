@@ -409,6 +409,12 @@ export const removeNotification = async (id: number): Promise<void> => {
 
 
 
+/**
+ * Marque une notification comme lue.
+ * Envoie une requête API pour mettre à jour la notification en base.
+ * @param {number} id - ID de la notification à marquer comme lue
+ * @throws Erreur si la mise à jour échoue
+ */
 export const markNotificationAsRead = async (id: number) => {
     try {
     await api.put(`${url}/notifications/read/${id}`);

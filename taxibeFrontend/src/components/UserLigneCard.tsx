@@ -1,4 +1,3 @@
-// src/screens/Screenuser/components/UserLigneCard.tsx
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import tw from 'twrnc';

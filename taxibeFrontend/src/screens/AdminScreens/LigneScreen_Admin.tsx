@@ -1,4 +1,3 @@
-// src/screens/Screenuser/LigneScreen.tsx
 import React, { useState, useMemo, useCallback } from "react";
 import { 
   View, 
@@ -24,6 +23,17 @@ import { DistrictSection } from "@/src/components/Admin/DistricSection_Admin";
 
 
 
+/**
+ * Écran d administration des lignes de Taxibe
+ * @description
+ * Ce composant affiche la liste des lignes de Taxibe
+ * avec des filtres de recherche et de tri.
+ * Les données sont mises à jour toutes les 5 minutes
+ * et peuvent être rafraîchies manuellement.
+ * @example
+ * import LigneScreenAdmin from "@/src/screens/AdminScreens/LigneScreen_Admin";
+ * <LigneScreenAdmin />
+ */
 export default function LigneScreenAdmin() {
   const [search, setSearch] = useState("");
   const [modalVisible, setModalVisible] = useState(false);

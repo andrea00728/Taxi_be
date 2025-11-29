@@ -1,4 +1,3 @@
-// LigneForm.tsx
 import { 
   createLigne, 
   getProvinces, 
@@ -23,6 +22,12 @@ interface SelectOption {
   value: number;
 }
 
+/**
+ * Formulaire pour créer une nouvelle ligne de transport
+ * 
+ * @param {Object} props - Les propriétés du composant
+ * @param {function} onCreated - La fonction à appeler lorsque la ligne est créée avec succès
+ */
 export default function LigneForm({ onCreated }: { onCreated: () => void }) {
   // États pour les données brutes
   const [provincesData, setProvincesData] = useState<Province[]>([]);
@@ -47,8 +52,15 @@ export default function LigneForm({ onCreated }: { onCreated: () => void }) {
   const [loading, setLoading] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
 
-  // Chargement initial des données
+
   useEffect(() => {
+/**
+ * Charge les données de base pour le formulaire de création d'arrêt.
+ * Charge les provinces et les régions.
+ * Extraie les districts de chaque région.
+ * En cas d'erreur, affiche un message d'erreur.
+ * En fin de chargement, met à jour l'état de chargement.
+ */
     const fetchData = async () => {
       setLoadingData(true);
       try {
@@ -156,6 +168,12 @@ export default function LigneForm({ onCreated }: { onCreated: () => void }) {
     }
   }, [selectedRegion, regionsData]);
 
+/**
+ * Valide le formulaire et envoie les données à l'API.
+ * Vérifie que tous les champs sont remplis et que le tarif est un nombre positif.
+ * En cas d'erreur, affiche un message d'erreur.
+ * En fin de chargement, met à jour l'état de chargement.
+ */
   const validerEtEnvoyer = async () => {
     if (!selectedDistrict || !nomLigne.trim() || !tarif.trim() || !depart.trim() || !terminus.trim()) {
       return Alert.alert("Validation", "Tous les champs doivent être remplis");
