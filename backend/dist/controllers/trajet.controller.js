@@ -20,12 +20,23 @@ class TrajetController {
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return R * c;
     }
+    // ✅ Ajout fonction pour obtenir l'index
+    static getArretIndex(arretId, ligneArrets) {
+        return ligneArrets.findIndex((a) => a.id === arretId);
+    }
+    // ✅ Ajout fonction pour vérifier la direction
+    static isValidDirection(startIndex, endIndex) {
+        // Vérifie que les indices sont valides ET différents
+        return startIndex >= 0 && endIndex >= 0 && startIndex !== endIndex;
+    }
     static findNearestArret(targetLat, targetLon, arrets) {
         if (!arrets || arrets.length === 0)
             return null;
         let nearest = null;
         let minDistance = Infinity;
-        for (const arret of arrets) {
+        // ✅ Modification pour tracker l'index
+        for (let i = 0; i < arrets.length; i++) {
+            const arret = arrets[i];
             const lat = parseFloat(arret.latitude);
             const lon = parseFloat(arret.longitude);
             if (isNaN(lat) || isNaN(lon))
@@ -33,7 +44,7 @@ class TrajetController {
             const distance = this.calculateDistance(targetLat, targetLon, lat, lon);
             if (distance < minDistance) {
                 minDistance = distance;
-                nearest = { arret, distance };
+                nearest = { arret, distance, index: i }; // ✅ Ajout de l'index
             }
         }
         return nearest;
@@ -56,7 +67,6 @@ class TrajetController {
                 error: "MISSING_PARAMETERS",
             });
         }
-        // 1. Recherche floue des arrêts (utilise maintenant la méthode du service)
         console.log("\n📍 ÉTAPE 1: Recherche des arrêts (recherche floue)");
         const departArrets = await arretSvc.findByName(depart);
         const destArrets = await arretSvc.findByName(destination);
@@ -86,7 +96,6 @@ class TrajetController {
                 suggestions: await TrajetController.getSuggestions(destination, arretSvc),
             });
         }
-        // 2. Récupérer toutes les lignes avec leurs arrêts
         console.log("\n🚌 ÉTAPE 2: Chargement des lignes acceptées");
         const allLignes = await ligneSvc.findAllWithArrets();
         const acceptedLignes = allLignes.filter((l) => l.statut === "Accepted" && l.arrets && l.arrets.length > 0);
@@ -95,19 +104,17 @@ class TrajetController {
             console.log(`     - ${l.nom}: ${l.arrets.length} arrêt(s)`);
         });
         const routes = [];
-        // 3. Routes directes
         console.log("\n🎯 ÉTAPE 3: Recherche de routes directes");
-        const directRoutes = await TrajetController.findDirectRoutes(departArrets, destArrets);
+        const directRoutes = await TrajetController.findDirectRoutes(departArrets, destArrets, acceptedLignes // ✅ Passage de allLignes pour vérifier l'ordre
+        );
         console.log(`  ✅ Routes directes trouvées: ${directRoutes.length}`);
         routes.push(...directRoutes);
-        // 4. Routes avec correspondances
         if (maxTransfers > 0) {
             console.log("\n🔄 ÉTAPE 4: Recherche de routes avec correspondances");
             const transferRoutes = await TrajetController.findIntelligentTransferRoutes(departArrets, destArrets, acceptedLignes, maxWalkingDistance, maxTransfers);
             console.log(`  ✅ Routes avec correspondances trouvées: ${transferRoutes.length}`);
             routes.push(...transferRoutes);
         }
-        // 5. Tri et limite
         routes.sort((a, b) => b.score - a.score);
         const topRoutes = routes.slice(0, limit);
         console.log("\n📊 RÉSUMÉ FINAL");
@@ -172,9 +179,9 @@ class TrajetController {
             },
         });
     }
-    static async findDirectRoutes(departArrets, destArrets) {
+    static async findDirectRoutes(departArrets, destArrets, allLignes) {
         const routes = [];
-        const processedLignes = new Set();
+        const processedPairs = new Set();
         for (const depArret of departArrets) {
             if (!depArret.ligne) {
                 console.log(`    ⚠️  "${depArret.nom}" n'a pas de ligne associée`);
@@ -186,12 +193,25 @@ class TrajetController {
                     continue;
                 }
                 if (depArret.ligne.id === destArret.ligne.id) {
-                    const ligneId = depArret.ligne.id;
-                    if (processedLignes.has(ligneId))
+                    const pairKey = `${depArret.id}-${destArret.id}`;
+                    if (processedPairs.has(pairKey))
                         continue;
-                    processedLignes.add(ligneId);
+                    processedPairs.add(pairKey);
+                    // ✅ Vérification de l'ordre des arrêts (dans les deux sens)
+                    const ligneComplete = allLignes.find((l) => l.id === depArret.ligne.id);
+                    if (ligneComplete && ligneComplete.arrets) {
+                        const departIndex = this.getArretIndex(depArret.id, ligneComplete.arrets);
+                        const destIndex = this.getArretIndex(destArret.id, ligneComplete.arrets);
+                        if (!this.isValidDirection(departIndex, destIndex)) {
+                            console.log(`    ⚠️  Ordre invalide: ${depArret.nom} → ${destArret.nom} (indices: ${departIndex} → ${destIndex})`);
+                            continue;
+                        }
+                        // ✅ Déterminer la direction du trajet
+                        const direction = departIndex < destIndex ? "aller" : "retour";
+                        console.log(`    ✅ Route directe via ${depArret.ligne.nom} (${direction})`);
+                    }
                     const distance = this.calculateDistance(parseFloat(depArret.latitude), parseFloat(depArret.longitude), parseFloat(destArret.latitude), parseFloat(destArret.longitude));
-                    console.log(`    ✅ Route directe via ${depArret.ligne.nom}: ${Math.round(distance)}m`);
+                    console.log(`       Distance: ${Math.round(distance)}m`);
                     routes.push({
                         type: "direct",
                         lignes: [depArret.ligne],
@@ -213,6 +233,7 @@ class TrajetController {
     }
     static async findIntelligentTransferRoutes(departArrets, destArrets, allLignes, maxWalkingDistance, maxTransfers) {
         const routes = [];
+        const processedCombinations = new Set();
         for (const depArret of departArrets) {
             if (!depArret.ligne) {
                 console.log(`    ⚠️  Arrêt de départ "${depArret.nom}" sans ligne`);
@@ -228,12 +249,21 @@ class TrajetController {
             const arretsLigneDepart = ligneCompletDepart.arrets;
             console.log(`       → ${arretsLigneDepart.length} arrêts disponibles`);
             for (const destArret of destArrets) {
+                // ✅ FILTRAGE: Ignorer si destination sur même ligne que départ
+                if (destArret.ligne && destArret.ligne.id === ligneDepart.id) {
+                    console.log(`       ⚠️  Destination sur même ligne (${ligneDepart.nom}), route directe à privilégier`);
+                    continue;
+                }
                 const destLat = parseFloat(destArret.latitude);
                 const destLon = parseFloat(destArret.longitude);
                 if (isNaN(destLat) || isNaN(destLon))
                     continue;
                 let bestTransfer = null;
                 for (const arretDescente of arretsLigneDepart) {
+                    // ✅ Ne pas descendre au même arrêt que le départ
+                    if (arretDescente.id === depArret.id) {
+                        continue;
+                    }
                     const descenteLat = parseFloat(arretDescente.latitude);
                     const descenteLon = parseFloat(arretDescente.longitude);
                     if (isNaN(descenteLat) || isNaN(descenteLon))
@@ -249,6 +279,11 @@ class TrajetController {
                         const nearestToDest = this.findNearestArret(destLat, destLon, autreLigne.arrets);
                         if (!nearestToDest)
                             continue;
+                        // ✅ VALIDATION: Vérifier que montée ≠ destination
+                        if (nearestArret.index === nearestToDest.index) {
+                            console.log(`         ⚠️  Arrêt de montée = arrêt de destination sur ${autreLigne.nom}`);
+                            continue;
+                        }
                         const distanceDepart = this.calculateDistance(parseFloat(depArret.latitude), parseFloat(depArret.longitude), descenteLat, descenteLon);
                         const distanceTransfer = this.calculateDistance(parseFloat(nearestArret.arret.latitude), parseFloat(nearestArret.arret.longitude), parseFloat(nearestToDest.arret.latitude), parseFloat(nearestToDest.arret.longitude));
                         const walkToDestination = this.calculateDistance(parseFloat(nearestToDest.arret.latitude), parseFloat(nearestToDest.arret.longitude), destLat, destLon);
@@ -266,8 +301,13 @@ class TrajetController {
                     }
                 }
                 if (bestTransfer) {
+                    const combinationKey = `${depArret.id}-${bestTransfer.arretDescente.id}-${bestTransfer.arretMontee.id}-${destArret.id}`;
+                    if (processedCombinations.has(combinationKey))
+                        continue;
+                    processedCombinations.add(combinationKey);
                     const score = 80 - bestTransfer.totalDistance / 1000 - bestTransfer.walkDistance / 100;
                     console.log(`       ✅ Correspondance trouvée: ${ligneDepart.nom} → ${bestTransfer.ligneCorrespondance.nom}`);
+                    console.log(`          ${depArret.nom} → ${bestTransfer.arretDescente.nom} → ${bestTransfer.arretMontee.nom} → ${bestTransfer.arretDestination.nom}`);
                     console.log(`          Distance: ${Math.round(bestTransfer.totalDistance)}m (dont ${Math.round(bestTransfer.walkDistance)}m à pied)`);
                     routes.push({
                         type: "with_transfer",
@@ -301,7 +341,6 @@ class TrajetController {
     }
     static async getSuggestions(query, arretSvc) {
         const allArrets = await arretSvc.getAllArrets();
-        // Normaliser la query
         const normalizedQuery = query.normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "")
             .replace(/[''`´]/g, "")

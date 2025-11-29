@@ -1,3 +1,4 @@
+import ButtonCreatAdmin from "@/src/components/Admin/Button_creeAdmin";
 import CountLigne from "@/src/components/Admin/countlignebydistrict";
 import Statistique from "@/src/components/Admin/statistique";
 import { useLogout } from "@/src/utils/logout";
@@ -22,6 +23,12 @@ export default function DashboardAdmin() {
           <CountLigne />
         </View>
       </ScrollView>
+
+      <View>
+        <ButtonCreatAdmin
+        
+        />
+      </View>
 
       {/* Floating Action Button */}
       <TouchableOpacity 

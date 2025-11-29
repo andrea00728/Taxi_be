@@ -1,43 +1,43 @@
-import React, { useState, useCallback } from "react";
-import { View, Text, Pressable, Modal, useWindowDimensions } from "react-native";
-import tw from "twrnc";
 import { Ionicons } from "@expo/vector-icons";
+import React, { useCallback, useState } from "react";
+import { Modal, Pressable, Text, useWindowDimensions, View } from "react-native";
+import tw from "twrnc";
 import LoginScreen from "../screens/Loginscreen";
 import RegisterScreen from "../screens/RegistrerScreen";
+import { useAuth } from "../contexts/AuthContext";
 
-// Importez les types de navigation
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '@/app/index'; // Assurez-vous que le chemin est correct
-
-// Définissez les props que le bouton va recevoir
-interface ButtonDetailsProps {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
-}
-
-
-export default function ButtonDetails({ navigation }: ButtonDetailsProps) {
+/**
+ * Bouton pour ouvrir la modale du Detail, qui permet de se connecter ou de s'inscrire.
+ * La modale est composée d'un écran de login et d'un écran d'inscription.
+ * Lorsque le bouton est pressé, la modale s'ouvre.
+ * Lorsque le token est reçu, le token est sauvegardé dans le contexte.
+ * La navigation se fera automatiquement via le Stack.Navigator conditionnel.
+ */
+export default function ButtonDetails() {
   const [visible, setVisible] = useState(false);
   const [currentScreen, setCurrentScreen] = useState<'login' | 'register'>('login');
   const { height } = useWindowDimensions();
+  const { login } = useAuth();
 
   const open = useCallback(() => setVisible(true), []);
+  
   const close = useCallback(() => {
     setVisible(false);
     setCurrentScreen('login');
   }, []);
 
   const handleLogin = useCallback((token: string) => {
-    console.log("Token reçu, navigation en cours...", token);
+    console.log("Token reçu, sauvegarde dans le contexte...", token);
     
-    // 1. Fermer la modale
+    // Sauvegarder le token (le rôle sera extrait automatiquement)
+    login(token);
+    
+    // Fermer la modale
     setVisible(false);
-    
-    // 2. Naviguer vers l'écran de Contribution
-    navigation.navigate('Contribution');
-
-    // Optionnel : réinitialiser l'écran de la modale pour la prochaine ouverture
     setCurrentScreen('login');
-  }, [navigation]);
+    
+    // La navigation se fera automatiquement via le Stack.Navigator conditionnel
+  }, [login]);
 
   const goToRegister = useCallback(() => {
     setCurrentScreen('register');
@@ -51,7 +51,7 @@ export default function ButtonDetails({ navigation }: ButtonDetailsProps) {
 
   return (
     <View>
-      <Pressable
+           <Pressable
         style={tw`bg-yellow-400  px-2 w-23 ml-20  py-2 rounded-full flex-row items-center`}
         android_ripple={{ color: "#f1f1f1" }}
         onPress={open}
@@ -62,6 +62,7 @@ export default function ButtonDetails({ navigation }: ButtonDetailsProps) {
         <Ionicons name="lock-closed-outline" size={15} color="white" style={tw`ml-2`} />
       </Pressable>
 
+
       <Modal
         visible={visible}
         animationType="slide"
@@ -69,14 +70,14 @@ export default function ButtonDetails({ navigation }: ButtonDetailsProps) {
         onRequestClose={close}
       >
         <Pressable 
-          style={tw`flex-1 mt-100`} 
+          style={tw`flex-1 mt-70`} 
           onPress={close}
         >
           <Pressable onPress={(e) => e.stopPropagation()}>
             <View 
               style={[
-                  tw`bg-white rounded-t-3xl px-5 py-4`, // Style pour l'effet "bottom sheet"
-                  { minHeight: modalHeight, maxHeight: height * 0.9 }
+                tw`bg-white rounded-t-3xl px-5 py-4`,
+                { minHeight: modalHeight, maxHeight: height * 0.9 }
               ]}
             >
               <View style={tw`flex-row items-center justify-end mb-3`}>
@@ -111,4 +112,6 @@ export default function ButtonDetails({ navigation }: ButtonDetailsProps) {
     </View>
   );
 }
+
+
 

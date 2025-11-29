@@ -170,7 +170,8 @@ export default function LigneForm({ onCreated }: { onCreated: () => void }) {
       tarif: tarif,
       depart: depart,
       terminus: terminus,
-      district_id: selectedDistrict
+      district_id: selectedDistrict,
+      statut: ""
     };
 
     try {

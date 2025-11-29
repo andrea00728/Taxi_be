@@ -137,7 +137,7 @@ export default function HomeScreen({ navigation }: Props) {
                       <Text style={tw`text-gray-800`}>⇄{ligne.depart} → {ligne.terminus}</Text>
                        <Text style={tw`text-gray-800`}>⇄{ligne.terminus} ←{ligne.depart}</Text>
                       <View style={tw`ml-auto `}>
-                        <ButtonDetails navigation={navigation} />
+                        <ButtonDetails />
                       </View>
                     </View>
                   ))

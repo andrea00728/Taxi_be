@@ -273,7 +273,7 @@ export default function MapScreen() {
 </head>
 <body>
   <div id="map"></div>
-  <div id="updateIndicator" class="update-indicator">🔄 Mise à jour...</div>
+  <div id="updateIndicator" class="update-indicator"> Mise à jour...</div>
   
   <script>
     let map;
@@ -285,7 +285,7 @@ export default function MapScreen() {
     const userLocation = [${location.latitude}, ${location.longitude}];
     const initialLignesData = ${JSON.stringify(lignesData)};
     
-    console.log('🗺️ Initialisation de la carte...');
+    console.log('Initialisation de la carte...');
 
     map = L.map('map', {
       zoomControl: true,
@@ -309,10 +309,6 @@ export default function MapScreen() {
     }).addTo(map);
     
     userMarker.bindPopup(
-      '<div class="popup-header">' +
-      '<span class="popup-icon">📍</span>' +
-      '<span>Votre position</span>' +
-      '</div>' +
       '<div class="popup-details">Vous êtes ici</div>'
     );
 
@@ -343,7 +339,7 @@ export default function MapScreen() {
           return waypoints;
         }
       } catch (error) {
-        console.error('❌ Erreur OSRM:', error);
+        console.error('Erreur OSRM:', error);
         return waypoints;
       }
     }
@@ -364,7 +360,7 @@ export default function MapScreen() {
         showUpdateIndicator();
       }
       
-      console.log(\`🔄 Traitement de \${lignesData.length} ligne(s)...\`);
+      console.log(\`Traitement de \${lignesData.length} ligne(s)...\`);
       clearLignes();
       
       const allLatLngs = [userMarker.getLatLng()];
@@ -401,7 +397,6 @@ export default function MapScreen() {
 
           stopMarker.bindPopup(
             '<div class="popup-header">' +
-            '<span class="popup-icon">🚍</span>' +
             '<span>' + arret.nom + '</span>' +
             '</div>' +
             '<div class="popup-details">' +
