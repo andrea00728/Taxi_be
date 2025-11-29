@@ -1,20 +1,22 @@
 import { createArret, getLigneByUser } from "@/src/services/api";
 import { ArretDto, Ligne } from "@/src/type/ligneType";
-import React, { useState, useEffect } from "react";
-import { 
-  Modal, 
-  View, 
-  Text, 
-  TextInput, 
-  TouchableOpacity, 
-  ScrollView, 
+import { Ionicons } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
+import {
   ActivityIndicator,
   Alert,
   KeyboardAvoidingView,
-  Platform
+  Modal,
+  Platform,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import tw from "twrnc";
+import MapPicker from "../MapPicker";
+
 
 interface Arret_busModalprops {
   visible: boolean;
@@ -22,36 +24,31 @@ interface Arret_busModalprops {
   onSuccess?: () => void;
 }
 
-// interface Ligne {
-//   id: number;
-//   nom: string;
-// }
-
 const ArretBus: React.FC<Arret_busModalprops> = ({
   visible,
   onClose,
   onSuccess
 }) => {
-  // États du formulaire
   const [nom, setNom] = useState<string>("");
   const [latitude, setLatitude] = useState<string>("");
   const [longitude, setLongitude] = useState<string>("");
   const [selectedLigne, setSelectedLigne] = useState<string>("");
   
-  // États de l'interface
+  const [selectedPosition, setSelectedPosition] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
+  
   const [lignes, setLignes] = useState<Ligne[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingLignes, setLoadingLignes] = useState<boolean>(false);
   
-  // États de validation
   const [errors, setErrors] = useState<{
     nom?: string;
-    latitude?: string;
-    longitude?: string;
+    position?: string;
     nomligne?: string;
   }>({});
 
-  // Charger les lignes au montage du composant
   useEffect(() => {
     if (visible) {
       fetchLignes();
@@ -59,20 +56,28 @@ const ArretBus: React.FC<Arret_busModalprops> = ({
   }, [visible]);
 
   const fetchLignes = async () => {
-  setLoadingLignes(true);
-  try {
-    const response = await getLigneByUser();
-    setLignes(response || []); 
-  } catch (error) {
-    Alert.alert("Erreur", "Impossible de charger les lignes");
-    console.error("Erreur lors du chargement des lignes:", error);
-  } finally {
-    setLoadingLignes(false);
-  }
-};
+    setLoadingLignes(true);
+    try {
+      const response = await getLigneByUser();
+      setLignes(response || []); 
+    } catch (error) {
+      Alert.alert("Erreur", "Impossible de charger les lignes");
+      console.error("Erreur lors du chargement des lignes:", error);
+    } finally {
+      setLoadingLignes(false);
+    }
+  };
 
+  const handleLocationSelect = (lat: number, lng: number) => {
+    setSelectedPosition({ latitude: lat, longitude: lng });
+    setLatitude(lat.toString());
+    setLongitude(lng.toString());
+    
+    if (errors.position) {
+      setErrors({ ...errors, position: undefined });
+    }
+  };
 
-  // Validation du formulaire
   const validateForm = (): boolean => {
     const newErrors: typeof errors = {};
 
@@ -80,16 +85,8 @@ const ArretBus: React.FC<Arret_busModalprops> = ({
       newErrors.nom = "Le nom de l'arrêt est requis";
     }
 
-    if (!latitude.trim()) {
-      newErrors.latitude = "La latitude est requise";
-    } else if (isNaN(Number(latitude)) || Number(latitude) < -90 || Number(latitude) > 90) {
-      newErrors.latitude = "Latitude invalide (-90 à 90)";
-    }
-
-    if (!longitude.trim()) {
-      newErrors.longitude = "La longitude est requise";
-    } else if (isNaN(Number(longitude)) || Number(longitude) < -180 || Number(longitude) > 180) {
-      newErrors.longitude = "Longitude invalide (-180 à 180)";
+    if (!selectedPosition) {
+      newErrors.position = "Veuillez sélectionner une position sur la carte";
     }
 
     if (!selectedLigne) {
@@ -100,16 +97,15 @@ const ArretBus: React.FC<Arret_busModalprops> = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  // Réinitialiser le formulaire
   const resetForm = () => {
     setNom("");
     setLatitude("");
     setLongitude("");
     setSelectedLigne("");
+    setSelectedPosition(null);
     setErrors({});
   };
 
-  // Soumettre le formulaire
   const handleSubmit = async () => {
     if (!validateForm()) {
       return;
@@ -138,7 +134,6 @@ const ArretBus: React.FC<Arret_busModalprops> = ({
     }
   };
 
-  // Fermer le modal
   const handleClose = () => {
     resetForm();
     onClose();
@@ -158,23 +153,20 @@ const ArretBus: React.FC<Arret_busModalprops> = ({
       >
         <View style={tw`flex-1 bg-black/50 justify-center items-center px-4`}>
           <View style={tw`bg-white rounded-2xl w-full max-w-md`}>
-            {/* Header */}
             <View style={tw`flex-row items-center justify-between p-5 border-b border-gray-200`}>
-              <Text style={tw`text-xl font-bold text-gray-900`}>
-                Créer un arrêt
-              </Text>
+              <View
+              style={tw`bg-yellow-400 w-10 h-10 rounded-full`}
+              />
               <TouchableOpacity onPress={handleClose}>
                 <Ionicons name="close" size={24} color="#6B7280" />
               </TouchableOpacity>
             </View>
 
-            {/* Body */}
-            <ScrollView style={tw`max-h-96`}>
+            <ScrollView style={tw`max-h-[500px]`}>
               <View style={tw`p-5`}>
-                {/* Nom de l'arrêt */}
                 <View style={tw`mb-4`}>
                   <Text style={tw`text-sm font-semibold text-gray-700 mb-2`}>
-                    Nom de l'arrêt *
+                    Nom 
                   </Text>
                   <TextInput
                     style={tw`border ${errors.nom ? 'border-red-500' : 'border-gray-300'} rounded-lg px-4 py-3 text-gray-900`}
@@ -187,62 +179,45 @@ const ArretBus: React.FC<Arret_busModalprops> = ({
                     editable={!loading}
                   />
                   {errors.nom && (
-                    <Text style={tw`text-red-500 text-xs mt-1`}>
-                      {errors.nom}
-                    </Text>
+                    <Text style={tw`text-red-500 text-xs mt-1`}>{errors.nom}</Text>
                   )}
                 </View>
 
-                {/* Latitude */}
                 <View style={tw`mb-4`}>
                   <Text style={tw`text-sm font-semibold text-gray-700 mb-2`}>
-                    Latitude *
+                    Position 
                   </Text>
-                  <TextInput
-                    style={tw`border ${errors.latitude ? 'border-red-500' : 'border-gray-300'} rounded-lg px-4 py-3 text-gray-900`}
-                    placeholder="Ex: 48.8566"
-                    value={latitude}
-                    onChangeText={(text) => {
-                      setLatitude(text);
-                      if (errors.latitude) setErrors({ ...errors, latitude: undefined });
-                    }}
-                    keyboardType="numeric"
-                    editable={!loading}
-                  />
-                  {errors.latitude && (
-                    <Text style={tw`text-red-500 text-xs mt-1`}>
-                      {errors.latitude}
-                    </Text>
-                  )}
-                </View>
-
-                {/* Longitude */}
-                <View style={tw`mb-4`}>
-                  <Text style={tw`text-sm font-semibold text-gray-700 mb-2`}>
-                    Longitude *
+                  <Text style={tw`text-xs text-gray-500 mb-2`}>
+                    Cliquez sur la carte pour sélectionner la position
                   </Text>
-                  <TextInput
-                    style={tw`border ${errors.longitude ? 'border-red-500' : 'border-gray-300'} rounded-lg px-4 py-3 text-gray-900`}
-                    placeholder="Ex: 2.3522"
-                    value={longitude}
-                    onChangeText={(text) => {
-                      setLongitude(text);
-                      if (errors.longitude) setErrors({ ...errors, longitude: undefined });
-                    }}
-                    keyboardType="numeric"
-                    editable={!loading}
-                  />
-                  {errors.longitude && (
-                    <Text style={tw`text-red-500 text-xs mt-1`}>
-                      {errors.longitude}
-                    </Text>
+                  
+                  <View style={tw`border ${errors.position ? 'border-red-500' : 'border-gray-300'} rounded-lg overflow-hidden h-60`}>
+                    <MapPicker
+                      onLocationSelect={handleLocationSelect}
+                      initialLat={48.8566}
+                      initialLng={2.3522}
+                    />
+                  </View>
+                  
+                  {selectedPosition && (
+                    <View style={tw`mt-2 bg-gray-50 p-2 rounded-lg`}>
+                      <Text style={tw`text-xs text-gray-600`}>
+                        Latitude: {selectedPosition.latitude.toFixed(6)}
+                      </Text>
+                      <Text style={tw`text-xs text-gray-600`}>
+                        Longitude: {selectedPosition.longitude.toFixed(6)}
+                      </Text>
+                    </View>
+                  )}
+                  
+                  {errors.position && (
+                    <Text style={tw`text-red-500 text-xs mt-1`}>{errors.position}</Text>
                   )}
                 </View>
 
-                {/* Sélection de la ligne */}
                 <View style={tw`mb-4`}>
                   <Text style={tw`text-sm font-semibold text-gray-700 mb-2`}>
-                    Ligne *
+                    Ligne 
                   </Text>
                   {loadingLignes ? (
                     <ActivityIndicator size="small" color="#FCD34D" />
@@ -283,15 +258,12 @@ const ArretBus: React.FC<Arret_busModalprops> = ({
                     </View>
                   )}
                   {errors.nomligne && (
-                    <Text style={tw`text-red-500 text-xs mt-1`}>
-                      {errors.nomligne}
-                    </Text>
+                    <Text style={tw`text-red-500 text-xs mt-1`}>{errors.nomligne}</Text>
                   )}
                 </View>
               </View>
             </ScrollView>
 
-            {/* Footer */}
             <View style={tw`flex-row p-5 border-t border-gray-200 gap-3`}>
               <TouchableOpacity
                 style={tw`flex-1 py-3 px-4 border border-gray-300 rounded-lg`}

@@ -42,4 +42,4 @@ app-example
 /ios
 /android
 
-url.ts
+/utils/url.ts

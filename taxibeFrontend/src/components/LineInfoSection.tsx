@@ -28,7 +28,7 @@ export const LineInfoSection = React.memo(({
     <View style={tw`flex-row mb-4`}>
       <View style={tw`flex-1 mr-2`}>
         <Text style={tw`text-sm font-semibold mb-2 text-gray-700`}>
-          Nom Ligne <Text style={tw`text-red-500`}>*</Text>
+          Nom Ligne 
         </Text>
         <TextInput
           value={nomLigne}
@@ -41,7 +41,7 @@ export const LineInfoSection = React.memo(({
 
       <View style={tw`flex-1 ml-2`}>
         <Text style={tw`text-sm font-semibold mb-2 text-gray-700`}>
-          Tarif (Ar) <Text style={tw`text-red-500`}>*</Text>
+          Tarif (Ar) 
         </Text>
         <TextInput
           value={tarif}
