@@ -9,6 +9,7 @@ const provinces_js_1 = require("../entities/provinces.js");
 const regions_js_1 = require("../entities/regions.js");
 const districts_js_1 = require("../entities/districts.js");
 const notification_js_1 = require("../entities/notification.js");
+const commentaire_js_1 = require("../entities/commentaire.js");
 exports.AppDataSource = new typeorm_1.DataSource({
     type: "postgres",
     host: process.env.DB_HOST || "localhost",
@@ -17,7 +18,7 @@ exports.AppDataSource = new typeorm_1.DataSource({
     password: process.env.DB_PASSWORD || "aandrea",
     database: process.env.DB_NAME || "taxibe",
     // entities: ["dist/entities/*.js"],
-    entities: [Ligne_js_1.Ligne, Arret_js_1.Arret, Itineraire_js_1.Itineraire, provinces_js_1.Province, regions_js_1.Region, districts_js_1.District, notification_js_1.NotificationEntity],
+    entities: [Ligne_js_1.Ligne, Arret_js_1.Arret, Itineraire_js_1.Itineraire, provinces_js_1.Province, regions_js_1.Region, districts_js_1.District, notification_js_1.NotificationEntity, commentaire_js_1.Commentaire],
     synchronize: true,
 });
 //# sourceMappingURL=data-source.js.map

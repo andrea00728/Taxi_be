@@ -18,7 +18,9 @@ class ArretService {
         return await this.arretRepository.find({ relations: ["ligne"] });
     }
     /**
-     * Normalise une chaîne : supprime accents, apostrophes et met en minuscule
+     * Normalizes a given string by decomposing accented characters, removing accents and apostrophes, normalizing spaces, converting to lowercase, and trimming.
+     * @param {string} str The string to normalize.
+     * @returns {string} The normalized string.
      */
     normalizeString(str) {
         return str

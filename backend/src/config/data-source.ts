@@ -6,6 +6,7 @@ import { Province } from "../entities/provinces.js";
 import { Region } from "../entities/regions.js";
 import { District } from "../entities/districts.js";
 import { NotificationEntity } from "../entities/notification.js";
+import { Commentaire } from "../entities/commentaire.js";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -15,6 +16,6 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD || "aandrea",
   database: process.env.DB_NAME || "taxibe",
   // entities: ["dist/entities/*.js"],
-    entities: [Ligne,Arret,Itineraire,Province,Region,District,NotificationEntity],
+    entities: [Ligne,Arret,Itineraire,Province,Region,District,NotificationEntity,Commentaire],
   synchronize: true,
 });

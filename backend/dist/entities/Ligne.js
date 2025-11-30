@@ -58,6 +58,10 @@ __decorate([
     __metadata("design:type", String)
 ], Ligne.prototype, "statut", void 0);
 __decorate([
+    (0, typeorm_1.OneToMany)('Commentaire', 'ligne', { onDelete: "CASCADE" }),
+    __metadata("design:type", Array)
+], Ligne.prototype, "commentaires", void 0);
+__decorate([
     (0, typeorm_1.Column)(),
     (0, typeorm_1.Index)(),
     __metadata("design:type", String)

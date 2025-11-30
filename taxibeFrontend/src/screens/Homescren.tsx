@@ -9,6 +9,8 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/app/index'; // Assurez-vous que le chemin est correct
 import { url } from "../utils/url";
 import { Ligne } from "../type/ligneType";
+import ButtonCommentaire from "../components/ButtonCommentaire";
+
 
 interface District {
   id: number;
@@ -136,9 +138,15 @@ export default function HomeScreen({ navigation }: Props) {
                       <Text style={tw`text-gray-800 font-bold text-lg`}>{ligne.nom}</Text>
                       <Text style={tw`text-gray-800`}>⇄{ligne.depart} → {ligne.terminus}</Text>
                        <Text style={tw`text-gray-800`}>⇄{ligne.terminus} ←{ligne.depart}</Text>
-                      <View style={tw`ml-auto `}>
+                      {/* <View style={tw`ml-auto `}>
                         <ButtonDetails />
+                      </View> */}
+
+                       <View style={tw`flex-row justify-end mt-2 gap-2`}>
+                        <ButtonDetails />
+                        <ButtonCommentaire ligneId={ligne.id} ligneName={ligne.nom} />
                       </View>
+                      
                     </View>
                   ))
                 )}

@@ -68,7 +68,6 @@ static async getLigneById(req: Request, res: Response) {
 
 /**
  * Creates a new ligne and persists it to the database.
- *
  * @param {Request} req The Express request object.
  * @param {Response} res The Express response object.
  * @returns {Promise<void>} A promise that resolves when the response has been sent.
@@ -110,9 +109,6 @@ static async updateLigne(req:Request,res:Response){
 }
 
 
-
-
-
 /**
  * Met à jour le statut d'une ligne par son ID.
  * 
@@ -131,6 +127,7 @@ static async updateStatusLigne(req:Request,res:Response){
     }
 }
 
+
 /**
  * Deletes a ligne by its ID.
  *
@@ -148,7 +145,4 @@ static async deleteLigne(req:Request,res:Response){
        res.status(500).json({ message: "Erreur lors de la suppression de la ligne" }); 
     }
 }
-
-
-
 }

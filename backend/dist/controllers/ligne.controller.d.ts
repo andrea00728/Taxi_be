@@ -28,7 +28,6 @@ export declare class LigneController {
     static getLigneById(req: Request, res: Response): Promise<Response<any, Record<string, any>> | undefined>;
     /**
      * Creates a new ligne and persists it to the database.
-     *
      * @param {Request} req The Express request object.
      * @param {Response} res The Express response object.
      * @returns {Promise<void>} A promise that resolves when the response has been sent.
@@ -44,6 +43,14 @@ export declare class LigneController {
      * @throws {Error} If an error occurs while updating the ligne.
      */
     static updateLigne(req: Request, res: Response): Promise<void>;
+    /**
+     * Met à jour le statut d'une ligne par son ID.
+     *
+     * @param {Request} req The Express request object.
+     * @param {Response} res The Express response object.
+     * @returns {Promise<void>} A promise that resolves when the response has been sent.
+     * @throws {Error} If an error occurs while updating the ligne.
+     */
     static updateStatusLigne(req: Request, res: Response): Promise<void>;
     /**
      * Deletes a ligne by its ID.

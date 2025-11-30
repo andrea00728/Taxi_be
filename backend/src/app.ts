@@ -15,6 +15,7 @@ import RegionRouter from "./routes/region.route.js";
 import { DistrictRoute } from "./routes/district.route.js";
 import cors from "cors";
 import NotificationRouter from './routes/notification.routes.js';
+import comsRoute from './routes/commentaire.router.js';
 
 const app = express();
 app.use(express.json());
@@ -91,6 +92,7 @@ app.use("/api/provinces",ProvinceRouter);
 app.use("/api/regions",RegionRouter);
 app.use("/api/districts",DistrictRoute);
 app.use("/api/notifications",NotificationRouter);
+app.use("/api/commentaires",comsRoute);
 
 AppDataSource.initialize()
   .then(() => console.log("📦 Base de données connectée"))

@@ -5,6 +5,7 @@ import { url } from '../utils/url';
 import { Ligne, LigneDto, District, Region, Province, ArretDto, Arret } from '../type/ligneType';
 import { CountByDistrictResponse } from '../type/districtType';
 import { NotificationData } from '../type/notificationType';
+import { commentaire, comsDTO } from '../type/comsType';
 
 const api = axios.create({
   baseURL: url,
@@ -425,3 +426,49 @@ export const markNotificationAsRead = async (id: number) => {
 };
 
 export default api;
+
+
+// ==================== SERVICES Des commentaire ====================
+
+
+export const createComs = async (data:comsDTO): Promise<commentaire> => {
+  try {
+    const response = await api.post(`${url}/commentaires/create`,data);
+    return response.data
+  } catch (error) {
+    console.error("erreur lors de la creation du commentaire ",error);
+    throw error
+  }
+}
+
+export const getComsByLigne = async (id:number):Promise<commentaire[]>=>{
+  try {
+   const response = await api.get(`${url}/commentaires/${id}`);
+    return response.data
+  } catch (error) {
+    console.error("erreur lors de la recuperation des commentaire ",error);
+    throw error
+  }
+}
+
+export const getAllComsByLigne = async ():Promise<commentaire[]>=>{
+  try {
+   const response = await api.get(`${url}/commentaires`);
+    return response.data
+  } catch (error) {
+    console.error("erreur lors de la recuperation des commentaire ",error);
+    throw error
+  }
+}
+
+
+
+export const removeCommentaire = async (id: number): Promise<void> => {
+  try {
+    await api.delete(`${url}/commentaires/remove/${id}`);
+  } catch (error) {
+    console.error(`Erreur lors de la suppression du commentaire ${id}:`, error);
+    throw error;
+  }
+};
+

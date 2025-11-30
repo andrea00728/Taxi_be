@@ -5,6 +5,7 @@ import { Arret } from "./Arret.js";
 import { Itineraire } from "./Itineraire.js";
 import { District } from "./districts.js";
 import { Region } from "./regions.js";
+import { Commentaire } from "./commentaire.js";
 
  export enum StatutLigne {
    Attent= "Attent",
@@ -39,6 +40,9 @@ export class Ligne {
 
   @Column({ type: "enum", enum: StatutLigne, default: StatutLigne.Attent })
   statut!:StatutLigne;
+
+  @OneToMany('Commentaire','ligne',{onDelete:"CASCADE"})
+  commentaires!:Commentaire[];
 
   @Column()
   @Index()
