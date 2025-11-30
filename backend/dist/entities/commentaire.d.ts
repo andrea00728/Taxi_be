@@ -10,5 +10,6 @@ export declare class Commentaire {
     satisfaction: SatisfactionLevel;
     firebase_uid: string;
     ligne: Ligne;
+    createdAt: Date;
 }
 //# sourceMappingURL=commentaire.d.ts.map

@@ -4,15 +4,17 @@ import tw from "twrnc";
 import CommentaireForms from "../components/comForms";
 import CommentaireList from "../components/comList";
 
-interface CommentaireScreenProps {
+export interface CommentaireScreenProps {
   ligneId: number;
+  onCommentAdded?:()=>void;
 }
 
-export default function CommentaireScreen({ ligneId }: CommentaireScreenProps) {
+export default function CommentaireScreen({ ligneId,onCommentAdded }: CommentaireScreenProps) {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const handleCommentSuccess = () => {
     setRefreshTrigger((prev) => prev + 1);
+    onCommentAdded?.();
   };
 
   return (

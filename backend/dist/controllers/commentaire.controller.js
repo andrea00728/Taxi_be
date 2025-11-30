@@ -4,6 +4,17 @@ exports.CommentaireController = void 0;
 const commentaire_service_1 = require("../services/commentaire.service");
 const comsService = new commentaire_service_1.CommentaireService();
 class CommentaireController {
+    static async getComsRecent(req, res) {
+        try {
+            const ligne_id = Number(req.params.id);
+            const data = await comsService.findComsRecent(ligne_id);
+            res.status(201).json(data);
+        }
+        catch (error) {
+            res.status(500).json({ message: "Erreur lors de la recuperation  du commentaire le plus  recente" });
+            throw new Error("Error lors de la recuperation du commentaire le plus recente");
+        }
+    }
     static async getAll_Coms(req, res) {
         try {
             const data = await comsService.getAllComs();

@@ -20,6 +20,7 @@ import { DistrictSection } from "@/src/components/DistrictSection";
 import { SearchHeader } from "@/src/components/SearchHeader";
 import { EmptyState } from "@/src/components/EmptyState";
 import { useLignes } from "@/src/hooks/useLignes";
+import { useLogout } from "@/src/utils/logout";
 
 /**
  * Écran d affichage des lignes de Taxibe
@@ -39,8 +40,8 @@ import { useLignes } from "@/src/hooks/useLignes";
 export default function LigneScreen() {
   const [search, setSearch] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-  
-  const { logout } = useAuth();
+  const {handleLogout}=useLogout();
+  // const { logout } = useAuth();
   const router = useRouter();
   
   const {
@@ -92,27 +93,27 @@ export default function LigneScreen() {
   }, [districts, search]);
 
   //  Gestion de la déconnexion
-  const handleLogout = useCallback(async () => {
-    Alert.alert(
-      'Déconnexion',
-      'Êtes-vous sûr de vouloir vous déconnecter ?',
-      [
-        { text: 'Annuler', style: 'cancel' },
-        {
-          text: 'Déconnecter',
-          style: 'destructive',
-        /**
-         * Fonction appelée lorsque le bouton "Déconnecter" est pressé.
-         * Elle logout l'utilisateur et redirige vers la page d accueil.
-         */
-          onPress: async () => {
-            await logout();
-            router.replace('/');
-          },
-        },
-      ]
-    );
-  }, [logout, router]);
+  // const handleLogout = useCallback(async () => {
+  //   Alert.alert(
+  //     'Déconnexion',
+  //     'Êtes-vous sûr de vouloir vous déconnecter ?',
+  //     [
+  //       { text: 'Annuler', style: 'cancel' },
+  //       {
+  //         text: 'Déconnecter',
+  //         style: 'destructive',
+  //       /**
+  //        * Fonction appelée lorsque le bouton "Déconnecter" est pressé.
+  //        * Elle logout l'utilisateur et redirige vers la page d accueil.
+  //        */
+  //         onPress: async () => {
+  //           await logout();
+  //           router.replace('/');
+  //         },
+  //       },
+  //     ]
+  //   );
+  // }, [logout, router]);
 
   // Gestion du scroll pour fermer le clavier
   const handleScroll = useCallback(() => {

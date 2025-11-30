@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator, TouchableOpacity, Alert, Modal, Pressable } from "react-native";
+import { View, Text, ActivityIndicator, TouchableOpacity, Alert, Modal, Pressable,Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import tw from "twrnc";
 import { getComsByLigne, removeCommentaire } from "../services/api";
@@ -25,7 +25,33 @@ export default function CommentaireList({ ligneId, refreshTrigger, onCommentDele
   const [deleting, setDeleting] = useState(false);
   const { userToken, userRole } = useAuth();
 
-  // Récupérer l'UID de l'utilisateur connecté
+
+ const formatTimeAgo = (date: Date | string): string => {
+    const now = new Date();
+    const commentDate = new Date(date);
+    const diffInSeconds = Math.floor((now.getTime() - commentDate.getTime()) / 1000);
+
+    if (diffInSeconds < 60) {
+      return "À l'instant";
+    } else if (diffInSeconds < 3600) {
+      const minutes = Math.floor(diffInSeconds / 60);
+      return `il y a ${minutes} min`;
+    } else if (diffInSeconds < 86400) {
+      const hours = Math.floor(diffInSeconds / 3600);
+      return `il y a ${hours}h`;
+    } else if (diffInSeconds < 604800) {
+      const days = Math.floor(diffInSeconds / 86400);
+      return `il y a ${days}j`;
+    } else {
+      // Format date complète pour les vieux commentaires
+      return commentDate.toLocaleDateString('fr-FR', {
+        day: 'numeric',
+        month: 'short'
+      });
+    }
+  };
+
+
   const getCurrentUserUid = (): string | null => {
     if (!userToken) return null;
     try {
@@ -142,16 +168,23 @@ export default function CommentaireList({ ligneId, refreshTrigger, onCommentDele
             <View style={tw`p-3`}>
               <View style={tw`flex-row items-center`}>
                 {/* Avatar */}
+               {comment.user?.photoURL ? (
+                 <Image 
+                  source={{ uri: comment.user.photoURL }}
+                  style={tw`w-10 h-10 rounded-full`}
+                />
+              ) : (
                 <View style={tw`w-10 h-10 rounded-full bg-gray-300 items-center justify-center`}>
                   <Ionicons name="person" size={20} color="#FFF" />
                 </View>
+              )}
                 
                 <View style={tw`flex-1 ml-3`}>
                   <Text style={tw`text-gray-900 font-semibold text-sm`}>
-                    Utilisateur
+                    {comment.user?.displayName || 'Utilisateur'}
                   </Text>
                   <Text style={tw`text-gray-500 text-xs`}>
-                    À l'instant
+                    {comment.createdAt ? formatTimeAgo(comment.createdAt):"A l'instant"}
                   </Text>
                 </View>
 

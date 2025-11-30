@@ -12,6 +12,24 @@ const comsRoute = (0, express_1.Router)();
  */
 /**
  * @swagger
+ * /commentaires/recent/{id}:
+ *   get:
+ *     summary: Récupere le commentaire plus recente
+ *     tags: [Commentaires]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la ligne
+ *     responses:
+ *       200:
+ *         description: Commentaires récupérés avec succès
+ */
+comsRoute.get("/recent/:id", commentaire_controller_1.CommentaireController.getComsRecent);
+/**
+ * @swagger
  * /commentaires:
  *   get:
  *     summary: Récupérer tous les commentaires
@@ -38,7 +56,7 @@ comsRoute.get("/", commentaire_controller_1.CommentaireController.getAll_Coms);
  *       200:
  *         description: Commentaires récupérés avec succès
  */
-comsRoute.get("/:id", commentaire_controller_1.CommentaireController.getAll_comsBy_Ligne); // ✅ Correction route
+comsRoute.get("/:id", commentaire_controller_1.CommentaireController.getAll_comsBy_Ligne);
 /**
  * @swagger
  * /commentaires/create:

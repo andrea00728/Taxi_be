@@ -13,4 +13,10 @@ export interface commentaire {
     id: number;
     nom: string;
   };
+  createdAt?:Date|string;
+   user?: {
+    displayName: string;
+    email?: string | null;
+    photoURL?: string | null;
+  };
 }

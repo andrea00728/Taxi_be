@@ -11,6 +11,28 @@ const comsRoute = Router();
  *   description: Gestion des commentaires
  */
 
+
+
+/**
+ * @swagger
+ * /commentaires/recent/{id}:
+ *   get:
+ *     summary: Récupere le commentaire plus recente
+ *     tags: [Commentaires]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la ligne
+ *     responses:
+ *       200:
+ *         description: Commentaires récupérés avec succès
+ */
+comsRoute.get("/recent/:id", CommentaireController.getComsRecent); 
+
+
 /**
  * @swagger
  * /commentaires:
@@ -40,7 +62,7 @@ comsRoute.get("/", CommentaireController.getAll_Coms);
  *       200:
  *         description: Commentaires récupérés avec succès
  */
-comsRoute.get("/:id", CommentaireController.getAll_comsBy_Ligne); // ✅ Correction route
+comsRoute.get("/:id", CommentaireController.getAll_comsBy_Ligne); 
 
 /**
  * @swagger

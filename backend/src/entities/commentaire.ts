@@ -1,4 +1,4 @@
-import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Ligne } from "./Ligne";
 
 export enum SatisfactionLevel{
@@ -32,4 +32,7 @@ export class Commentaire{
 
     @ManyToOne(()=>Ligne,(ligne)=>ligne.commentaires,{onDelete:"CASCADE"})
     ligne!:Ligne;
+
+    @CreateDateColumn()
+    createdAt!:Date;
 }

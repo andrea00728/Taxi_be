@@ -10,12 +10,19 @@ import { RootStackParamList } from '@/app/index'; // Assurez-vous que le chemin 
 import { url } from "../utils/url";
 import { Ligne } from "../type/ligneType";
 import ButtonCommentaire from "../components/ButtonCommentaire";
+import CommentaireRecente from "./commentaireRecente";
+
 
 
 interface District {
   id: number;
   nom: string;
   lignes: Ligne[];
+}
+
+interface CommentaireScreenProps {
+  ligneId: number;
+  onCommentAdded?:()=>void;
 }
 
 // Définissez le type des props que Homescren va recevoir
@@ -34,10 +41,13 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
  *   );
  * };
  */
-export default function HomeScreen({ navigation }: Props) {
+
+
+ export default function HomeScreen({ navigation }: Props) {
   const [districts, setDistricts] = useState<District[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
 /**
  * Récupère les lignes avec statut "Accepted"
@@ -62,6 +72,10 @@ export default function HomeScreen({ navigation }: Props) {
   useEffect(() => {
     fetchLignes();
   }, []);
+
+  const handleCommentSuccess = () => {
+    setRefreshTrigger((prev) => prev + 1);
+  };
 
   const filterDistrict = districts.map(d => ({
     ...d,
@@ -141,8 +155,12 @@ export default function HomeScreen({ navigation }: Props) {
                       {/* <View style={tw`ml-auto `}>
                         <ButtonDetails />
                       </View> */}
-
-                       <View style={tw`flex-row justify-end mt-2 gap-2`}>
+                        <CommentaireRecente 
+                        ligneId={ligne.id} 
+                         refreshTrigger={refreshTrigger}
+                        onCommentDeleted={handleCommentSuccess}
+                        />
+                       <View style={tw`flex-row justify-end  gap-2`}>
                         <ButtonDetails />
                         <ButtonCommentaire ligneId={ligne.id} ligneName={ligne.nom} />
                       </View>

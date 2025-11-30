@@ -52,7 +52,8 @@ export default function ButtonDetails() {
   return (
     <View>
            <Pressable
-        style={tw`bg-yellow-400  px-2 w-23 ml-20  py-2 rounded-full flex-row items-center`}
+        // style={tw`bg-yellow-400  px-2 w-23 ml-20  py-2 rounded-full flex-row items-center`}
+        style={tw`bg-yellow-400 ml-auto px-4 py-2 rounded-3xl flex-row items-center mt-2`}
         android_ripple={{ color: "#f1f1f1" }}
         onPress={open}
         accessibilityRole="button"

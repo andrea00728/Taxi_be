@@ -2,11 +2,51 @@ import { AppDataSource } from "../config/data-source";
 import { CreateCommentaireDto } from "../dtos/create-commentaire.dto";
 import { Commentaire } from "../entities/commentaire";
 import { Ligne } from "../entities/Ligne";
-
+import admin from "firebase-admin";
 export class CommentaireService{
     private commentaireRepo= AppDataSource.getRepository(Commentaire);
 
 
+     /**
+   * Enrichir les commentaires avec les infos Firebase
+   */
+  private async enrichCommentsWithUserInfo(comments: Commentaire[]) {
+    const enrichedComments = await Promise.all(
+      comments.map(async (comment) => {
+        try {
+          //  Récupérer l'utilisateur depuis Firebase
+          const firebaseUser = await admin.auth().getUser(comment.firebase_uid);
+          return {
+            ...comment,
+            user: {
+              displayName: firebaseUser.displayName || 'Utilisateur',
+              email: firebaseUser.email,
+              photoURL: firebaseUser.photoURL,
+            }
+          };
+        } catch (error) {
+          console.error(`Erreur récupération user ${comment.firebase_uid}:`, error);
+          // Fallback si l'utilisateur n'existe plus dans Firebase
+          return {
+            ...comment,
+            user: {
+              displayName: 'Utilisateur',
+              email: null,
+              photoURL: null,
+            }
+          };
+        }
+      })
+    );
+
+    return enrichedComments;
+  }
+    async findComsRecent(ligne_id:number){
+        const coms=await this.commentaireRepo.findOne({
+            where:{ligne:{id:ligne_id}},
+            order:{createdAt:'DESC'},
+        })
+    }
     async createCommentaire(data:Partial<Commentaire> &{ligne_id?:number},firebaseUid:string){
         
         if(data.ligne_id){
@@ -33,7 +73,7 @@ export class CommentaireService{
             {where:{ligne:{id:ligne_id}}},
         )
 
-        return comsLigne;
+        return await this.enrichCommentsWithUserInfo(comsLigne);
     }
 
    async removeComs(id: number, userUid: string, userRole: string) {
@@ -44,7 +84,7 @@ export class CommentaireService{
             throw new Error(`Commentaire avec l'id ${id} est introuvable`);
         }
 
-        // ✅ Vérifier que l'utilisateur est le créateur OU admin
+        //  Vérifier que l'utilisateur est le créateur OU admin
         if (commentaire.firebase_uid !== userUid && userRole !== 'admin') {
             throw new Error('Vous n\'êtes pas autorisé à supprimer ce commentaire');
         }

@@ -472,3 +472,13 @@ export const removeCommentaire = async (id: number): Promise<void> => {
   }
 };
 
+export const comsRecent =async (id:number):Promise<commentaire[]> =>  {
+  try {
+    const response = await api.get(`${url}/commentaires/recent/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("erreur lors de la recuperation du commentaire plus recente  ",error);
+    throw error
+  }
+}
+

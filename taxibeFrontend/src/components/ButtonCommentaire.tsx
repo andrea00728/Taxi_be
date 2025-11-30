@@ -15,9 +15,10 @@ import CommentaireScreen from "../screens/ComsScreens";
 interface ButtonCommentaireProps {
   ligneId: number;
   ligneName: string;
+  onCommentAdded?: () => void;
 }
 
-export default function ButtonCommentaire({ ligneId, ligneName }: ButtonCommentaireProps) {
+export default function ButtonCommentaire({ ligneId, ligneName,onCommentAdded}: ButtonCommentaireProps) {
   const [visible, setVisible] = useState(false);
   const { height, width } = useWindowDimensions();
 
@@ -87,7 +88,12 @@ export default function ButtonCommentaire({ ligneId, ligneName }: ButtonCommenta
 
                 {/* Contenu scrollable */}
                 <View style={tw`flex-1`}>
-                  <CommentaireScreen ligneId={ligneId} />
+                  <CommentaireScreen 
+                  ligneId={ligneId} 
+                   onCommentAdded={()=>{
+                    onCommentAdded?.();
+                  }}
+                  />
                 </View>
               </View>
             </Pressable>

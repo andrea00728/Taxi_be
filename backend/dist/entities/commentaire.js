@@ -46,6 +46,10 @@ __decorate([
     (0, typeorm_1.ManyToOne)(() => Ligne_1.Ligne, (ligne) => ligne.commentaires, { onDelete: "CASCADE" }),
     __metadata("design:type", Ligne_1.Ligne)
 ], Commentaire.prototype, "ligne", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", Date)
+], Commentaire.prototype, "createdAt", void 0);
 exports.Commentaire = Commentaire = __decorate([
     (0, typeorm_1.Entity)()
 ], Commentaire);
