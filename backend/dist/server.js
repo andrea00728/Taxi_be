@@ -1,9 +1,15 @@
 "use strict";
+// import app from "./app.js";
+// import '@dotenvx/dotenvx/config';
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectedUsers = exports.notificationGateway = exports.io = void 0;
+// const PORT = process.env.PORT || 3000;
+// app.listen(PORT, () => {
+//   console.log(` Serveur Taxibe en marche sur le port ${PORT}`);
+// });
 const http_1 = require("http");
 const socket_io_1 = require("socket.io");
 const app_js_1 = __importDefault(require("./app.js"));
@@ -24,12 +30,13 @@ exports.io = new socket_io_1.Server(httpServer, {
         allowedHeaders: ["Content-Type", "Authorization"],
     },
 });
-// Crée l'instance unique de la Gateway ici
+//  Crée l'instance unique de la Gateway ici
 exports.notificationGateway = new notification_gateway_1.NotificationGateway(exports.io);
 exports.connectedUsers = new Map();
-// Bloc WebSocket principal
+// Ce bloc est probablement redondant si NotificationGateway gère déjà 'connection'
+// Mais gardons-le pour l'instant pour ne rien casser de ta logique d'auth socket existante
 exports.io.on('connection', (socket) => {
-    // Enregistrement d’un utilisateur côté WebSocket
+    // Cette partie gère l'enregistrement utilisateur spécifique
     socket.on('register', (data) => {
         exports.connectedUsers.set(data.firebaseUid, {
             socketId: socket.id,
@@ -39,7 +46,8 @@ exports.io.on('connection', (socket) => {
         console.log(`👤 WebSocket - User ${data.firebaseUid} (${data.role}) enregistré (Server.ts)`);
         socket.emit('registered', { success: true });
     });
-    // Déconnexion — déjà gérée dans NotificationGateway, mais ce n’est pas gênant
+    // La déconnexion est aussi gérée par NotificationGateway, donc ça fait doublon de logs
+    // mais ce n'est pas grave.
 });
 const PORT = process.env.PORT || 3000;
 httpServer.listen(PORT, () => {
